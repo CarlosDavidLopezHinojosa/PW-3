@@ -6,6 +6,7 @@ De la práctica anterior en principio tenemos que hacer algunos cambios que son 
 - Crear ficheros config.properties y sql.properties para no tener que hardocdear los valores de la base de datos.
 - El patrón Factory de la P1 no se ha cambiado, según el criterio del profesor (Tenemos que averiguar cual es).
 - Posibles mejoras en la base de datos para no tener tablas con muchas tuplas como la clase Reserva, tal vez debamos implementar una especialización.
+- Al hacer las Reservas
 
 De la práctica actual en principio lo que debemos hacer es lo siguiente:
 
