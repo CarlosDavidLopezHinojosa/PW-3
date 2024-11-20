@@ -73,14 +73,8 @@ import java.util.List;
 public class DBConnection {
 
 	protected Connection connection = null;
-
-	// Important: This configuration is hard-coded here for illustrative purposes only
-	
-	protected String url = "jdbc:mysql://oraclepr.uco.es:3306/i22goapj";
-
-	protected String user = "i22goapj";
-
-	protected String password = "meloading";
+	private ConfigPropertiesManager configProperties = new ConfigPropertiesManager();
+	private SQLPropertiesManager sqlProperties = new SQLPropertiesManager();
 
 	/**
 	 * Establece una conexión con la base de datos utilizando los parámetros de conexión
@@ -94,7 +88,7 @@ public class DBConnection {
 
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
-			this.connection = (Connection) DriverManager.getConnection(url, user, password);
+			this.connection = (Connection) DriverManager.getConnection(configProperties.getUrl(), configProperties.getUsername(), configProperties.getPassword());
 		} 
 		catch (SQLException e) {
 			System.err.println("Connection to MySQL has failed!");
@@ -170,7 +164,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistasNoDisponibles() {
 		List<PistaDTO> pistasNoDisponibles = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE disponible = false";
+		String query = sqlProperties.getSQL("selectPistasNoDisponibles");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -199,7 +193,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistasDisponibles() {
 		List<PistaDTO> pistasDisponibles = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE disponible = true";
+		String query = sqlProperties.getSQL("selectPistasDisponibles");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -230,7 +224,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistasDisponiblesJugadoresTipo(int maxJugadores, TamanoPista tamano) {
 		List<PistaDTO> pistasDisponibles = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE disponible = true AND maxJugadores <= ? AND tamano = ?";
+		String query = sqlProperties.getSQL("selectPistasDisponiblesJugadoresTipo");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, maxJugadores);
 			stmt.setString(2, tamano.name());
@@ -264,7 +258,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistaNombre(String nombre) {
 		List<PistaDTO> pistas = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE nombre = ?";
+		String query = sqlProperties.getSQL("selectPistaNombre");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, nombre);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -306,7 +300,7 @@ public class DBConnection {
 	 * @param numNinos El número de niños en la reserva.
 	 */
 	public void insertIntoReserva(int id, int idUsuario, LocalDate diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, String tipoReserva, int numAdultos, int numNinos) {
-		String query = "INSERT INTO Reserva (id, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, tipo, numAdultos, numNinos) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = sqlProperties.getSQL("insertIntoReserva");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.setInt(2, idUsuario);
@@ -339,7 +333,7 @@ public class DBConnection {
 	 */
 	public List<ReservaDTO> selectReservasFuturas() {
 		List<ReservaDTO> reservasFuturas = new ArrayList<>();
-		String query = "SELECT * FROM Reserva WHERE diaYHora > CURRENT_TIMESTAMP";
+		String query = sqlProperties.getSQL("selectReservasFuturas");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -376,7 +370,7 @@ public class DBConnection {
 	 */
 	public List<ReservaDTO> selectReservasFuturasUsuario(int idUsuario) {
 		List<ReservaDTO> reservasFuturasUsuario = new ArrayList<>();
-		String query = "SELECT * FROM Reserva WHERE diaYHora > CURRENT_TIMESTAMP AND idUsuario = ?";
+		String query = sqlProperties.getSQL("selectReservasFuturasUsuario");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idUsuario);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -416,7 +410,7 @@ public class DBConnection {
 	 */
 	public List<ReservaDTO> selectReservaPistaDia(int idPista, LocalDate dia) {
 		List<ReservaDTO> reservas = new ArrayList<>();
-		String query = "SELECT * FROM Reserva WHERE idPista = ? AND DATE(diaYHora) = ?";
+		String query = sqlProperties.getSQL("selectReservaPistaDia");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idPista);
 			stmt.setDate(2, java.sql.Date.valueOf(dia));
@@ -455,7 +449,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al intentar eliminar la reserva de la base de datos.
 	 */
 	public void deleteReserva(int id) {
-		String query = "DELETE FROM Reserva WHERE id = ?";
+		String query = sqlProperties.getSQL("deleteReserva");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.executeUpdate();
@@ -475,7 +469,7 @@ public class DBConnection {
 	 */
 	public List<ReservaDTO> selectReservaUsuario(int idUsuario) {
 		List<ReservaDTO> reservas = new ArrayList<>();
-		String query = "SELECT * FROM Reserva WHERE idUsuario = ?";
+		String query = sqlProperties.getSQL("selectReservaUsuario");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idUsuario);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -516,7 +510,7 @@ public class DBConnection {
 	 * @param pistaTamano  El tamaño de la pista asociado al bono.
 	 */
 	public void insertIntoBono(int id, int sesiones, int idUser, String tipoReserva, PistaDTO.TamanoPista pistaTamano) {
-		String query = "INSERT INTO Bono (id, sesiones, idUser, tipoReserva, tamanoPista) VALUES (?, ?, ?, ?, ?)";
+		String query = sqlProperties.getSQL("insertIntoBono");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.setInt(2, sesiones);
@@ -537,9 +531,10 @@ public class DBConnection {
 	 * @param idBono El ID del bono a reducir.
 	 */
 	public void reducirBono(int idBono) {
-		String selectQuery = "SELECT sesiones FROM Bono WHERE id = ?";
-		String updateQuery = "UPDATE Bono SET sesiones = sesiones - 1 WHERE id = ?";
-		String deleteQuery = "DELETE FROM Bono WHERE id = ?";
+		String selectQuery = sqlProperties.getSQL("selectBono");
+		String updateQuery = sqlProperties.getSQL("updateBono");
+		String deleteQuery = sqlProperties.getSQL("deleteBono");
+
 		try (PreparedStatement selectStmt = this.connection.prepareStatement(selectQuery)) {
 			selectStmt.setInt(1, idBono);
 			try (ResultSet rs = selectStmt.executeQuery()) {
@@ -574,7 +569,7 @@ public class DBConnection {
 	 */
 	public List<BonoDTO> selectBonos(int idUser) {
 		List<BonoDTO> bonos = new ArrayList<>();
-		String query = "SELECT * FROM Bono WHERE idUser = ?";
+		String query = sqlProperties.getSQL("selectBonos");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idUser);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -609,7 +604,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al insertar el registro en la base de datos.
 	 */
 	public void insertIntoJugador(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email) {
-		String query = "INSERT INTO Jugador (nombre, apellidos, id, fechaNacimiento, fechaInscripcion, email) VALUES (?, ?, ?, ?, ?, ?)";
+		String query = sqlProperties.getSQL("insertIntoJugador");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, nombre);
 			stmt.setString(2, apellidos);
@@ -636,7 +631,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al actualizar el registro en la base de datos.
 	 */
 	public void updateJugador(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email) {
-		String query = "UPDATE Jugador SET nombre = ?, apellidos = ?, fechaNacimiento = ?, fechaInscripcion = ?, email = ? WHERE id = ?";
+		String query = sqlProperties.getSQL("updateJugador");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, nombre);
 			stmt.setString(2, apellidos);
@@ -660,7 +655,7 @@ public class DBConnection {
 	 */
 	public List<JugadorDTO> selectJugadores() {
 		List<JugadorDTO> jugadores = new ArrayList<>();
-		String query = "SELECT * FROM Jugador";
+		String query = sqlProperties.getSQL("selectJugadores");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -691,7 +686,7 @@ public class DBConnection {
 	 */
 	public JugadorDTO selectJugadorEmail(String email) {
 		JugadorDTO jugador = null;
-		String query = "SELECT * FROM Jugador WHERE email = ?";
+		String query = sqlProperties.getSQL("selectJugadorEmail");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, email);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -724,7 +719,7 @@ public class DBConnection {
 	 * @param idPista El identificador de la pista asociada al material.
 	 */
 	public void insertIntoMaterial(int id, MaterialDTO.TipoMaterial tipo, boolean usoExterior, MaterialDTO.EstadoMaterial estado, int idPista) {
-		String query = "INSERT INTO Material (id, tipo, usoExterior, estado, idPista) VALUES (?, ?, ?, ?, ?)";
+		String query = sqlProperties.getSQL("insertIntoMaterial");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.setString(2, tipo.name());
@@ -746,7 +741,7 @@ public class DBConnection {
 	 */
 	public List<MaterialDTO> selectMateriales() {
 		List<MaterialDTO> materiales = new ArrayList<>();
-		String query = "SELECT * FROM Material";
+		String query = sqlProperties.getSQL("selectMateriales");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -776,7 +771,7 @@ public class DBConnection {
 	 */
 	public MaterialDTO selectMaterialId(int id) {
 		MaterialDTO material = null;
-		String query = "SELECT * FROM Material WHERE id = ?";
+		String query = sqlProperties.getSQL("selectMaterialId");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -806,7 +801,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al ejecutar la actualización en la base de datos.
 	 */
 	public void updateMaterialPista(int idPista, int idMaterial) {
-		String query = "UPDATE Material SET idPista = ? WHERE id = ?";
+		String query = sqlProperties.getSQL("updateMaterialPista");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idPista);
 			stmt.setInt(2, idMaterial);
@@ -845,7 +840,8 @@ public class DBConnection {
 	 * @return el valor máximo de ID de la tabla especificada, o -1 si ocurre un error.
 	 */
 	public int getMaxId(String table) {
-		String query = "SELECT MAX(id) FROM " + table;
+		String query = sqlProperties.getSQL("getMaxId");
+		query = query.replace("{table}", table);
 		try (Statement stmt = this.connection.createStatement();
 			 ResultSet rs = stmt.executeQuery(query)) {
 			if (rs.next()) {
