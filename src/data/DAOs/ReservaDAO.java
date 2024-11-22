@@ -1,11 +1,13 @@
 package data.DAOs;
 
-import business.DTOs.PistaDTO;
-import business.DTOs.Reservas.ReservaDTO;
-import business.DTOs.Reservas.ReservaFactoryDTO;
-import data.common.DBConnection;
 import java.time.LocalDate;
 import java.util.List;
+
+import business.DTOs.PistaDTO;
+import business.DTOs.Reservas.ReservaBonoFactoryDTO;
+import business.DTOs.Reservas.ReservaDTO;
+import business.DTOs.Reservas.ReservaIndFactoryDTO;
+import data.common.DBConnection;
 
 
 /**
@@ -64,7 +66,39 @@ public class ReservaDAO {
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         int id = conexion.getMaxId("Reserva") + 1;
-        ReservaDTO reserva = ReservaFactoryDTO.crearReservaBono(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+        ReservaDTO reserva;
+        if(idBono==-1 && nSesionBono==-1){
+            ReservaIndFactoryDTO reservaIndFactory = new ReservaIndFactoryDTO();
+            switch (tipoReserva) {
+                case "ADULTOS":
+                    reserva = reservaIndFactory.crearReservaAdultos(tipoReserva, idUsuario, diaYHora, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                    break;
+                case "INFANTIL":
+                    reserva = reservaIndFactory.crearReservaInfantil(tipoReserva, idUsuario, diaYHora, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                    break;
+                case "FAMILIAR":
+                    reserva = reservaIndFactory.crearReservaFamiliar(tipoReserva, idUsuario, diaYHora, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Tipo de reserva desconocido: " + tipoReserva);
+            }
+        }
+        else{
+            switch (tipoReserva) {
+            case "ADULTOS":
+                reserva = ReservaBonoFactoryDTO.crearReservaAdultos(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                break;
+            case "INFANTIL":
+                reserva = ReservaBonoFactoryDTO.crearReservaInfantil(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                break;
+            case "FAMILIAR":
+                reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo de reserva desconocido: " + tipoReserva);
+        }
+        }
+        
         conexion.insertIntoReserva(id, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, tipoReserva, numAdultos, numNinos);
 
         conexion.closeConnection();
