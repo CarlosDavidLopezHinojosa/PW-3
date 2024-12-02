@@ -21,6 +21,8 @@ import java.time.LocalDate;
  *   <li>{@link #setFechaInscripcion(LocalDate)}: Establece la fecha de inscripción del jugador.</li>
  *   <li>{@link #getEmail()}: Obtiene el correo electrónico del jugador.</li>
  *   <li>{@link #setEmail(String)}: Establece el correo electrónico del jugador.</li>
+ *   <li>{@link #getPassword()}: Obtiene la contraseña del jugador.</li>
+ *   <li>{@link #setPassword(String)}: Establece la contraseña del jugador.</li>
  * </ul>
  * 
  * <p>Ejemplo de uso:</p>
@@ -43,6 +45,7 @@ public class JugadorDTO {
     private LocalDate fechaNacimiento;
     private LocalDate fechaInscripcion;
     private String email;
+    private String password;
 
     /**
      * Constructor vacío (necesario para serialización).
@@ -59,14 +62,16 @@ public class JugadorDTO {
      * @param fechaNacimiento   la fecha de nacimiento del jugador
      * @param fechaInscripcion  la fecha de inscripción del jugador
      * @param email             el email del jugador
+     * @param password          la contraseña del jugador
      */
-    public JugadorDTO(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email) {
+    public JugadorDTO(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email, String password) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.id = id;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaInscripcion = fechaInscripcion;
         this.email = email;
+        this.password = password;
     }
 
     /**
@@ -176,6 +181,26 @@ public class JugadorDTO {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    /**
+     * Obtiene la contraseña del jugador.
+     *
+     * @return la contraseña del jugador
+     */
+    public String getPassword() {
+        return password;
+    }
+
+
+    /**
+     * Establece la contraseña del jugador.
+     *
+     * @param password la contraseña del jugador
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 
     // Método toString() para una representación en cadena
     @Override
