@@ -1,16 +1,24 @@
 package display;
 
-import business.DTOs.*;
-import business.DTOs.MaterialDTO.EstadoMaterial;
-import business.DTOs.MaterialDTO.TipoMaterial;
-import business.DTOs.PistaDTO.TamanoPista;
-import business.DTOs.Reservas.*;
-import business.Gestores.*;
-import data.DAOs.*;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+
+import business.DTOs.BonoDTO;
+import business.DTOs.JugadorDTO;
+import business.DTOs.MaterialDTO;
+import business.DTOs.MaterialDTO.EstadoMaterial;
+import business.DTOs.MaterialDTO.TipoMaterial;
+import business.DTOs.PistaDTO;
+import business.DTOs.PistaDTO.TamanoPista;
+import business.DTOs.Reservas.ReservaDTO;
+import business.Gestores.GestorDePistas;
+import business.Gestores.GestorDeReservas;
+import business.Gestores.GestorDeUsuarios;
+import data.DAOs.BonoDAO;
+import data.DAOs.JugadorDAO;
+import data.DAOs.MaterialDAO;
+import data.DAOs.PistaDAO;
 
 public class ProgramaDeReservas {
 
@@ -169,8 +177,19 @@ public class ProgramaDeReservas {
             }
         }
 
+        // Leemos la contraseña
+        String password = "";
+        System.out.println("Ahora introduzca una contraseña\n");
+        try {
+            byte[] buffer = new byte[100];
+            int leido = System.in.read(buffer);
+            password = new String(buffer,0,leido).trim();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         LocalDate fechaNacimientoLocalDateTime = LocalDate.parse(fechaNacimiento);
-        JugadorDTO user = GestorDeUsuarios.darDeAlta(email, nombre, apellidos, fechaNacimientoLocalDateTime);
+        JugadorDTO user = GestorDeUsuarios.darDeAlta(email, nombre, apellidos, fechaNacimientoLocalDateTime, password);
         menuIniciado(user);
     }
 
