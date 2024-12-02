@@ -1,9 +1,10 @@
 package data.DAOs;
 
-import business.DTOs.JugadorDTO;
-import data.common.DBConnection;
 import java.time.LocalDate;
 import java.util.List;
+
+import business.DTOs.JugadorDTO;
+import data.common.DBConnection;
 
 /**
  * La clase JugadorDAO proporciona métodos para interactuar con la base de datos de jugadores.
@@ -79,11 +80,11 @@ public class JugadorDAO {
      * @param fechaNacimiento La fecha de nacimiento del jugador.
      * @return Un objeto JugadorDTO que representa al jugador dado de alta.
      */
-    public static JugadorDTO darDeAlta(String email, String nombre, String apellidos, LocalDate fechaNacimiento){
+    public static JugadorDTO darDeAlta(String email, String nombre, String apellidos, LocalDate fechaNacimiento, String password) {
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         int id = conexion.getMaxId("Jugador") + 1;
-        JugadorDTO jugador = new JugadorDTO(nombre, apellidos, id, fechaNacimiento, LocalDate.now(), email);
+        JugadorDTO jugador = new JugadorDTO(nombre, apellidos, id, fechaNacimiento, LocalDate.now(), email, password);
         conexion.insertIntoJugador(nombre, apellidos, id, fechaNacimiento, LocalDate.now(), email);
         conexion.closeConnection();
         return jugador;
