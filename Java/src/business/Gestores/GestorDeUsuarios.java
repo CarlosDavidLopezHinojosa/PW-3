@@ -1,9 +1,10 @@
 package business.Gestores;
 
-import business.DTOs.JugadorDTO;
-import data.DAOs.JugadorDAO;
 import java.time.LocalDate;
 import java.util.List;
+
+import business.DTOs.JugadorDTO;
+import data.DAOs.JugadorDAO;
 
 /**
  * La clase GestorDeUsuarios implementa el patrón de diseño Singleton para gestionar usuarios en un sistema.
@@ -64,10 +65,11 @@ public class GestorDeUsuarios {
      * @param nombre Nombre del usuario.
      * @param apellidos Apellidos del usuario.
      * @param fechaNacimiento Fecha de nacimiento del usuario.
+     * @param password Contraseña del usuario.
      * @return El objeto Jugador del usuario creado, o null si ya estaba registrado.
      */
-    public static JugadorDTO darDeAlta(String email, String nombre, String apellidos, LocalDate fechaNacimiento) {
-        return JugadorDAO.darDeAlta(email, nombre, apellidos, fechaNacimiento);
+    public static JugadorDTO darDeAlta(String email, String nombre, String apellidos, LocalDate fechaNacimiento, String password) {
+        return JugadorDAO.darDeAlta(email, nombre, apellidos, fechaNacimiento, password);
     }
 
     /**
