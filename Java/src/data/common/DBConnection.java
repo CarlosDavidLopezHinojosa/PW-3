@@ -1,11 +1,13 @@
 package data.common;
 
 import business.DTOs.BonoDTO;
+import business.DTOs.Reservas.ReservaBonoFactoryDTO;
 import business.DTOs.JugadorDTO;
 import business.DTOs.MaterialDTO;
 import business.DTOs.PistaDTO;
 import business.DTOs.PistaDTO.TamanoPista;
 import business.DTOs.Reservas.ReservaDTO;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,6 +18,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import business.DTOs.Reservas.ReservaAdultosDTO;
+import business.DTOs.Reservas.ReservaFamiliarDTO;
+import business.DTOs.Reservas.ReservaInfantilDTO;
 
 
 /**
@@ -343,22 +349,60 @@ public class DBConnection {
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
-				ReservaDTO reserva = new ReservaDTO(
-					rs.getInt("id"),
-					rs.getInt("idUsuario"),
-					rs.getDate("diaYHora").toLocalDate(),
-					rs.getInt("idBono"),
-					rs.getInt("nSesionBono"),
-					rs.getInt("duracion"),
-					rs.getInt("idPista"),
-					rs.getFloat("precio"),
-					rs.getFloat("descuento"),
-					PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
-					rs.getString("tipo"),
-					rs.getInt("numAdultos"),
-					rs.getInt("numNinos")
-				);
-				reservasFuturas.add(reserva);
+				if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.ADULTOS.name())){
+					ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
+						rs.getString("tipo"),
+						rs.getInt("idUsuario"),
+						rs.getDate("diaYHora").toLocalDate(),
+						rs.getInt("idBono"),
+						rs.getInt("nSesionBono"),
+						rs.getInt("duracion"),
+						rs.getInt("idPista"),
+						rs.getFloat("precio"),
+						rs.getFloat("descuento"),
+						PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+						rs.getInt("id"),
+						rs.getInt("numAdultos"),
+						rs.getInt("numNinos")	
+					);
+					reservasFuturas.add(reserva);
+				}
+				else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.FAMILIAR.name())){
+					ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
+						rs.getString("tipo"),
+						rs.getInt("idUsuario"),
+						rs.getDate("diaYHora").toLocalDate(),
+						rs.getInt("idBono"),
+						rs.getInt("nSesionBono"),
+						rs.getInt("duracion"),
+						rs.getInt("idPista"),
+						rs.getFloat("precio"),
+						rs.getFloat("descuento"),
+						PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+						rs.getInt("id"),
+						rs.getInt("numAdultos"),
+						rs.getInt("numNinos")	
+					);
+					reservasFuturas.add(reserva);
+				}
+				else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.INFANTIL.name())){
+					ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
+						rs.getString("tipo"),
+						rs.getInt("idUsuario"),
+						rs.getDate("diaYHora").toLocalDate(),
+						rs.getInt("idBono"),
+						rs.getInt("nSesionBono"),
+						rs.getInt("duracion"),
+						rs.getInt("idPista"),
+						rs.getFloat("precio"),
+						rs.getFloat("descuento"),
+						PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+						rs.getInt("id"),
+						rs.getInt("numAdultos"),
+						rs.getInt("numNinos")	
+					);
+					reservasFuturas.add(reserva);
+				}
 			}
 		} catch (SQLException e) {
 			System.err.println("Error while retrieving records from Reserva table.");
@@ -381,22 +425,60 @@ public class DBConnection {
 			stmt.setInt(1, idUsuario);
 			try (ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
-					ReservaDTO reserva = new ReservaDTO(
-						rs.getInt("id"),
-						rs.getInt("idUsuario"),
-						rs.getDate("diaYHora").toLocalDate(),
-						rs.getInt("idBono"),
-						rs.getInt("nSesionBono"),
-						rs.getInt("duracion"),
-						rs.getInt("idPista"),
-						rs.getFloat("precio"),
-						rs.getFloat("descuento"),
-						PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
-						rs.getString("tipo"),
-						rs.getInt("numAdultos"),
-						rs.getInt("numNinos")
-					);
-					reservasFuturasUsuario.add(reserva);
+					if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.ADULTOS.name())){
+						ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservasFuturasUsuario.add(reserva);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.FAMILIAR.name())){
+						ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservasFuturasUsuario.add(reserva);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.INFANTIL.name())){
+						ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservasFuturasUsuario.add(reserva);
+					}
 				}
 			}
 		} catch (SQLException e) {
@@ -422,22 +504,60 @@ public class DBConnection {
 			stmt.setDate(2, java.sql.Date.valueOf(dia));
 			try (ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
-					ReservaDTO reserva = new ReservaDTO(
-						rs.getInt("id"),
-						rs.getInt("idUsuario"),
-						rs.getDate("diaYHora").toLocalDate(),
-						rs.getInt("idBono"),
-						rs.getInt("nSesionBono"),
-						rs.getInt("duracion"),
-						rs.getInt("idPista"),
-						rs.getFloat("precio"),
-						rs.getFloat("descuento"),
-						PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
-						rs.getString("tipo"),
-						rs.getInt("numAdultos"),
-						rs.getInt("numNinos")
-					);
-					reservas.add(reserva);
+					if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.ADULTOS.name())){
+						ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservas.add(reserva);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.FAMILIAR.name())){
+						ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservas.add(reserva);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.INFANTIL.name())){
+						ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservas.add(reserva);
+					}
 				}
 			}
 		} catch (SQLException e) {
@@ -480,22 +600,60 @@ public class DBConnection {
 			stmt.setInt(1, idUsuario);
 			try (ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
-					ReservaDTO reserva = new ReservaDTO(
-						rs.getInt("id"),
-						rs.getInt("idUsuario"),
-						rs.getDate("diaYHora").toLocalDate(),
-						rs.getInt("idBono"),
-						rs.getInt("nSesionBono"),
-						rs.getInt("duracion"),
-						rs.getInt("idPista"),
-						rs.getFloat("precio"),
-						rs.getFloat("descuento"),
-						PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
-						rs.getString("tipo"),
-						rs.getInt("numAdultos"),
-						rs.getInt("numNinos")
-					);
-					reservas.add(reserva);
+					if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.ADULTOS.name())){
+						ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservas.add(reserva);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.FAMILIAR.name())){
+						ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservas.add(reserva);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.INFANTIL.name())){
+						ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservas.add(reserva);
+					}
 				}
 			}
 		} catch (SQLException e) {
