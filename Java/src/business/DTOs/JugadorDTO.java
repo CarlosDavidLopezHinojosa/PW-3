@@ -75,6 +75,27 @@ public class JugadorDTO {
     }
 
     /**
+     * Constructor con parámetros.
+     *
+     * @param nombre            el nombre del jugador
+     * @param apellidos         los apellidos del jugador
+     * @param id                el ID del jugador
+     * @param fechaNacimiento   la fecha de nacimiento del jugador
+     * @param fechaInscripcion  la fecha de inscripción del jugador
+     * @param email             el email del jugador
+     * @param password          la contraseña del jugador
+     */
+    public JugadorDTO(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.id = id;
+        this.fechaNacimiento = fechaNacimiento;
+        this.fechaInscripcion = fechaInscripcion;
+        this.email = email;
+    }
+    
+
+    /**
      * Obtiene el nombre del jugador.
      *
      * @return el nombre del jugador
