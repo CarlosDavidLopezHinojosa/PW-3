@@ -6,6 +6,7 @@
 <html>
 <head>
     <title>Lista de Jugadores</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/jugadores.css">
 </head>
 <body>
     <h1>Lista de Jugadores</h1>
