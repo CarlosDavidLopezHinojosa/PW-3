@@ -1,0 +1,40 @@
+package web.controller;
+
+import java.io.IOException;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import web.model.business.DTOs.JugadorDTO;
+import web.model.data.DAOs.JugadorDAO;
+
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Redirige a la página de inicio de sesión
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        JugadorDTO jugador = JugadorDAO.getUsuarioEmail(email);
+
+        if (jugador != null) {
+            // Usuario encontrado, redirigir a la página de bienvenida
+            request.getSession().setAttribute("usuario", jugador);
+            response.sendRedirect("views/welcome.jsp");
+        } 
+        else {
+            // Usuario no encontrado, redirigir a la página de inicio de sesión con un mensaje de error
+            request.setAttribute("error", "Correo o contraseña incorrectos");
+            request.getRequestDispatcher("views/login.jsp").forward(request, response);
+        }
+    }
+}

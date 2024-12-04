@@ -12,20 +12,18 @@ import web.model.business.DTOs.JugadorDTO;
 import web.model.data.DAOs.JugadorDAO;
 
 @WebServlet("/jugadores")
-public class EjemploServlet extends HttpServlet {
+public class VerJugadoresServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JugadorDAO jugadorDAO = new JugadorDAO();
         List<JugadorDTO> jugadores = jugadorDAO.obtenerUsuarios();
 
-        response.setContentType("text/html");
-        response.getWriter().println("<h1>Lista de Jugadores</h1>");
-        response.getWriter().println("<ul>");
-        for (JugadorDTO jugador : jugadores) {
-            response.getWriter().println("<li>" + jugador + "</li>");
-        }
-        response.getWriter().println("</ul>");
+        // Set the list of players as a request attribute
+        request.setAttribute("jugadores", jugadores);
+
+        // Forward the request to jugadores.jsp
+        request.getRequestDispatcher("/views/jugadores.jsp").forward(request, response);
     }
 
     @Override

@@ -1,21 +1,53 @@
-/* pw/src/main/webapp/css/estilos1.css */
+/* General */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
 }
 
 h1 {
   color: #333;
+  margin: 20px 0;
+  text-align: center;
 }
 
+/* Contenedor de lista */
 ul {
-  list-style-type: none;
+  list-style-type: none; /* Sin viñetas */
   padding: 0;
+  margin: 0;
+  width: 80%;
+  max-width: 600px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-li {
-  background-color: #fff;
-  margin: 5px 0;
-  padding: 10px;
-  border: 1px solid #ddd;
+ul li {
+  padding: 15px 20px;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px;
+  color: #555;
+}
+
+ul li:last-child {
+  border-bottom: none; /* Sin borde en el último elemento */
+}
+
+/* Hover y estilos adicionales */
+ul li:hover {
+  background-color: #f0f8ff; /* Azul claro */
+  cursor: pointer;
+  color: #007bff; /* Azul */
+}
+
+ul li:first-letter {
+  text-transform: uppercase; /* Capitaliza la primera letra de cada elemento */
 }
