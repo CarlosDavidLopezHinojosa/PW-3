@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.DTOs.JugadorDTO;
 import web.model.data.DAOs.JugadorDAO;
 
-@WebServlet("/ejemplo")
+@WebServlet("/jugadores")
 public class EjemploServlet extends HttpServlet {
 
     @Override
