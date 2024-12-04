@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.JugadorDTO;
 import web.model.data.DAOs.JugadorDAO;
 
@@ -24,14 +25,21 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        JugadorDTO jugador = JugadorDAO.getUsuarioEmail(email);
+        JugadorDAO jugadorDAO = new JugadorDAO();
+        JugadorDTO jugador = jugadorDAO.getUsuarioEmail(email);
 
         if (jugador != null) {
-            // Usuario encontrado, redirigir a la página de bienvenida
-            request.getSession().setAttribute("usuario", jugador);
+            // Usuario encontrado, crear CustomerBean y almacenarlo en la sesión
+            CustomerBean customerBean = new CustomerBean();
+            customerBean.setId(jugador.getId());
+            customerBean.setNombre(jugador.getNombre());
+            customerBean.setApellidos(jugador.getApellidos());
+            customerBean.setEmail(jugador.getEmail());
+            customerBean.setFechaNacimiento(jugador.getFechaNacimiento());
+
+            request.getSession().setAttribute("customerBean", customerBean);
             response.sendRedirect("views/welcome.jsp");
-        } 
-        else {
+        } else {
             // Usuario no encontrado, redirigir a la página de inicio de sesión con un mensaje de error
             request.setAttribute("error", "Correo o contraseña incorrectos");
             request.getRequestDispatcher("views/login.jsp").forward(request, response);

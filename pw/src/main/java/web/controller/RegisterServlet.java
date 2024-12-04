@@ -1,4 +1,4 @@
-package web.controller.servlets;
+package web.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.JugadorDTO;
 import web.model.data.DAOs.JugadorDAO;
 
@@ -46,8 +47,15 @@ public class RegisterServlet extends HttpServlet {
 
             jugadorDAO.darDeAlta(email, name, lastName, fechaNacimiento, password);
 
-            // Redirigir a la página de bienvenida
-            request.getSession().setAttribute("usuario", newJugador);
+            // Crear CustomerBean y almacenarlo en la sesión
+            CustomerBean customerBean = new CustomerBean();
+            customerBean.setId(newJugador.getId());
+            customerBean.setNombre(newJugador.getNombre());
+            customerBean.setApellidos(newJugador.getApellidos());
+            customerBean.setEmail(newJugador.getEmail());
+            customerBean.setFechaNacimiento(newJugador.getFechaNacimiento());
+
+            request.getSession().setAttribute("customerBean", customerBean);
             response.sendRedirect("views/welcome.jsp");
         } else {
             // Usuario ya existe, mostrar mensaje de error
