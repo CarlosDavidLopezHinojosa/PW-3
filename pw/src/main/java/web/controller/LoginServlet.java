@@ -11,7 +11,7 @@ import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.JugadorDTO;
 import web.model.data.DAOs.JugadorDAO;
 
-@WebServlet("/LoginServlet")
+@WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
 
     @Override

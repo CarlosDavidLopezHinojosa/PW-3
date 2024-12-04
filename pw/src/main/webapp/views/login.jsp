@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <h2>Iniciar Sesión</h2>
-        <form action="<%= request.getContextPath() %>/LoginServlet" method="post">
+        <form action="<%= request.getContextPath() %>/Login" method="post">
             <label for="email">Correo:</label>
             <input type="email" id="email" name="email" required><br><br>
             <label for="password">Contraseña:</label>

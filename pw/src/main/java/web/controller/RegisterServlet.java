@@ -13,7 +13,7 @@ import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.JugadorDTO;
 import web.model.data.DAOs.JugadorDAO;
 
-@WebServlet("/RegisterServlet")
+@WebServlet("/Registro")
 public class RegisterServlet extends HttpServlet {
 
     @Override

@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <h2>Registro</h2>
-        <form action="<%= request.getContextPath() %>/RegisterServlet" method="post">
+        <form action="<%= request.getContextPath() %>/Registro" method="post">
             <label for="name">Nombre:</label>
             <input type="text" id="name" name="name" required><br><br>
             <label for="lastName">Apellidos:</label>
