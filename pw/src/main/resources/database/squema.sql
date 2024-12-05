@@ -19,6 +19,7 @@ CREATE TABLE Material (
 
 CREATE TABLE Jugador (
     nombre VARCHAR(255),
+    contrasena VARCHAR(255),
     apellidos VARCHAR(255),
     id INT AUTO_INCREMENT PRIMARY KEY,
     fechaNacimiento DATE,
