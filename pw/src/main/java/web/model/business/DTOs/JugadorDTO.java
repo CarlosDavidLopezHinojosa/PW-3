@@ -46,6 +46,11 @@ public class JugadorDTO {
     private LocalDate fechaInscripcion;
     private String email;
     private String password;
+    private Roles rol;
+
+    public enum Roles {
+        ADMIN, CLIENTE
+    }
 
     /**
      * Constructor vacío (necesario para serialización).
@@ -64,7 +69,7 @@ public class JugadorDTO {
      * @param email             el email del jugador
      * @param password          la contraseña del jugador
      */
-    public JugadorDTO(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email, String password) {
+    public JugadorDTO(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email, String password, Roles rol) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.id = id;
@@ -72,6 +77,7 @@ public class JugadorDTO {
         this.fechaInscripcion = fechaInscripcion;
         this.email = email;
         this.password = password;
+        this.rol = rol;
     }
 
     /**
@@ -85,13 +91,14 @@ public class JugadorDTO {
      * @param email             el email del jugador
      * @param password          la contraseña del jugador
      */
-    public JugadorDTO(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email) {
+    public JugadorDTO(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email, Roles rol) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.id = id;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaInscripcion = fechaInscripcion;
         this.email = email;
+        this.rol = rol;
     }
     
 
@@ -220,6 +227,24 @@ public class JugadorDTO {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * Obtiene el rol del jugador.
+     *
+     * @return el rol del jugador
+     */
+    public Roles getRol() {
+        return rol;
+    }
+
+    /**
+     * Establece el rol del jugador.
+     *
+     * @param rol el rol del jugador
+     */
+    public void setRol(Roles rol) {
+        this.rol = rol;
     }
 
 
