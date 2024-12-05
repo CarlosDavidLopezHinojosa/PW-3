@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.JugadorDTO;
+import web.model.business.Gestores.GestorDeUsuarios;
 import web.model.data.DAOs.JugadorDAO;
 
 @WebServlet("/Registro")
@@ -33,27 +34,17 @@ public class RegisterServlet extends HttpServlet {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr, formatter);
 
-        JugadorDAO jugadorDAO = new JugadorDAO();
-        JugadorDTO existingJugador = jugadorDAO.getUsuarioEmail(email);
+        JugadorDTO existingJugador = JugadorDAO.getUsuarioEmail(email);
+        
 
         if (existingJugador == null) {
             // Usuario no existe, registrar nuevo usuario
-            JugadorDTO newJugador = new JugadorDTO();
-            newJugador.setNombre(name);
-            newJugador.setApellidos(lastName);
-            newJugador.setEmail(email);
-            newJugador.setPassword(password); // Asegúrate de manejar la contraseña de manera segura
-            newJugador.setFechaNacimiento(fechaNacimiento);
-
-            jugadorDAO.darDeAlta(email, name, lastName, fechaNacimiento, password);
-
+            GestorDeUsuarios.darDeAlta(email, name, lastName, fechaNacimiento, password);
             // Crear CustomerBean y almacenarlo en la sesión
+            JugadorDTO jugador = JugadorDAO.getUsuarioEmail(email);
+
             CustomerBean customerBean = new CustomerBean();
-            customerBean.setId(newJugador.getId());
-            customerBean.setNombre(newJugador.getNombre());
-            customerBean.setApellidos(newJugador.getApellidos());
-            customerBean.setEmail(newJugador.getEmail());
-            customerBean.setFechaNacimiento(newJugador.getFechaNacimiento());
+            customerBean.setData(jugador);
 
             request.getSession().setAttribute("customerBean", customerBean);
             response.sendRedirect("views/welcome.jsp");

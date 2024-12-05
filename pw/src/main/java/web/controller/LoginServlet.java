@@ -25,21 +25,16 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        JugadorDAO jugadorDAO = new JugadorDAO();
-        JugadorDTO jugador = jugadorDAO.getUsuarioEmail(email);
+        JugadorDTO jugador = JugadorDAO.getUsuarioEmail(email);
 
-        if(!jugador.getPassword().equals(password) ) {
-            jugador = null;
-        }
+        // if(jugador != null && !jugador.getPassword().equals(password) ) {
+        //     jugador = null;
+        // }
 
         if (jugador != null) {
             // Usuario encontrado, crear CustomerBean y almacenarlo en la sesión
             CustomerBean customerBean = new CustomerBean();
-            customerBean.setId(jugador.getId());
-            customerBean.setNombre(jugador.getNombre());
-            customerBean.setApellidos(jugador.getApellidos());
-            customerBean.setEmail(jugador.getEmail());
-            customerBean.setFechaNacimiento(jugador.getFechaNacimiento());
+            customerBean.setData(jugador);
 
             request.getSession().setAttribute("customerBean", customerBean);
             response.sendRedirect("views/welcome.jsp");

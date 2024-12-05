@@ -16,9 +16,8 @@ public class VerJugadoresServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        JugadorDAO jugadorDAO = new JugadorDAO();
-        List<JugadorDTO> jugadores = jugadorDAO.obtenerUsuarios();
 
+        List<JugadorDTO> jugadores = JugadorDAO.obtenerUsuarios();
         // Set the list of players as a request attribute
         request.setAttribute("jugadores", jugadores);
 

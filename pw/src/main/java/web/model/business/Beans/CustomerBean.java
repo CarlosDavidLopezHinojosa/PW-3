@@ -3,12 +3,22 @@ package web.model.business.Beans;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import web.model.business.DTOs.JugadorDTO;
+
 public class CustomerBean implements Serializable {
     private int id;
     private String nombre;
     private String apellidos;
     private String email;
     private LocalDate fechaNacimiento;
+
+    public void setData(JugadorDTO jugador) {
+        this.id = jugador.getId();
+        this.nombre = jugador.getNombre();
+        this.apellidos = jugador.getApellidos();
+        this.email = jugador.getEmail();
+        this.fechaNacimiento = jugador.getFechaNacimiento();
+    }
 
     // Getters y setters
 
