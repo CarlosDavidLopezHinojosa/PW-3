@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.JugadorDTO;
+import web.model.business.DTOs.JugadorDTO.Roles;
 import web.model.business.Gestores.GestorDeUsuarios;
 import web.model.data.DAOs.JugadorDAO;
 
@@ -33,13 +34,20 @@ public class RegisterServlet extends HttpServlet {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr, formatter);
+        String rolStr = request.getParameter("rol");
+        Roles rol;
+        if (rolStr.equals("ADMIN")) {
+            rol = Roles.ADMIN;
+        } else {
+            rol = Roles.CLIENTE;
+        }
 
         JugadorDTO existingJugador = JugadorDAO.getUsuarioEmail(email);
         
 
         if (existingJugador == null) {
             // Usuario no existe, registrar nuevo usuario
-            GestorDeUsuarios.darDeAlta(email, name, lastName, fechaNacimiento, password);
+            GestorDeUsuarios.darDeAlta(email, name, lastName, fechaNacimiento, password, rol);
             // Crear CustomerBean y almacenarlo en la sesión
             JugadorDTO jugador = JugadorDAO.getUsuarioEmail(email);
 
