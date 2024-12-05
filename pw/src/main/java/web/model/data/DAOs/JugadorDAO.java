@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import web.model.business.DTOs.JugadorDTO;
+import web.model.business.DTOs.JugadorDTO.Roles;
 import web.model.data.common.DBConnection;
 
 /**
@@ -80,11 +81,11 @@ public class JugadorDAO {
      * @param fechaNacimiento La fecha de nacimiento del jugador.
      * @return Un objeto JugadorDTO que representa al jugador dado de alta.
      */
-    public static JugadorDTO darDeAlta(String email, String nombre, String apellidos, LocalDate fechaNacimiento, String password) {
+    public static JugadorDTO darDeAlta(String email, String nombre, String apellidos, LocalDate fechaNacimiento, String password, Roles rol){
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         int id = conexion.getMaxId("Jugador") + 1;
-        JugadorDTO jugador = new JugadorDTO(nombre, apellidos, id, fechaNacimiento, LocalDate.now(), email, password);
+        JugadorDTO jugador = new JugadorDTO(nombre, apellidos, id, fechaNacimiento, LocalDate.now(), email, password, rol);
         conexion.insertIntoJugador(nombre, apellidos, id, fechaNacimiento, LocalDate.now(), email);
         conexion.closeConnection();
         return jugador;
