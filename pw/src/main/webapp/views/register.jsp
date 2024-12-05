@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/styles.css"> <!-- Enlace al CSS -->
-    <script src="<%= request.getContextPath() %>/static/js/register.js"></script>
 </head>
 <body>
     <div class="container">
@@ -32,5 +31,6 @@
             }
         %>
     </div>
+    <script src="<%= request.getContextPath() %>/static/js/register.js"></script>
 </body>
 </html>
