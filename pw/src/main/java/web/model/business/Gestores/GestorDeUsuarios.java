@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import web.model.business.DTOs.JugadorDTO;
+import web.model.business.DTOs.JugadorDTO.Roles;
 import web.model.data.DAOs.JugadorDAO;
 
 /**
@@ -68,8 +69,8 @@ public class GestorDeUsuarios {
      * @param password Contraseña del usuario.
      * @return El objeto Jugador del usuario creado, o null si ya estaba registrado.
      */
-    public static JugadorDTO darDeAlta(String email, String nombre, String apellidos, LocalDate fechaNacimiento, String password) {
-        return JugadorDAO.darDeAlta(email, nombre, apellidos, fechaNacimiento, password);
+    public static JugadorDTO darDeAlta(String email, String nombre, String apellidos, LocalDate fechaNacimiento, String password, Roles rol) {
+        return JugadorDAO.darDeAlta(email, nombre, apellidos, fechaNacimiento, password, rol);
     }
 
     /**
