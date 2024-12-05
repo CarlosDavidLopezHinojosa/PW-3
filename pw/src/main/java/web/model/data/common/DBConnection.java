@@ -827,7 +827,8 @@ public class DBConnection {
 					rs.getInt("id"),
 					rs.getDate("fechaNacimiento").toLocalDate(),
 					rs.getDate("fechaInscripcion").toLocalDate(),
-					rs.getString("email")
+					rs.getString("email"), 
+					JugadorDTO.Roles.valueOf(rs.getString("rol"))
 				);
 				jugadores.add(jugador);
 			}
@@ -859,7 +860,9 @@ public class DBConnection {
 						rs.getInt("id"),
 						rs.getDate("fechaNacimiento").toLocalDate(),
 						rs.getDate("fechaInscripcion").toLocalDate(),
-						rs.getString("email")
+						rs.getString("email"),
+						JugadorDTO.Roles.valueOf(rs.getString("rol"))
+
 					);
 				} else {
 				}
