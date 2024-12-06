@@ -24,7 +24,9 @@ CREATE TABLE Jugador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fechaNacimiento DATE,
     fechaInscripcion DATE,
-    email VARCHAR(255)
+    email VARCHAR(255),
+    password VARCHAR(255),
+    rol ENUM('Cliente', 'Admin')
 );
 
 CREATE TABLE Reserva (
