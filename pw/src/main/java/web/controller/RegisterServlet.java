@@ -34,13 +34,7 @@ public class RegisterServlet extends HttpServlet {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr, formatter);
-        String rolStr = request.getParameter("rol");
-        Roles rol;
-        if (rolStr.equals("ADMIN")) {
-            rol = Roles.ADMIN;
-        } else {
-            rol = Roles.CLIENTE;
-        }
+        Roles rol = Roles.CLIENTE;
 
         JugadorDTO existingJugador = JugadorDAO.getUsuarioEmail(email);
         

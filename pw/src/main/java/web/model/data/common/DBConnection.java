@@ -80,10 +80,10 @@ public class DBConnection {
 	protected Connection connection = null;
 
 	// Important: This configuration is hard-coded here for illustrative purposes only
-	
-	protected String url = "jdbc:mysql://oraclepr.uco.es:3306/i22goapj";
+	//Vamos a usar mi bd porque Aurora aun no ha corregido la P2
+	protected String url = "jdbc:mysql://oraclepr.uco.es:3306/i22lohic";
 
-	protected String user = "i22goapj";
+	protected String user = "i22lohic"; 
 
 	protected String password = "meloading";
 
@@ -765,8 +765,8 @@ public class DBConnection {
 	 * @param email El correo electrónico del jugador.
 	 * @throws SQLException Si ocurre un error al insertar el registro en la base de datos.
 	 */
-	public void insertIntoJugador(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email) {
-		String query = "INSERT INTO Jugador (nombre, apellidos, id, fechaNacimiento, fechaInscripcion, email) VALUES (?, ?, ?, ?, ?, ?)";
+	public void insertIntoJugador(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email, String password, JugadorDTO.Roles rol) {
+		String query = "INSERT INTO Jugador (nombre, apellidos, id, fechaNacimiento, fechaInscripcion, email, password, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, nombre);
 			stmt.setString(2, apellidos);
@@ -774,6 +774,8 @@ public class DBConnection {
 			stmt.setDate(4, java.sql.Date.valueOf(fechaNacimiento));
 			stmt.setDate(5, java.sql.Date.valueOf(fechaInscripcion));
 			stmt.setString(6, email);
+			stmt.setString(7, password);
+			stmt.setString(8, rol.name());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println("Error while inserting record into Jugador table.");
@@ -828,6 +830,7 @@ public class DBConnection {
 					rs.getDate("fechaNacimiento").toLocalDate(),
 					rs.getDate("fechaInscripcion").toLocalDate(),
 					rs.getString("email"), 
+					rs.getString("password"),
 					JugadorDTO.Roles.valueOf(rs.getString("rol"))
 				);
 				jugadores.add(jugador);
@@ -861,6 +864,7 @@ public class DBConnection {
 						rs.getDate("fechaNacimiento").toLocalDate(),
 						rs.getDate("fechaInscripcion").toLocalDate(),
 						rs.getString("email"),
+						rs.getString("password"),
 						JugadorDTO.Roles.valueOf(rs.getString("rol"))
 
 					);

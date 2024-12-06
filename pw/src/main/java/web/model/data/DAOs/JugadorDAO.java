@@ -69,7 +69,9 @@ public class JugadorDAO {
     public static JugadorDTO getUsuarioEmail(String email) {
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
-        return conexion.selectJugadorEmail(email);
+        JugadorDTO jugador = conexion.selectJugadorEmail(email);
+        conexion.closeConnection();
+        return jugador;
     }
 
     /**
@@ -86,7 +88,7 @@ public class JugadorDAO {
         conexion.getConnection();
         int id = conexion.getMaxId("Jugador") + 1;
         JugadorDTO jugador = new JugadorDTO(nombre, apellidos, id, fechaNacimiento, LocalDate.now(), email, password, rol);
-        conexion.insertIntoJugador(nombre, apellidos, id, fechaNacimiento, LocalDate.now(), email);
+        conexion.insertIntoJugador(nombre, apellidos, id, fechaNacimiento, LocalDate.now(), email,password, rol);
         conexion.closeConnection();
         return jugador;
     }

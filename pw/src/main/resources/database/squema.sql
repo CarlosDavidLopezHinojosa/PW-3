@@ -26,7 +26,7 @@ CREATE TABLE Jugador (
     fechaInscripcion DATE,
     email VARCHAR(255),
     password VARCHAR(255),
-    rol ENUM('Cliente', 'Admin')
+    rol ENUM('CLIENTE', 'ADMIN')
 );
 
 CREATE TABLE Reserva (

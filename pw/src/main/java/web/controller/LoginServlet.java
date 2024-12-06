@@ -27,9 +27,9 @@ public class LoginServlet extends HttpServlet {
 
         JugadorDTO jugador = JugadorDAO.getUsuarioEmail(email);
 
-        // if(jugador != null && !jugador.getPassword().equals(password) ) {
-        //     jugador = null;
-        // }
+        if(jugador != null && !jugador.getPassword().equals(password) ) {
+            jugador = null;
+        }
 
         if (jugador != null) {
             // Usuario encontrado, crear CustomerBean y almacenarlo en la sesión

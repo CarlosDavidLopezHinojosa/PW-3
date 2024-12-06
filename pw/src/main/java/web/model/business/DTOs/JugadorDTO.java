@@ -68,6 +68,7 @@ public class JugadorDTO {
      * @param fechaInscripcion  la fecha de inscripción del jugador
      * @param email             el email del jugador
      * @param password          la contraseña del jugador
+     * @param rol               el rol del jugador
      */
     public JugadorDTO(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email, String password, Roles rol) {
         this.nombre = nombre;
@@ -89,7 +90,7 @@ public class JugadorDTO {
      * @param fechaNacimiento   la fecha de nacimiento del jugador
      * @param fechaInscripcion  la fecha de inscripción del jugador
      * @param email             el email del jugador
-     * @param password          la contraseña del jugador
+     * @param rol               el rol del jugador
      */
     public JugadorDTO(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email, Roles rol) {
         this.nombre = nombre;
