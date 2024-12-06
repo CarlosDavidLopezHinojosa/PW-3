@@ -18,8 +18,8 @@
 
         <!-- Botones de acción -->
         <div class="actions">
-            <a href="views/login.jsp" class="btn btn-primary">Iniciar Sesión</a>
-            <a href="views/register.jsp" class="btn btn-secondary">Registrarse</a>
+            <a href="views/loginview.jsp" class="btn btn-primary">Iniciar Sesión</a>
+            <a href="views/registerview.jsp" class="btn btn-secondary">Registrarse</a>
         </div>
     </div>
 </body>

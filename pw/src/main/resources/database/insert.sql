@@ -11,10 +11,10 @@ INSERT INTO Material (tipo, usoExterior, estado, idPista) VALUES
 ('CONOS', TRUE, 'MAL_ESTADO', 3);
 
 -- Inserciones en la tabla Jugador
-INSERT INTO Jugador (nombre, contrasena, apellidos, fechaNacimiento, fechaInscripcion, email, password, rol) VALUES
-('Juan', 'password123', 'Pérez', '1990-01-01', '2023-01-01', 'juan.perez@example.com', 'password123', 'CLIENTE'),
-('María', 'password123', 'García', '1985-05-05', '2023-02-01', 'maria.garcia@example.com', 'password123', 'CLIENTE'),
-('Carlos', 'password123', 'López', '2000-10-10', '2023-03-01', 'carlos.lopez@example.com', 'password123', 'CLIENTE');
+INSERT INTO Jugador (nombre, apellidos, fechaNacimiento, fechaInscripcion, email, password, rol) VALUES
+('Juan', 'Pérez', '1990-01-01', '2023-01-01', 'juan.perez@example.com', 'password123', 'CLIENTE'),
+('María', 'García', '1985-05-05', '2023-02-01', 'maria.garcia@example.com', 'password123', 'CLIENTE'),
+('Carlos', 'López', '2000-10-10', '2023-03-01', 'carlos.lopez@example.com', 'password123', 'CLIENTE');
 
 -- Inserciones en la tabla Bono
 INSERT INTO Bono (sesiones, idUser, tipoReserva, tamanoPista) VALUES

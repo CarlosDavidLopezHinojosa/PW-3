@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Bienvenido</h2>
+        <h2>Bienvenido Administrador</h2>
         <p>Has iniciado sesión correctamente.</p>
     </div>
 </body>

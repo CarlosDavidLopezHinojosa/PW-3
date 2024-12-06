@@ -13,7 +13,7 @@
         <%
             List<JugadorDTO> jugadores = (List<JugadorDTO>) request.getAttribute("jugadores");
             for (JugadorDTO jugador : jugadores) {
-                out.println("<li>" + jugador.getNombre() + " (" + jugador.getEmail() + ") - Contraseña: " + jugador.getPassword() + "- Rol: " + jugador.getRol() + "</li>");
+                out.println("<li>" + jugador.getNombre() + " " + jugador.getApellidos() + " (" + jugador.getEmail() + ") - Contraseña: " + jugador.getPassword() + " - Rol: " + jugador.getRol() + "</li>");
             }
         %>
     </ul>
