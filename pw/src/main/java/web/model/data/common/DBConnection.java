@@ -662,7 +662,7 @@ public class DBConnection {
 		return reservas;
 	}
 
-	public List<ReservaDTO> selectTodasReservasClientes() {
+	public List<ReservaDTO> selectTodasReservas() {
 		List<ReservaDTO> reservas = new ArrayList<>();
 		String query = "SELECT * FROM Reserva";
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {

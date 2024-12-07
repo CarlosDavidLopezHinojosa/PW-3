@@ -148,10 +148,10 @@ public class ReservaDAO {
         conexion.closeConnection();
     }
 
-    public static List<ReservaDTO> obtenerReservasClientes(){
+    public static List<ReservaDTO> obtenerReservas(){
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
-        List<ReservaDTO> reservas = conexion.selectTodasReservasClientes();
+        List<ReservaDTO> reservas = conexion.selectTodasReservas();
         conexion.closeConnection();
         return reservas;
     }

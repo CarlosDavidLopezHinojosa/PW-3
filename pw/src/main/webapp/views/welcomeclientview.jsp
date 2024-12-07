@@ -26,7 +26,10 @@
             %>
         </h2>
         <p>Has iniciado sesión correctamente.</p>
-
+        <div>
+            <a href="<%= request.getContextPath() %>/controller/logout.jsp">Desconectar</a>
+            <a href="<%= request.getContextPath() %>/views/updateview.jsp">Modificar Datos</a>
+        </div>
         <p>
             Fecha actual: 
             <%= request.getAttribute("fechaActual") != null ? request.getAttribute("fechaActual") : "No disponible" %>

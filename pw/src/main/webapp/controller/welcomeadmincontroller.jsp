@@ -17,7 +17,7 @@
 
     List<JugadorDTO> clientes = JugadorDAO.obtenerUsuarios();
     clientes.removeIf(cliente -> cliente.getRol() != JugadorDTO.Roles.CLIENTE);
-    List<ReservaDTO> reservas = ReservaDAO.obtenerReservasClientes();
+    List<ReservaDTO> reservas = ReservaDAO.obtenerReservas();
     Map<Integer, Integer> reservasCompletadas = new HashMap<>();
 
     LocalDate fechaActual = LocalDate.now();

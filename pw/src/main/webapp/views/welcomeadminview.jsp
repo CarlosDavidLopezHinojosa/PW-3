@@ -14,6 +14,10 @@
     <div class="container">
         <h2>Bienvenido Administrador</h2>
         <p>Has iniciado sesión correctamente.</p>
+        <div>
+            <a href="<%= request.getContextPath() %>/controller/logout.jsp">Desconectar</a>
+            <a href="<%= request.getContextPath() %>/views/updateview.jsp">Modificar Datos</a>
+        </div>
         <h3>Listado de Clientes</h3>
         <table>
             <thead>
@@ -28,13 +32,21 @@
                 <%
                     List<JugadorDTO> clientes = (List<JugadorDTO>) request.getAttribute("clientes");
                     Map<Integer, Integer> reservasCompletadas = (Map<Integer, Integer>) request.getAttribute("reservasCompletadas");
-                    for (JugadorDTO cliente : clientes) {
+                    if (clientes != null && reservasCompletadas != null) {
+                        for (JugadorDTO cliente : clientes) {
                 %>
                     <tr>
                         <td><%= cliente.getNombre() %></td>
                         <td><%= cliente.getApellidos() %></td>
                         <td><%= cliente.getFechaInscripcion() %></td>
                         <td><%= reservasCompletadas.get(cliente.getId()) %></td>
+                    </tr>
+                <%
+                        }
+                    } else {
+                %>
+                    <tr>
+                        <td colspan="4">No hay datos disponibles.</td>
                     </tr>
                 <%
                     }
