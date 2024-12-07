@@ -662,6 +662,75 @@ public class DBConnection {
 		return reservas;
 	}
 
+	public List<ReservaDTO> selectTodasReservasClientes() {
+		List<ReservaDTO> reservas = new ArrayList<>();
+		String query = "SELECT * FROM Reserva";
+		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.ADULTOS.name())){
+						ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservas.add(reserva);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.FAMILIAR.name())){
+						ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservas.add(reserva);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.INFANTIL.name())){
+						ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
+							rs.getString("tipo"),
+							rs.getInt("idUsuario"),
+							rs.getDate("diaYHora").toLocalDate(),
+							rs.getInt("idBono"),
+							rs.getInt("nSesionBono"),
+							rs.getInt("duracion"),
+							rs.getInt("idPista"),
+							rs.getFloat("precio"),
+							rs.getFloat("descuento"),
+							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+							rs.getInt("id"),
+							rs.getInt("numAdultos"),
+							rs.getInt("numNinos")	
+						);
+						reservas.add(reserva);
+					}
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Error while retrieving records from Reserva table.");
+			e.printStackTrace();
+		}
+		return reservas;
+	}
+
 
 	/**
 	 * Inserta un nuevo registro en la tabla Bono.

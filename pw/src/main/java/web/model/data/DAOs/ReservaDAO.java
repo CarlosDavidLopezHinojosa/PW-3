@@ -69,34 +69,22 @@ public class ReservaDAO {
         ReservaDTO reserva;
         if(idBono==-1 && nSesionBono==-1){
             ReservaIndFactoryDTO reservaIndFactory = new ReservaIndFactoryDTO();
-            switch (tipoReserva) {
-                case "ADULTOS":
-                    reserva = reservaIndFactory.crearReservaAdultos(tipoReserva, idUsuario, diaYHora, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
-                    break;
-                case "INFANTIL":
-                    reserva = reservaIndFactory.crearReservaInfantil(tipoReserva, idUsuario, diaYHora, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
-                    break;
-                case "FAMILIAR":
-                    reserva = reservaIndFactory.crearReservaFamiliar(tipoReserva, idUsuario, diaYHora, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Tipo de reserva desconocido: " + tipoReserva);
-            }
+
+            reserva = switch (tipoReserva) {
+                case "ADULTOS" -> reservaIndFactory.crearReservaAdultos(tipoReserva, idUsuario, diaYHora, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                case "INFANTIL" -> reservaIndFactory.crearReservaInfantil(tipoReserva, idUsuario, diaYHora, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                case "FAMILIAR" -> reservaIndFactory.crearReservaFamiliar(tipoReserva, idUsuario, diaYHora, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                default -> throw new IllegalArgumentException("Tipo de reserva desconocido: " + tipoReserva);
+            };
+            
         }
         else{
             switch (tipoReserva) {
-            case "ADULTOS":
-                reserva = ReservaBonoFactoryDTO.crearReservaAdultos(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
-                break;
-            case "INFANTIL":
-                reserva = ReservaBonoFactoryDTO.crearReservaInfantil(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
-                break;
-            case "FAMILIAR":
-                reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
-                break;
-            default:
-                throw new IllegalArgumentException("Tipo de reserva desconocido: " + tipoReserva);
-        }
+                case "ADULTOS" -> reserva = ReservaBonoFactoryDTO.crearReservaAdultos(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                case "INFANTIL" -> reserva = ReservaBonoFactoryDTO.crearReservaInfantil(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                case "FAMILIAR" -> reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                default -> throw new IllegalArgumentException("Tipo de reserva desconocido: " + tipoReserva);
+                }
         }
         
         conexion.insertIntoReserva(id, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, tipoReserva, numAdultos, numNinos);
@@ -158,5 +146,13 @@ public class ReservaDAO {
         conexion.getConnection();
         conexion.deleteReserva(id);
         conexion.closeConnection();
+    }
+
+    public static List<ReservaDTO> obtenerReservasClientes(){
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        List<ReservaDTO> reservas = conexion.selectTodasReservasClientes();
+        conexion.closeConnection();
+        return reservas;
     }
 }
