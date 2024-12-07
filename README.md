@@ -12,7 +12,8 @@ De la práctica actual en principio lo que debemos hacer es lo siguiente:
 
 - [x] Esta primera semana debemos entender y crear el servidor se Apache Tomcat que se usará en local, no es necesario HTTPs.
 - [x] Tambien sería conveniente que entender Servlets y JSPs, ya que es lo que vamos a usar para la práctica.
-- [ ] Hacer página de inicio, login, registro
+- [x] Hacer página de inicio, login,
+- [ ] Hace el ejercicio 2, Javi, Alejandro.
 - [ ] Para el final de la práctica poner todas las queries en función de los ficheros properties
 
 ## Pero me cago en la reputisima que me re-pario
@@ -34,41 +35,85 @@ Antes que nada `maven install` para que te instale todas las dependencias.
 Si haces algun cambio en CUALQUIER fichero deber hacer los siguiente: `maven clean` -> `maven package`
 Y por ultimo reincia el servidor tomcat `restart in run mode`.
 
+Una vez hecho esto si quereís probar, podeis meteros en [la pagina web](http://localhost:8080/PW/).
+Tambien podeís ver los jugadores que tenemos en la base de datos en [enlace a los jugadores](http://localhost:8080/PW/jugadores)
+
 ### Organización del proyecto
 
 El mvc que nos enseñaron desde primaria, al menos que yo recuerde (Mi pasado me atormenta).
 
-Entended que este esquema esta generalizado
-
 ```bash
-mi-web-app/
+pw/
 │
 ├── src/
 │ ├── main/
 │ │ ├── java/
-│ │ │ ├── com.miwebapp.controlador/ # Servlets (Controladores)
-│ │ │ │ └── UsuarioServlet.java
-│ │ │ ├── com.miwebapp.modelo/ # Clases de negocio, si las hay
-│ │ │ ├── com.miwebapp.dao/ # Acceso a datos (DAO)
-│ │ │ │ └── UsuarioDAO.java
-│ │ │ ├── com.miwebapp.dto/ # Objetos de transferencia de datos (DTO)
-│ │ │ │ └── UsuarioDTO.java
-│ │ │ └── com.miwebapp.util/ # Utilidades y helpers
-│ │ │ ├── DBConnection.java # Clase para manejar conexiones
-│ │ │ └── OtrosHelpers.java # (Si es necesario)
-│ │ ├── resources/ # Configuraciones adicionales
-│ │ │ └── db.properties # Archivo de configuración de la BD
+│ │ │ ├── web/
+│ │ │ │ ├── model/
+│ │ │ │ │ ├── business/
+│ │ │ │ │ │ ├── Beans/
+│ │ │ │ │ │ │ └── CustomerBean.java
+│ │ │ │ │ │ ├── DTOs/
+│ │ │ │ │ │ │ ├── BonoDTO.java
+│ │ │ │ │ │ │ ├── JugadorDTO.java
+│ │ │ │ │ │ │ ├── MaterialDTO.java
+│ │ │ │ │ │ │ ├── PistaDTO.java
+│ │ │ │ │ │ │ └── Reservas/
+│ │ │ │ │ │ │ │ ├── ReservaAdultosDTO.java
+│ │ │ │ │ │ │ │ ├── ReservaBonoFactoryDTO.java
+│ │ │ │ │ │ │ │ ├── ReservaDTO.java
+│ │ │ │ │ │ │ │ ├── ReservaFactoryDTO.java
+│ │ │ │ │ │ │ │ ├── ReservaFamiliarDTO.java
+│ │ │ │ │ │ │ │ ├── ReservaIndFactoryDTO.java
+│ │ │ │ │ │ │ │ └── ReservaInfantilDTO.java
+│ │ │ │ │ │ ├── Gestores/
+│ │ │ │ │ │ │ ├── GestorDePistas.java
+│ │ │ │ │ │ │ ├── GestorDeReservas.java
+│ │ │ │ │ │ │ └── GestorDeUsuarios.java
+│ │ │ │ │ ├── data/
+│ │ │ │ │ │ ├── common/
+│ │ │ │ │ │ │ └── DBConnection.java
+│ │ │ │ │ │ ├── DAOs/
+│ │ │ │ │ │ │ ├── BonoDAO.java
+│ │ │ │ │ │ │ ├── JugadorDAO.java
+│ │ │ │ │ │ │ ├── MaterialDAO.java
+│ │ │ │ │ │ │ ├── PistaDAO.java
+│ │ │ │ │ │ │ └── ReservaDAO.java
+│ │ │ │ ├── servlet/
+│ │ │ │ │ └── VerJugadoresServlet.java
+│ │ ├── resources/
+│ │ │ ├── config.properties
+│ │ │ ├── database/
+│ │ │ │ ├── drop.sql
+│ │ │ │ ├── insert.sql
+│ │ │ │ ├── query.sql
+│ │ │ │ └── squema.sql
+│ │ │ └── sql.properties
 │ │ └── webapp/
-│ │ ├── WEB-INF/ # Configuración y vistas internas
-│ │ │ ├── web.xml # Descriptor de despliegue
-│ │ │ └── vistas/ # Vistas JSP
-│ │ │ └── usuarios.jsp
-│ │ └── static/ # Recursos estáticos (CSS, JS, imágenes)
-│ │ ├── css/
-│ │ ├── js/
-│ │ └── img/
-│ └── test/ # Pruebas unitarias y de integración
-│
-├── pom.xml # Configuración de dependencias con Maven
-└── README.md # Documentación del proyecto
+│ │ ├── WEB-INF/
+│ │ │ └── web.xml
+│ │ ├── controller/
+│ │ │ ├── logincontroller.jsp
+│ │ │ ├── logout.jsp
+│ │ │ ├── registercontroller.jsp
+│ │ │ ├── updatecontroller.jsp
+│ │ │ ├── welcomeadmincontroller.jsp
+│ │ │ └── welcomeclientcontroller.jsp
+│ │ ├── static/
+│ │ │ ├── css/
+│ │ │ │ ├── jugadores.css
+│ │ │ │ └── styles.css
+│ │ │ ├── img/
+│ │ │ └── js/
+│ │ │ │ └── register.js
+│ │ ├── views/
+│ │ │ ├── jugadores.jsp
+│ │ │ ├── loginview.jsp
+│ │ │ ├── registerview.jsp
+│ │ │ ├── updateview.jsp
+│ │ │ ├── welcomeadminview.jsp
+│ │ │ └── welcomeclientview.jsp
+│ │ └── index.jsp
+│ └── test/
+│ └── java/
 ```
