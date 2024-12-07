@@ -19,11 +19,11 @@
             session.setAttribute("customerBean", customerBean);
 
             if (jugador.getRol() == JugadorDTO.Roles.ADMIN) {
-                response.sendRedirect("../views/welcomeadminview.jsp");
+                response.sendRedirect("welcomeadmincontroller.jsp");
                 return;
             }
             else{
-                response.sendRedirect("../views/welcomeclientview.jsp");
+                response.sendRedirect("welcomeclientcontroller.jsp");
                 return;
             }
         } else {

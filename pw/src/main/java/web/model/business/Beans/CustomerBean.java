@@ -4,24 +4,27 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 import web.model.business.DTOs.JugadorDTO;
-import web.model.business.DTOs.JugadorDTO.Roles;
 
 public class CustomerBean implements Serializable {
     private int id;
     private String nombre;
     private String apellidos;
-    private String email;
     private LocalDate fechaNacimiento;
+    private LocalDate fechaInscripcion;
+    private String email;
     private String password;
-    private Roles rol;
+    private JugadorDTO.Roles rol;
 
+    public CustomerBean() {
+    }
 
     public void setData(JugadorDTO jugador) {
         this.id = jugador.getId();
         this.nombre = jugador.getNombre();
         this.apellidos = jugador.getApellidos();
-        this.email = jugador.getEmail();
         this.fechaNacimiento = jugador.getFechaNacimiento();
+        this.fechaInscripcion = jugador.getFechaInscripcion();
+        this.email = jugador.getEmail();
         this.password = jugador.getPassword();
         this.rol = jugador.getRol();
     }
@@ -52,20 +55,28 @@ public class CustomerBean implements Serializable {
         this.apellidos = apellidos;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public LocalDate getFechaInscripcion() {
+        return fechaInscripcion;
+    }
+
+    public void setFechaInscripcion(LocalDate fechaInscripcion) {
+        this.fechaInscripcion = fechaInscripcion;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -76,11 +87,11 @@ public class CustomerBean implements Serializable {
         this.password = password;
     }
 
-    public Roles getRol() {
+    public JugadorDTO.Roles getRol() {
         return rol;
     }
 
-    public void setRol(Roles rol) {
+    public void setRol(JugadorDTO.Roles rol) {
         this.rol = rol;
     }
 }

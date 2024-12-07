@@ -24,6 +24,6 @@ INSERT INTO Bono (sesiones, idUser, tipoReserva, tamanoPista) VALUES
 
 -- Inserciones en la tabla Reserva
 INSERT INTO Reserva (idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, tipo, numAdultos, numNinos) VALUES
-(1, '2023-04-01 10:00:00', 1, 1, 60, 1, 20.00, 5.00, 'ADULTOS', 'ADULTOS', 2, 0),
+(1, '2026-04-01 10:00:00', 1, 1, 60, 1, 20.00, 5.00, 'ADULTOS', 'ADULTOS', 2, 0),
 (2, '2023-04-02 11:00:00', 2, 1, 90, 2, 15.00, 3.00, 'MINIBASKET', 'FAMILIAR', 2, 2),
 (3, '2023-04-03 12:00:00', 3, 1, 120, 3, 25.00, 7.00, 'VS3', 'INFANTIL', 1, 3);
