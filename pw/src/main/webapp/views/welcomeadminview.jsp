@@ -34,12 +34,14 @@
                     Map<Integer, Integer> reservasCompletadas = (Map<Integer, Integer>) request.getAttribute("reservasCompletadas");
                     if (clientes != null && reservasCompletadas != null) {
                         for (JugadorDTO cliente : clientes) {
+                            // Trabajamos directamente con cliente.getId(), que ya es un int
+                            int clienteId = cliente.getId();
                 %>
                     <tr>
                         <td><%= cliente.getNombre() %></td>
                         <td><%= cliente.getApellidos() %></td>
                         <td><%= cliente.getFechaInscripcion() %></td>
-                        <td><%= reservasCompletadas.get(cliente.getId()) %></td>
+                        <td><%= reservasCompletadas.getOrDefault(clienteId, 0) %></td>
                     </tr>
                 <%
                         }

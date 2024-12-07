@@ -2,7 +2,7 @@
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.stream.Collectors" %>
 <%@ page import="web.model.business.DTOs.JugadorDTO" %>
 <%@ page import="web.model.business.DTOs.Reservas.ReservaDTO" %>
 <%@ page import="web.model.data.DAOs.JugadorDAO" %>
@@ -15,24 +15,21 @@
         return;
     }
 
-    List<JugadorDTO> clientes = JugadorDAO.obtenerUsuarios();
-    clientes.removeIf(cliente -> cliente.getRol() != JugadorDTO.Roles.CLIENTE);
-    List<ReservaDTO> reservas = ReservaDAO.obtenerReservas();
-    Map<Integer, Integer> reservasCompletadas = new HashMap<>();
+    // Filtrar clientes y reservas directamente desde las consultas
+    List<JugadorDTO> clientes = JugadorDAO.obtenerUsuarios()
+        .stream()
+        .filter(cliente -> cliente.getRol() == JugadorDTO.Roles.CLIENTE)
+        .collect(Collectors.toList());
 
     LocalDate fechaActual = LocalDate.now();
-    for (JugadorDTO cliente : clientes) {
-        if (cliente.getRol() == JugadorDTO.Roles.ADMIN) {
-            continue;
-        }
-        int numReservasCompletadas = 0;
-        for (ReservaDTO reserva : reservas) {
-            if (reserva.getIdUsuario() == cliente.getId() && reserva.getDiaYHora().isBefore(fechaActual)) {
-                numReservasCompletadas++;
-            }
-        }
-        reservasCompletadas.put(cliente.getId(), numReservasCompletadas);
-    }
+    List<ReservaDTO> reservas = ReservaDAO.obtenerReservas()
+        .stream()
+        .filter(reserva -> reserva.getDiaYHora().isBefore(fechaActual))
+        .collect(Collectors.toList());
+
+    // Mapear reservas completadas por cliente
+    Map<Integer, Long> reservasCompletadas = reservas.stream()
+        .collect(Collectors.groupingBy(ReservaDTO::getIdUsuario, Collectors.counting()));
 
     request.setAttribute("clientes", clientes);
     request.setAttribute("reservasCompletadas", reservasCompletadas);
