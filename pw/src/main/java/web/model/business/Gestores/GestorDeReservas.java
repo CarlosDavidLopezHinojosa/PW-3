@@ -1,12 +1,13 @@
 package web.model.business.Gestores;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import web.model.business.DTOs.BonoDTO;
 import web.model.business.DTOs.PistaDTO;
 import web.model.business.DTOs.Reservas.ReservaDTO;
 import web.model.data.DAOs.BonoDAO;
 import web.model.data.DAOs.ReservaDAO;
-import java.time.LocalDate;
-import java.util.List;
 
 /**
  * La clase GestorDeReservas implementa el patrón de diseño Singleton para gestionar reservas en un sistema.
@@ -100,7 +101,7 @@ public class GestorDeReservas {
      * <p>Si el usuario confirma, se crea y almacena la reserva.</p>
      * <p>Si el usuario no confirma, la reserva se cancela.</p>
      */
-    public static ReservaDTO hacerReservaIndividual(String tipoReserva, int idUsuario, LocalDate diaYHora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
+    public static ReservaDTO hacerReservaIndividual(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
         return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, -1, -1, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
     }
 
@@ -166,7 +167,7 @@ public class GestorDeReservas {
  *   <li><code>Exception</code>: Captura errores de formato de fecha.</li>
  * </ul>
  */
-    public static ReservaDTO hacerReservaBono(String tipoReserva, int idUsuario, LocalDate diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
+    public static ReservaDTO hacerReservaBono(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
         return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
     }
 
@@ -251,7 +252,7 @@ public class GestorDeReservas {
      * Si el formato de la fecha es incorrecto, se solicita al usuario que introduzca la fecha nuevamente.
      * </p>
      */
-    public static List<ReservaDTO> consultarReservaPistaDia(int idPista, LocalDate dia) {
+    public static List<ReservaDTO> consultarReservaPistaDia(int idPista, LocalDateTime dia) {
         return ReservaDAO.obtenerReservasPistaDia(idPista, dia);
 
     }
