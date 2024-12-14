@@ -1,6 +1,6 @@
 package web.model.business.DTOs.Reservas;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import web.model.business.DTOs.PistaDTO;
 
@@ -71,7 +71,7 @@ import web.model.business.DTOs.PistaDTO;
 public class ReservaDTO {
 
     private int idUsuario;
-    private LocalDate diaYHora; // Fecha y hora de la reserva
+    private LocalDateTime diaYHora; // Fecha y hora de la reserva
     private int idBono;
     private int nSesionBono;
     private int duracion;
@@ -107,7 +107,7 @@ public class ReservaDTO {
      * @param numAdultos  El número de adultos en la reserva.
      * @param numNinos    El número de niños en la reserva.
      */
-    public ReservaDTO(int idReserva, int idUsuario, LocalDate diaYHora, int idBono, int nSesionBono, int duracion,
+    public ReservaDTO(int idReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int nSesionBono, int duracion,
                       int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano,String tipo, int numAdultos, int numNinos) {
         this.idUsuario = idUsuario;
         this.diaYHora = diaYHora;
@@ -148,7 +148,7 @@ public class ReservaDTO {
      *
      * @return La fecha y hora de la reserva.
      */
-    public LocalDate getDiaYHora() {
+    public LocalDateTime getDiaYHora() {
         return diaYHora;
     }
 
@@ -157,7 +157,7 @@ public class ReservaDTO {
      *
      * @param diaYHora La fecha y hora de la reserva.
      */
-    public void setDiaYHora(LocalDate diaYHora) {
+    public void setDiaYHora(LocalDateTime diaYHora) {
         this.diaYHora = diaYHora;
     }
 
