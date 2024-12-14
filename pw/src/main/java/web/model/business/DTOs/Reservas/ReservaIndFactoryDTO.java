@@ -1,6 +1,6 @@
 package web.model.business.DTOs.Reservas;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import web.model.business.DTOs.PistaDTO;
 
@@ -45,7 +45,7 @@ public class ReservaIndFactoryDTO extends ReservaFactoryDTO{
      * @throws IllegalArgumentException Si el tipo de reserva no es reconocido.
      */
     @Override
-    public ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDate diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaInfantilDTO reserva = new ReservaInfantilDTO();
         reserva.setDiaYHora(diaYhora);
@@ -81,7 +81,7 @@ public class ReservaIndFactoryDTO extends ReservaFactoryDTO{
      * @throws IllegalArgumentException Si el tipo de reserva no es reconocido.
      */
     @Override
-    public ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDate diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaAdultosDTO reserva = new ReservaAdultosDTO();
         reserva.setDiaYHora(diaYhora);
@@ -117,7 +117,7 @@ public class ReservaIndFactoryDTO extends ReservaFactoryDTO{
      * @throws IllegalArgumentException Si el tipo de reserva no es reconocido.
      */
     @Override
-    public ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDate diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaFamiliarDTO reserva = new ReservaFamiliarDTO();
         reserva.setDiaYHora(diaYhora);
