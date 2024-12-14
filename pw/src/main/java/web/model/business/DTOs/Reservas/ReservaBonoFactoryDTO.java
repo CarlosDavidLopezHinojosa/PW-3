@@ -1,6 +1,6 @@
 package web.model.business.DTOs.Reservas;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import web.model.business.DTOs.PistaDTO;
 
@@ -28,7 +28,7 @@ import web.model.business.DTOs.PistaDTO;
  */    
 public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
     @Override
-    public ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDate diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaInfantilDTO reserva = new ReservaInfantilDTO();
         reserva.setDiaYHora(diaYhora);
@@ -47,7 +47,7 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
     }
 
     @Override
-    public ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDate diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaAdultosDTO reserva = new ReservaAdultosDTO();
         reserva.setDiaYHora(diaYhora);
@@ -66,7 +66,7 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
     }
 
     @Override
-    public ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDate diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaFamiliarDTO reserva = new ReservaFamiliarDTO();
         reserva.setDiaYHora(diaYhora);
@@ -103,7 +103,7 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
      * @return La instancia de Reserva creada según el tipo especificado.
      * @throws IllegalArgumentException Si el tipo de reserva no es reconocido.
      */
-    public static ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDate diaYhora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public static ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaInfantilDTO reserva = new ReservaInfantilDTO();
         reserva.setDiaYHora(diaYhora);
@@ -142,7 +142,7 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
      * @return La instancia de Reserva creada según el tipo especificado.
      * @throws IllegalArgumentException Si el tipo de reserva no es reconocido.
      */
-    public static ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDate diaYhora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public static ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaAdultosDTO reserva = new ReservaAdultosDTO();
         reserva.setDiaYHora(diaYhora);
@@ -181,7 +181,7 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
      * @return La instancia de Reserva creada según el tipo especificado.
      * @throws IllegalArgumentException Si el tipo de reserva no es reconocido.
      */
-    public static ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDate diaYhora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public static ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaFamiliarDTO reserva = new ReservaFamiliarDTO();
         reserva.setDiaYHora(diaYhora);
