@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +36,12 @@ import web.model.business.DTOs.Reservas.ReservaInfantilDTO;
  *   <li>{@link #selectPistas()}: Recupera una lista de objetos PistaDTO desde la base de datos.</li>
  *   <li>{@link #selectPistasNoDisponibles()}: Recupera una lista de objetos PistaDTO que no están disponibles.</li>
  *   <li>{@link #selectPistasDisponibles()}: Recupera una lista de pistas disponibles de la base de datos.</li>
+ *   <li>{@link #selectPistasDisponiblesPorFechaYTipo(LocalDateTime, boolean)}: Selecciona una lista de pistas disponibles según la fecha y el tipo de pista.</li>
+ *   <li>{@link #selectPistasDisponiblesFecha(LocalDateTime)}: Selecciona una lista de pistas disponibles en una fecha específica.</li>
  *   <li>{@link #selectPistasDisponiblesJugadoresTipo(int, TamanoPista)}: Selecciona una lista de pistas disponibles según el número máximo de jugadores y el tamaño de la pista.</li>
  *   <li>{@link #selectPistaNombre(String)}: Selecciona una lista de objetos PistaDTO de la base de datos cuyo nombre coincide con el nombre proporcionado.</li>
  *   <li>{@link #insertIntoReserva(int, int, LocalDate, int, int, int, int, float, float, PistaDTO.TamanoPista, String, int, int)}: Inserta un nuevo registro en la tabla Reserva.</li>
+ *   <li>{@link #selectReservaPorId(int)}: Recupera un registro de la tabla Reserva basado en el ID proporcionado.</li>
  *   <li>{@link #selectReservasFuturas()}: Recupera una lista de reservas futuras desde la base de datos.</li>
  *   <li>{@link #selectReservasFuturasUsuario(int)}: Recupera una lista de reservas futuras para un usuario específico.</li>
  *   <li>{@link #selectReservaPistaDia(int, LocalDate)}: Selecciona las reservas de una pista específica en un día determinado.</li>
@@ -50,6 +54,7 @@ import web.model.business.DTOs.Reservas.ReservaInfantilDTO;
  *   <li>{@link #updateJugador(String, String, int, LocalDate, LocalDate, String)}: Actualiza un registro en la tabla Jugador con los datos proporcionados.</li>
  *   <li>{@link #selectJugadores()}: Recupera una lista de objetos JugadorDTO desde la base de datos.</li>
  *   <li>{@link #selectJugadorEmail(String)}: Recupera un registro de la tabla Jugador basado en el correo electrónico proporcionado.</li>
+ *   <li>{@link #selectJugadorId(int)}: Recupera un registro de la tabla Jugador basado en el ID proporcionado.</li>
  *   <li>{@link #insertIntoMaterial(int, MaterialDTO.TipoMaterial, boolean, MaterialDTO.EstadoMaterial, int)}: Inserta un nuevo registro en la tabla Material.</li>
  *   <li>{@link #selectMateriales()}: Recupera una lista de objetos MaterialDTO desde la base de datos.</li>
  *   <li>{@link #selectMaterialId(int)}: Recupera un registro de la tabla Material basado en el ID proporcionado.</li>
@@ -226,6 +231,69 @@ public class DBConnection {
 	}
 
 	/**
+	 * Selecciona una lista de pistas disponibles según la fecha y el tipo de pista.
+	 * @param fecha La fecha en la que se desean buscar las pistas disponibles.
+	 * @param esExterior Indica si la pista es exterior.
+	 * @return
+	 */
+	public List<PistaDTO> selectPistasDisponiblesPorFechaYTipo(LocalDateTime fecha, boolean esExterior) {
+        List<PistaDTO> pistasDisponibles = new ArrayList<>();
+        String query = "SELECT * FROM Pista WHERE disponible = true AND esExterior = ? AND id NOT IN (SELECT idPista FROM Reserva WHERE DATE(diaYHora) = ?)";
+        try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+            stmt.setBoolean(1, esExterior);
+			stmt.setTimestamp(2, Timestamp.valueOf(fecha));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    PistaDTO pista = new PistaDTO();
+                    pista.setId(rs.getInt("id"));
+                    pista.setNombre(rs.getString("nombre"));
+                    pista.setDisponible(rs.getBoolean("disponible"));
+                    pista.setEsExterior(rs.getBoolean("esExterior"));
+                    pista.setTamano(TamanoPista.valueOf(rs.getString("tamano")));
+                    pista.setMaxJugadores(rs.getInt("maxJugadores"));
+                    pistasDisponibles.add(pista);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pistasDisponibles;
+    }
+
+	/**
+	 * Selecciona una lista de pistas disponibles en una fecha específica.
+	 *
+	 * @param fecha La fecha en la que se desean buscar las pistas disponibles.
+	 * @return Una lista de objetos PistaDTO que representan las pistas disponibles en la fecha especificada.
+	 * @throws SQLException Si ocurre un error al intentar recuperar los registros de la base de datos.
+	 */
+	public List<PistaDTO> selectPistasDisponiblesFecha(LocalDateTime fecha) {
+		List<PistaDTO> pistasDisponibles = new ArrayList<>();
+		String query = "SELECT * FROM Pista WHERE disponible = true AND id NOT IN (SELECT idPista FROM Reserva WHERE diaYHora = ?)";
+		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			stmt.setTimestamp(1, Timestamp.valueOf(fecha));
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					PistaDTO pista = new PistaDTO(
+						rs.getString("nombre"),
+						rs.getInt("id"),
+						rs.getBoolean("disponible"),
+						rs.getBoolean("esExterior"),
+						TamanoPista.valueOf(rs.getString("tamano")),
+						rs.getInt("maxJugadores")
+					);
+					pistasDisponibles.add(pista);
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Error while retrieving records from Pista table.");
+			e.printStackTrace();
+		}
+		return pistasDisponibles;
+	}
+
+
+	/**
 	 * Selecciona una lista de pistas disponibles según el número máximo de jugadores y el tamaño de la pista.
 	 *
 	 * @param maxJugadores El número máximo de jugadores permitido en la pista.
@@ -310,12 +378,12 @@ public class DBConnection {
 	 * @param numAdultos El número de adultos en la reserva.
 	 * @param numNinos El número de niños en la reserva.
 	 */
-	public void insertIntoReserva(int id, int idUsuario, LocalDate diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, String tipoReserva, int numAdultos, int numNinos) {
+	public void insertIntoReserva(int id, int idUsuario, LocalDateTime diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, String tipoReserva, int numAdultos, int numNinos) {
 		String query = "INSERT INTO Reserva (id, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, tipo, numAdultos, numNinos) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.setInt(2, idUsuario);
-			stmt.setTimestamp(3, Timestamp.valueOf(diaYHora.atStartOfDay()));
+			stmt.setTimestamp(3, Timestamp.valueOf(diaYHora));
 			stmt.setInt(4, idBono);
 			stmt.setInt(5, nSesionBono);
 			stmt.setInt(6, duracion);
@@ -331,6 +399,80 @@ public class DBConnection {
 			System.err.println("Error while inserting record into Reserva table.");
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Recupera un registro de la tabla Reserva basado en el ID proporcionado.
+	 *
+	 * @param id El ID de la reserva que se desea recuperar.
+	 * @return Un objeto ReservaDTO que representa la reserva recuperada.
+	 * @throws SQLException Si ocurre un error al intentar recuperar el registro de la base de datos.
+	 */
+	public ReservaDTO selectReservaPorId(int id) {
+		ReservaDTO reserva = null;
+		String query = "SELECT * FROM Reserva WHERE id = ?";
+		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			stmt.setInt(1, id);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.ADULTOS.name())){
+						reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
+								rs.getString("tipo"),
+								rs.getInt("idUsuario"),
+								rs.getTimestamp("diaYHora").toLocalDateTime(),
+								rs.getInt("idBono"),
+								rs.getInt("nSesionBono"),
+								rs.getInt("duracion"),
+								rs.getInt("idPista"),
+								rs.getFloat("precio"),
+								rs.getFloat("descuento"),
+								PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+								rs.getInt("id"),
+								rs.getInt("numAdultos"),
+								rs.getInt("numNinos")
+							);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.FAMILIAR.name())){
+						reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
+								rs.getString("tipo"),
+								rs.getInt("idUsuario"),
+								rs.getTimestamp("diaYHora").toLocalDateTime(),
+								rs.getInt("idBono"),
+								rs.getInt("nSesionBono"),
+								rs.getInt("duracion"),
+								rs.getInt("idPista"),
+								rs.getFloat("precio"),
+								rs.getFloat("descuento"),
+								PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+								rs.getInt("id"),
+								rs.getInt("numAdultos"),
+								rs.getInt("numNinos")
+							);
+					}
+					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.INFANTIL.name())){
+						reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
+								rs.getString("tipo"),
+								rs.getInt("idUsuario"),
+								rs.getTimestamp("diaYHora").toLocalDateTime(),
+								rs.getInt("idBono"),
+								rs.getInt("nSesionBono"),
+								rs.getInt("duracion"),
+								rs.getInt("idPista"),
+								rs.getFloat("precio"),
+								rs.getFloat("descuento"),
+								PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+								rs.getInt("id"),
+								rs.getInt("numAdultos"),
+								rs.getInt("numNinos")
+							);
+					}
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Error while retrieving record from Reserva table.");
+			e.printStackTrace();
+		}
+		return reserva;
 	}
 	
 	/**
@@ -352,7 +494,7 @@ public class DBConnection {
 					ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
 						rs.getString("tipo"),
 						rs.getInt("idUsuario"),
-						rs.getDate("diaYHora").toLocalDate(),
+						rs.getTimestamp("diaYHora").toLocalDateTime(),
 						rs.getInt("idBono"),
 						rs.getInt("nSesionBono"),
 						rs.getInt("duracion"),
@@ -370,7 +512,7 @@ public class DBConnection {
 					ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
 						rs.getString("tipo"),
 						rs.getInt("idUsuario"),
-						rs.getDate("diaYHora").toLocalDate(),
+						rs.getTimestamp("diaYHora").toLocalDateTime(),
 						rs.getInt("idBono"),
 						rs.getInt("nSesionBono"),
 						rs.getInt("duracion"),
@@ -388,7 +530,7 @@ public class DBConnection {
 					ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
 						rs.getString("tipo"),
 						rs.getInt("idUsuario"),
-						rs.getDate("diaYHora").toLocalDate(),
+						rs.getTimestamp("diaYHora").toLocalDateTime(),
 						rs.getInt("idBono"),
 						rs.getInt("nSesionBono"),
 						rs.getInt("duracion"),
@@ -428,7 +570,7 @@ public class DBConnection {
 						ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -446,7 +588,7 @@ public class DBConnection {
 						ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -464,7 +606,7 @@ public class DBConnection {
 						ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -495,19 +637,19 @@ public class DBConnection {
 	 * @return Una lista de objetos ReservaDTO que representan las reservas encontradas.
 	 * @throws SQLException Si ocurre un error al intentar recuperar los registros de la base de datos.
 	 */
-	public List<ReservaDTO> selectReservaPistaDia(int idPista, LocalDate dia) {
+	public List<ReservaDTO> selectReservaPistaDia(int idPista, LocalDateTime dia) {
 		List<ReservaDTO> reservas = new ArrayList<>();
 		String query = "SELECT * FROM Reserva WHERE idPista = ? AND DATE(diaYHora) = ?";
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idPista);
-			stmt.setDate(2, java.sql.Date.valueOf(dia));
+			stmt.setTimestamp(2, Timestamp.valueOf(dia));
 			try (ResultSet rs = stmt.executeQuery()) {
 				while (rs.next()) {
 					if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.ADULTOS.name())){
 						ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -525,7 +667,7 @@ public class DBConnection {
 						ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -543,7 +685,7 @@ public class DBConnection {
 						ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -603,7 +745,7 @@ public class DBConnection {
 						ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -621,7 +763,7 @@ public class DBConnection {
 						ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -639,7 +781,7 @@ public class DBConnection {
 						ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -672,7 +814,7 @@ public class DBConnection {
 						ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -690,7 +832,7 @@ public class DBConnection {
 						ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -708,7 +850,7 @@ public class DBConnection {
 						ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
 							rs.getString("tipo"),
 							rs.getInt("idUsuario"),
-							rs.getDate("diaYHora").toLocalDate(),
+							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
 							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
@@ -948,6 +1090,41 @@ public class DBConnection {
 	}
 
 	/**
+	 * Recupera un registro de la tabla Jugador basado en el ID proporcionado.
+	 *
+	 * @param id El ID del jugador que se desea buscar.
+	 * @return Un objeto JugadorDTO que contiene los datos del jugador si se encuentra un registro con el ID proporcionado,
+	 *         o null si no se encuentra ningún registro.
+	 * @throws SQLException Si ocurre un error al intentar recuperar el registro de la base de datos.
+	 */
+	public JugadorDTO selectJugadorId(int id) {
+		JugadorDTO jugador = null;
+		String query = "SELECT * FROM Jugador WHERE id = ?";
+		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			stmt.setInt(1, id);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					jugador = new JugadorDTO(
+						rs.getString("nombre"),
+						rs.getString("apellidos"),
+						rs.getInt("id"),
+						rs.getDate("fechaNacimiento").toLocalDate(),
+						rs.getDate("fechaInscripcion").toLocalDate(),
+						rs.getString("email"),
+						rs.getString("password"),
+						JugadorDTO.Roles.valueOf(rs.getString("rol"))
+					);
+				} else {
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Error while retrieving record from Jugador table.");
+			e.printStackTrace();
+		}
+		return jugador;
+	}
+
+	/**
 	 * Inserta un nuevo registro en la tabla Material.
 	 *
 	 * @param id El identificador del material.
@@ -1090,4 +1267,20 @@ public class DBConnection {
 		}
 		return -1; // Devuelve -1 si no se pudo obtener el ID
 	}
+
+	/**
+     * Actualiza una reserva en la base de datos.
+     *
+     * @param reserva El objeto ReservaDTO que representa la reserva a actualizar.
+     */
+    public void updateReserva(ReservaDTO reserva) {
+        String query = "UPDATE Reserva SET diaYHora = ? WHERE id = ?";
+        try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			stmt.setTimestamp(1, Timestamp.valueOf(reserva.getDiaYHora()));
+            stmt.setInt(2, reserva.getIdReserva());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
