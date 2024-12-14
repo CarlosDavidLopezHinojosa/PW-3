@@ -46,6 +46,16 @@
             Fecha de la próxima reserva: 
             <%= proximaReserva != null ? proximaReserva : "No tienes reservas próximas." %>
         </p>
+        
+        <h3>Funcionalidades</h3>
+        <div class="actions">
+            <a href="<%= request.getContextPath() %>/views/realizarReserva.jsp" class="btn btn-primary">Realizar Reserva</a>
+            <a href="<%= request.getContextPath() %>/views/modificarReserva.jsp" class="btn btn-primary">Modificar Reserva</a>
+            <a href="<%= request.getContextPath() %>/views/cancelarReserva.jsp" class="btn btn-primary">Cancelar Reserva</a>
+            <a href="<%= request.getContextPath() %>/views/verReservas.jsp" class="btn btn-primary">Consultar Reservas</a>
+            <a href="<%= request.getContextPath() %>/views/verBonos.jsp" class="btn btn-primary">Ver Bonos</a>
+            <a href="<%= request.getContextPath() %>/views/verPistas.jsp" class="btn btn-primary">Ver Pistas</a>
+        </div>
     </div>
 </body>
 </html>
