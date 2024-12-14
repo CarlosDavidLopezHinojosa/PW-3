@@ -20,6 +20,7 @@ import web.model.data.common.DBConnection;
  * <p>Los métodos principales de esta clase son:</p>
  * <ul>
  *   <li>{@link #existeUsuarioEmail(String)}: Verifica si existe un usuario con el email proporcionado en la base de datos.</li>
+ *   <li>{@link #existeUsuarioId(int)}: Verifica si existe un usuario con el id proporcionado en la base de datos.</li>
  *   <li>{@link #getUsuarioEmail(String)}: Obtiene un usuario de la base de datos cuyo email coincida con el proporcionado.</li>
  *   <li>{@link #darDeAlta(String, String, String, LocalDate)}: Añade un nuevo usuario a la base de datos y devuelve un objeto JugadorDTO con los datos del usuario añadido.</li>
  *   <li>{@link #modificarInformacion(int, String, String, String, LocalDate)}: Modifica la información de un usuario existente en la base de datos.</li>
@@ -52,6 +53,24 @@ public class JugadorDAO {
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         if (conexion.selectJugadorEmail(email) == null) {
+            conexion.closeConnection();
+            return false;
+        } else {
+            conexion.closeConnection();
+            return true;
+        }
+    }
+
+    /**
+     * Verifica si existe un usuario con el ID proporcionado.
+     *
+     * @param id El ID del usuario a verificar.
+     * @return true si el usuario existe, false en caso contrario.
+     */
+    public static boolean existeUsuarioId(int id) {
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        if (conexion.selectJugadorId(id) == null) {
             conexion.closeConnection();
             return false;
         } else {
