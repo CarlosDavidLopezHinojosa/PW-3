@@ -17,6 +17,7 @@ import web.model.data.common.DBConnection;
  * <ul>
  *   <li>{@link #insertarBono(int, int, String, PistaDTO.TamanoPista)}: Inserta un nuevo bono en la base de datos y devuelve un objeto BonoDTO con los datos del bono insertado.</li>
  *   <li>{@link #mostrarBonosUsuario(JugadorDTO)}: Devuelve una lista con todos los bonos de un usuario específico.</li>
+ *   <li>{@link #mostrarBonosUsuario(int)}: Devuelve una lista con todos los bonos de un usuario específico.</li>
  * </ul>
  * 
  * <p>Ejemplo de uso:</p>
@@ -65,6 +66,20 @@ public class BonoDAO {
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         List<BonoDTO> bonos = conexion.selectBonos(user.getId());
+        conexion.closeConnection();
+        return bonos;
+    }
+
+    /**
+     * Recupera una lista de bonos asociados a un usuario específico.
+     *
+     * @param idUser El ID del usuario del cual se desean obtener los bonos.
+     * @return Una lista de objetos BonoDTO que representan los bonos del usuario.
+     */
+    public static List<BonoDTO> mostrarBonosUsuario(int idUser){
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        List<BonoDTO> bonos = conexion.selectBonos(idUser);
         conexion.closeConnection();
         return bonos;
     }
