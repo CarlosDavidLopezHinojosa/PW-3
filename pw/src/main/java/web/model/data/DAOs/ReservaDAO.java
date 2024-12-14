@@ -1,6 +1,6 @@
 package web.model.data.DAOs;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import web.model.business.DTOs.PistaDTO;
@@ -27,6 +27,8 @@ import web.model.data.common.DBConnection;
  *   <li>{@link #obtenerReservasFuturasUsuario(int)}: Devuelve una lista con las reservas cuya fecha sea posterior a la fecha actual y el id del usuario sea el pasado como argumento.</li>
  *   <li>{@link #obtenerReservasPistaDia(int, LocalDate)}: Devuelve una lista con las reservas cuya fecha sea igual a la fecha actual para una pista específica.</li>
  *   <li>{@link #eliminarReserva(int)}: Elimina la reserva con el id pasado por parámetro de la base de datos.</li>
+ *   <li>{@link #obtenerReservas()}: Devuelve una lista con todas las reservas almacenadas en la base de datos.</li>
+ *   <li>{@link #obtenerReservaPorId(int)}: Devuelve la reserva con el id pasado por parámetro.</li>
  * </ul>
  * 
  * <p>Ejemplo de uso:</p>
@@ -62,7 +64,7 @@ public class ReservaDAO {
      * @param numNinos El número de niños en la reserva.
      * @return El objeto ReservaDTO que representa la reserva creada.
      */
-    public static ReservaDTO insertarReserva(String tipoReserva, int idUsuario, LocalDate diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos){
+    public static ReservaDTO insertarReserva(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos){
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         int id = conexion.getMaxId("Reserva") + 1;
@@ -128,7 +130,7 @@ public class ReservaDAO {
      * @param dia El día para el cual se desean obtener las reservas.
      * @return Una lista de objetos ReservaDTO que representan las reservas de la pista en el día especificado.
      */
-    public static List<ReservaDTO> obtenerReservasPistaDia(int idPista, LocalDate dia){
+    public static List<ReservaDTO> obtenerReservasPistaDia(int idPista, LocalDateTime dia){
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         List<ReservaDTO> reservas = conexion.selectReservaPistaDia(idPista, dia);
@@ -148,11 +150,41 @@ public class ReservaDAO {
         conexion.closeConnection();
     }
 
+    /**
+     * Obtiene una lista con todas las reservas almacenadas en la base de datos.
+     *
+     * @return Una lista de objetos ReservaDTO que representan todas las reservas almacenadas.
+     */
     public static List<ReservaDTO> obtenerReservas(){
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         List<ReservaDTO> reservas = conexion.selectTodasReservas();
         conexion.closeConnection();
         return reservas;
+    }
+
+    /**
+     * Obtiene una reserva de la base de datos a partir de su identificador.
+     * @param id El identificador de la reserva.
+     * @return  Un objeto ReservaDTO que representa la reserva con el identificador especificado.
+     */
+    public static ReservaDTO obtenerReservaPorId(int id){
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        ReservaDTO reserva = conexion.selectReservaPorId(id);
+        conexion.closeConnection();
+        return reserva;
+    }
+
+    /**
+     * Actualiza una reserva en la base de datos.
+     *
+     * @param reserva El objeto ReservaDTO que representa la reserva a actualizar.
+     */
+    public static void actualizarReserva(ReservaDTO reserva) {
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        conexion.updateReserva(reserva);
+        conexion.closeConnection();
     }
 }
