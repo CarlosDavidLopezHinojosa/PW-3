@@ -1,5 +1,5 @@
 package web.model.business.DTOs.Reservas;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import web.model.business.DTOs.PistaDTO;
 
@@ -26,10 +26,10 @@ import web.model.business.DTOs.PistaDTO;
  */    
 
 public abstract class ReservaFactoryDTO {
-    public abstract ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDate diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos);
+    public abstract ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos);
 
-    public abstract ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDate diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos);
+    public abstract ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos);
 
-    public abstract ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDate diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos);
+    public abstract ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos);
 
 }
