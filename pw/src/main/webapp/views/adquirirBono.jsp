@@ -5,6 +5,13 @@
 <head>
     <title>Adquirir Bono</title>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
+    <style>
+        .back-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
     <script>
         function actualizarTamanoPista() {
             var tipoReserva = document.getElementById("tipoReserva").value;
@@ -14,7 +21,7 @@
             if (tipoReserva === "ADULTOS") {
                 pistaTamano.innerHTML += "<option value='ADULTOS'>ADULTOS</option>";
             } else if (tipoReserva === "FAMILIAR") {
-                pistaTamano.innerHTML += "<option value='VS3'>VS3</option>";
+                pistaTamano.innerHTML += "<option value='3VS3'>3VS3</option>";
                 pistaTamano.innerHTML += "<option value='MINIBASKET'>MINIBASKET</option>";
             } else if (tipoReserva === "INFANTIL") {
                 pistaTamano.innerHTML += "<option value='MINIBASKET'>MINIBASKET</option>";
@@ -30,6 +37,7 @@
     </script>
 </head>
 <body>
+    <a href="<%= request.getContextPath() %>/controller/welcomeclientcontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
     <h1>Adquirir Bono</h1>
     <form action="<%= request.getContextPath() %>/adquirirBono" method="post">
         <label for="sesiones">Número de Sesiones:</label>
