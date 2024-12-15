@@ -53,6 +53,10 @@
             <a href="<%= request.getContextPath() %>/views/modificarReserva.jsp" class="btn btn-primary">Modificar Reserva</a>
             <a href="<%= request.getContextPath() %>/views/cancelarReserva.jsp" class="btn btn-primary">Cancelar Reserva</a>
             <a href="<%= request.getContextPath() %>/views/verReservas.jsp" class="btn btn-primary">Consultar Reservas</a>
+            <a href="<%= request.getContextPath() %>/views/adquirirBono.jsp" class="btn btn-primary">Adquirir Bono</a>
+            <a href="<%= request.getContextPath() %>/views/buscarPistaDisponible.jsp" class="btn btn-primary">Buscar Pista Disponible</a>
+            <a href="<%= request.getContextPath() %>/views/jugadores.jsp" class="btn btn-primary">Ver Jugadores</a>
+            <a href="<%= request.getContextPath() %>/views/verMateriales.jsp" class="btn btn-primary">Ver Materiales</a>
             <a href="<%= request.getContextPath() %>/views/verBonos.jsp" class="btn btn-primary">Ver Bonos</a>
             <a href="<%= request.getContextPath() %>/views/verPistas.jsp" class="btn btn-primary">Ver Pistas</a>
         </div>
