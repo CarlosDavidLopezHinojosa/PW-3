@@ -25,7 +25,8 @@ import web.model.data.common.DBConnection;
  *   <li>{@link #listarPistasNoDisponibles()}: Devuelve una lista con todas las pistas no disponibles en la base de datos.</li>
  *   <li>{@link #listarPistasDisponibles(int, TamanoPista)}: Devuelve una lista con todas las pistas disponibles que tengan un tamaño y un número de jugadores concretos.</li>
  *   <li>{@link #listarPistasDisponiblesPorFechayTipo(LocalDateTime, boolean)}: Devuelve una lista con todas las pistas disponibles en una fecha concreta y de un tipo específico.</li>
- *   <li>{@link #listarPistasDisponiblesPorFecha(LocalDateTime)}: Devuelve una lista con todas las pistas disponibles en una fecha concreta.</li>
+ *   <li>{@link #listarPistasDisponiblesPorFechaYTipo(LocalDateTime, PistaDTO.TamanoPista)}: Devuelve una lista con todas las pistas disponibles en una fecha concreta y de un tipo específico.</li>  
+ * <li>{@link #listarPistasDisponiblesPorFecha(LocalDateTime)}: Devuelve una lista con todas las pistas disponibles en una fecha concreta.</li>
  *   <li>{@link #booleanPistaNombre(String)}: Devuelve true si hay una pista con el nombre pasado por parámetro en la base de datos y false si no la hay.</li>
  *   <li>{@link #obtenerPistas()}: Devuelve una lista con todas las pistas en la base de datos.</li>
  *   <li>{@link #obtenerPistaNombre(String)}: Devuelve un objeto PistaDTO con los datos de la pista con el nombre pasado por parámetro.</li>
@@ -128,6 +129,21 @@ public class PistaDAO {
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         List<PistaDTO> pistas_disponibles = conexion.selectPistasDisponiblesPorFechaYTipo(fecha, esExterior);
+        conexion.closeConnection();
+        return pistas_disponibles;
+    }
+
+    /**
+     * Lista las pistas disponibles en una fecha específica y de un tamaño específico.
+     *
+     * @param fecha La fecha para la que se desean obtener las pistas disponibles.
+     * @param tamano El tamaño de la pista requerido.
+     * @return Una lista de objetos PistaDTO que representan las pistas disponibles.
+     */
+    public static List<PistaDTO> listarPistasDisponiblesPorFechaYTipo(LocalDateTime fecha, PistaDTO.TamanoPista tamano){
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        List<PistaDTO> pistas_disponibles = conexion.selectPistasDisponiblesPorFechaYTipo(fecha, tamano);
         conexion.closeConnection();
         return pistas_disponibles;
     }
