@@ -37,6 +37,7 @@ import web.model.business.DTOs.Reservas.ReservaInfantilDTO;
  *   <li>{@link #selectPistasNoDisponibles()}: Recupera una lista de objetos PistaDTO que no están disponibles.</li>
  *   <li>{@link #selectPistasDisponibles()}: Recupera una lista de pistas disponibles de la base de datos.</li>
  *   <li>{@link #selectPistasDisponiblesPorFechaYTipo(LocalDateTime, boolean)}: Selecciona una lista de pistas disponibles según la fecha y el tipo de pista.</li>
+ *   <li> {@link #selectPistasDisponiblesPorFechaYTipo(LocalDateTime, PistaDTO.TamanoPista)}: Selecciona una lista de pistas disponibles según la fecha y el tipo de pista.</li>
  *   <li>{@link #selectPistasDisponiblesFecha(LocalDateTime)}: Selecciona una lista de pistas disponibles en una fecha específica.</li>
  *   <li>{@link #selectPistasDisponiblesJugadoresTipo(int, TamanoPista)}: Selecciona una lista de pistas disponibles según el número máximo de jugadores y el tamaño de la pista.</li>
  *   <li>{@link #selectPistaNombre(String)}: Selecciona una lista de objetos PistaDTO de la base de datos cuyo nombre coincide con el nombre proporcionado.</li>
@@ -259,6 +260,38 @@ public class DBConnection {
         }
         return pistasDisponibles;
     }
+
+	/**
+	 * Selecciona una lista de pistas disponibles según la fecha y el tipo de pista.
+	 * @param fecha La fecha en la que se desean buscar las pistas disponibles.
+	 * @param tamano El tamaño de la pista (enum TamanoPista).
+	 * @return	Una lista de objetos PistaDTO que representan las pistas disponibles en la fecha especificada.
+	 */
+	public List<PistaDTO> selectPistasDisponiblesPorFechaYTipo(LocalDateTime fecha, PistaDTO.TamanoPista tamano) {
+		List<PistaDTO> pistasDisponibles = new ArrayList<>();
+		String query = "SELECT * FROM Pista WHERE disponible = true AND tamano = ? AND id NOT IN (SELECT idPista FROM Reserva WHERE DATE(diaYHora) = ?)";
+		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			stmt.setString(1, tamano.name());
+			stmt.setTimestamp(2, Timestamp.valueOf(fecha));
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					PistaDTO pista = new PistaDTO(
+						rs.getString("nombre"),
+						rs.getInt("id"),
+						rs.getBoolean("disponible"),
+						rs.getBoolean("esExterior"),
+						TamanoPista.valueOf(rs.getString("tamano")),
+						rs.getInt("maxJugadores")
+					);
+					pistasDisponibles.add(pista);
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Error while retrieving records from Pista table.");
+			e.printStackTrace();
+		}
+		return pistasDisponibles;
+	}
 
 	/**
 	 * Selecciona una lista de pistas disponibles en una fecha específica.
