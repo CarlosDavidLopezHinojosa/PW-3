@@ -6,12 +6,20 @@
 <head>
     <title>Buscar Pista Disponible</title>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
+    <style>
+        .back-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
 </head>
 <body>
+    <a href="<%= request.getContextPath() %>/controller/welcomeclientcontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
     <h1>Buscar Pista Disponible</h1>
     <form action="<%= request.getContextPath() %>/buscarPistaDisponible" method="post">
-        <label for="fecha">Fecha:</label>
-        <input type="date" id="fecha" name="fecha" value="<%= request.getParameter("fecha") != null ? request.getParameter("fecha") : "" %>" required><br><br>
+        <label for="fechaHora">Fecha y Hora:</label>
+        <input type="datetime-local" id="fechaHora" name="fechaHora" value="<%= request.getParameter("fechaHora") != null ? request.getParameter("fechaHora") : "" %>" required><br><br>
 
         <label for="tipoPista">Tipo de Pista (opcional):</label>
         <select id="tipoPista" name="tipoPista">
