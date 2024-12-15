@@ -7,6 +7,13 @@
 <head>
     <title>Ver Bonos</title>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
+    <style>
+        .back-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
     <script>
         function mostrarDetalles(id) {
             var detalles = document.getElementById("detalles-" + id);
@@ -19,6 +26,7 @@
     </script>
 </head>
 <body>
+    <a href="<%= request.getContextPath() %>/controller/welcomeclientcontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
     <h1>Ver Bonos</h1>
     
     <%
