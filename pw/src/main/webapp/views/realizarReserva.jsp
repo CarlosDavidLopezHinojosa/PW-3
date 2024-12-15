@@ -25,7 +25,7 @@
         </select><br><br>
 
         <label for="diaYHora">Día y Hora de la Reserva:</label>
-        <input type="datetime-local" id="diaYHora" name="diaYHora" required><br><br>
+        <input type="datetime-local" id="diaYHora" name="diaYHora" required onchange="buscarPistasDisponibles()"><br><br>
 
         <label for="esBono">¿Es de Bono?:</label>
         <input type="checkbox" id="esBono" name="esBono" value="true"><br><br>
@@ -41,8 +41,10 @@
         <label for="duracion">Duración (minutos):</label>
         <input type="number" id="duracion" name="duracion" required><br><br>
 
-        <label for="idPista">ID de la Pista:</label>
-        <input type="number" id="idPista" name="idPista" required><br><br>
+        <label for="pista">Pista:</label>
+        <select id="pista" name="pista" required>
+            <option value="">Seleccione una pista</option>
+        </select><br><br>
 
         <label for="precio">Precio:</label>
         <input type="number" step="0.01" id="precio" name="precio" required><br><br>
@@ -159,7 +161,24 @@
             }
 
             return true;
-        }       
+        }
+
+        function buscarPistasDisponibles() {
+            var tipoReserva = document.getElementById("tipoReserva").value;
+            var diaYHora = document.getElementById("diaYHora").value;
+
+            if (tipoReserva && diaYHora) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "<%= request.getContextPath() %>/realizarReserva?action=buscarPistasDisponibles&tipoReserva=" + tipoReserva + "&diaYHora=" + diaYHora, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var pistaSelect = document.getElementById("pista");
+                        pistaSelect.innerHTML = xhr.responseText;
+                    }
+                };
+                xhr.send();
+            }
+        }
 
         // Inicializar campos al cargar la página
         actualizarCampos();
