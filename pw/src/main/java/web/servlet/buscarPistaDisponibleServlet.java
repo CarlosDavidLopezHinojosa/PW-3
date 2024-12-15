@@ -2,6 +2,7 @@ package web.servlet;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -16,26 +17,22 @@ import web.model.data.DAOs.PistaDAO;
 public class buscarPistaDisponibleServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/views/buscarPistaDisponible.jsp").forward(request, response);
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String fechaStr = request.getParameter("fecha");
+            String fechaHoraStr = request.getParameter("fechaHora");
             String tipoPista = request.getParameter("tipoPista");
-            LocalDateTime fecha = LocalDateTime.parse(fechaStr);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            LocalDateTime fechaHora = LocalDateTime.parse(fechaHoraStr, formatter);
             List<PistaDTO> pistas = null;
 
-            if (fecha.isBefore(LocalDateTime.now())) {
-                request.setAttribute("mensaje", "La fecha no puede ser pasada.");
+            if (fechaHora.isBefore(LocalDateTime.now())) {
+                request.setAttribute("mensaje", "La fecha y hora no pueden ser pasadas.");
             } else {
                 if (tipoPista == null || tipoPista.isEmpty()) {
-                    pistas = PistaDAO.listarPistasDisponiblesPorFecha(fecha);
+                    pistas = PistaDAO.listarPistasDisponiblesPorFecha(fechaHora);
                 } else {
                     boolean esExterior = "EXTERIOR".equalsIgnoreCase(tipoPista);
-                    pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(fecha, esExterior);
+                    pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(fechaHora, esExterior);
                 }
             }
 
