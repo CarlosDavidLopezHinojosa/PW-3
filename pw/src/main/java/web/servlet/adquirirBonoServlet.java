@@ -24,7 +24,7 @@ public class adquirirBonoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            CustomerBean customer = (CustomerBean) session.getAttribute("customer");
+            CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
 
             if (customer == null) {
                 request.setAttribute("mensaje", "Usuario no autenticado.");
