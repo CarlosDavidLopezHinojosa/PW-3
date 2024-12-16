@@ -45,6 +45,7 @@
         
         <label for="tipoReserva">Tipo de Reserva:</label>
         <select id="tipoReserva" name="tipoReserva" required>
+            <option value="">Seleccione un tipo de reserva</option>
             <option value="ADULTOS">ADULTOS</option>
             <option value="FAMILIAR">FAMILIAR</option>
             <option value="INFANTIL">INFANTIL</option>
