@@ -50,15 +50,15 @@
         <h3>Funcionalidades</h3>
         <div class="actions">
             <a href="<%= request.getContextPath() %>/views/realizarReserva.jsp" class="btn btn-primary">Realizar Reserva</a>
-            <a href="<%= request.getContextPath() %>/views/modificarReserva.jsp" class="btn btn-primary">Modificar Reserva</a>
-            <a href="<%= request.getContextPath() %>/views/cancelarReserva.jsp" class="btn btn-primary">Cancelar Reserva</a>
-            <a href="<%= request.getContextPath() %>/views/verReservas.jsp" class="btn btn-primary">Consultar Reservas</a>
+            <a href="<%= request.getContextPath() %>/modificarReserva" class="btn btn-primary">Modificar Reserva</a>
+            <a href="<%= request.getContextPath() %>/cancelarReserva" class="btn btn-primary">Cancelar Reserva</a>
+            <a href="<%= request.getContextPath() %>/verReservas" class="btn btn-primary">Consultar Reservas</a>
             <a href="<%= request.getContextPath() %>/views/adquirirBono.jsp" class="btn btn-primary">Adquirir Bono</a>
             <a href="<%= request.getContextPath() %>/views/buscarPistaDisponible.jsp" class="btn btn-primary">Buscar Pista Disponible</a>
-            <a href="<%= request.getContextPath() %>/views/jugadores.jsp" class="btn btn-primary">Ver Jugadores</a>
-            <a href="<%= request.getContextPath() %>/views/verMateriales.jsp" class="btn btn-primary">Ver Materiales</a>
-            <a href="<%= request.getContextPath() %>/views/verBonos.jsp" class="btn btn-primary">Ver Bonos</a>
-            <a href="<%= request.getContextPath() %>/views/verPistas.jsp" class="btn btn-primary">Ver Pistas</a>
+            <a href="<%= request.getContextPath() %>/jugadores" class="btn btn-primary">Ver Jugadores</a>
+            <a href="<%= request.getContextPath() %>/verMateriales" class="btn btn-primary">Ver Materiales</a>
+            <a href="<%= request.getContextPath() %>/verBonos" class="btn btn-primary">Ver Bonos</a>
+            <a href="<%= request.getContextPath() %>/verPistas" class="btn btn-primary">Ver Pistas</a>
         </div>
     </div>
 </body>
