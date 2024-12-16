@@ -4,4 +4,9 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+
+  <context-param>
+    <param-name>config</param-name>
+    <param-value>/WEB-INF/resources/config.properties</param-value>
+  </context-param>
 </web-app>

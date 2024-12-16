@@ -1,5 +1,6 @@
 package web.model.data.common;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -84,14 +85,14 @@ import web.model.business.DTOs.Reservas.ReservaInfantilDTO;
 public class DBConnection {
 
 	protected Connection connection = null;
+	protected static DBConfig dbConfig = null;
 
 	// Important: This configuration is hard-coded here for illustrative purposes only
 	//Vamos a usar mi bd porque Aurora aun no ha corregido la P2
-	protected String url = "jdbc:mysql://oraclepr.uco.es:3306/i22lohic";
+	protected static String url = dbConfig != null ? dbConfig.getUrl() : null;
+	protected static String user = dbConfig != null ? dbConfig.getUsername() : null;
+	protected static String password = dbConfig != null ? dbConfig.getPassword() : null;
 
-	protected String user = "i22lohic"; 
-
-	protected String password = "meloading";
 
 	/**
 	 * Establece una conexión con la base de datos utilizando los parámetros de conexión
@@ -101,7 +102,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al intentar establecer la conexión con la base de datos.
 	 * @throws ClassNotFoundException Si el controlador JDBC no se encuentra en el classpath.
 	 */
-	public Connection getConnection(){
+	public DBConnection getConnection(){
 
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
@@ -114,9 +115,15 @@ public class DBConnection {
 			System.err.println("JDBC Driver not found.");
 			e.printStackTrace();
 		}
-		return this.connection;
+		return this;
 	}
 
+	public static void setConfig(InputStream input) {
+		DBConnection.dbConfig = new DBConfig(input);
+		url = DBConnection.dbConfig.getUrl();
+		user = DBConnection.dbConfig.getUsername();
+		password = DBConnection.dbConfig.getPassword();
+	}
 
 	/**
 	 * Inserta un nuevo registro en la tabla Pista.
