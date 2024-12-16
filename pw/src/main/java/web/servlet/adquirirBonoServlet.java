@@ -35,7 +35,13 @@ public class adquirirBonoServlet extends HttpServlet {
             int idUser = customer.getId();
             int sesiones = Integer.parseInt(request.getParameter("sesiones"));
             String tipoReserva = request.getParameter("tipoReserva");
-            PistaDTO.TamanoPista pistaTamano = PistaDTO.TamanoPista.valueOf(request.getParameter("pistaTamano").toUpperCase());
+            String tam = request.getParameter("pistaTamano");
+            PistaDTO.TamanoPista pistaTamano = PistaDTO.TamanoPista.valueOf("ADULTOS");
+            
+            if(tam != null){
+                pistaTamano = PistaDTO.TamanoPista.valueOf(request.getParameter(tam.toUpperCase()));
+            }
+
 
             BonoDTO nuevoBono = BonoDAO.insertarBono(sesiones, idUser, tipoReserva, pistaTamano);
 

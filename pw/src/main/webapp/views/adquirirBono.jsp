@@ -21,7 +21,7 @@
             if (tipoReserva === "ADULTOS") {
                 pistaTamano.innerHTML += "<option value='ADULTOS'>ADULTOS</option>";
             } else if (tipoReserva === "FAMILIAR") {
-                pistaTamano.innerHTML += "<option value='3VS3'>3VS3</option>";
+                pistaTamano.innerHTML += "<option value='VS3'>3VS3</option>";
                 pistaTamano.innerHTML += "<option value='MINIBASKET'>MINIBASKET</option>";
             } else if (tipoReserva === "INFANTIL") {
                 pistaTamano.innerHTML += "<option value='MINIBASKET'>MINIBASKET</option>";
