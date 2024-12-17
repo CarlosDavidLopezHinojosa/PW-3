@@ -64,7 +64,7 @@
             <a href="<%= request.getContextPath() %>/asociarMaterialPista" class="btn btn-primary">Asociar material a pista</a>
             <a href="<%= request.getContextPath() %>/modificarEstadoMaterial" class="btn btn-primary">Modificar estado de material</a>
             <a href="<%= request.getContextPath() %>/modificarEstadoPista" class="btn btn-primary">Modificar estado de pista</a>
-            <a href="<%= request.getContextPath() %>/views/eliminarReservas.jsp" class="btn btn-primary">Eliminar reservas no realizadas</a>
+            <a href="<%= request.getContextPath() %>/eliminarReservaAdmin" class="btn btn-primary">Eliminar reservas no realizadas</a>
         </div>
     </div>
 </body>
