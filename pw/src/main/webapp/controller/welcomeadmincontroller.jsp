@@ -1,5 +1,5 @@
 <%@ page import="web.model.business.Beans.CustomerBean" %>
-<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.stream.Collectors" %>
@@ -21,7 +21,7 @@
         .filter(cliente -> cliente.getRol() == JugadorDTO.Roles.CLIENTE)
         .collect(Collectors.toList());
 
-    LocalDate fechaActual = LocalDate.now();
+    LocalDateTime fechaActual = LocalDateTime.now();
     List<ReservaDTO> reservas = ReservaDAO.obtenerReservas()
         .stream()
         .filter(reserva -> reserva.getDiaYHora().isBefore(fechaActual))
