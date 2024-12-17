@@ -400,6 +400,23 @@ public class DBConnection {
 		return pistas;
 	}
 
+	/**
+	 * Actualiza la disponibilidad de una pista en la base de datos.
+	 *
+	 * @param idPista El id de la pista que se actualizará.
+	 * @param nuevaDisponibilidad La nueva disponibilidad que se asignará a la pista.
+	 */
+	public void updatePistaDisponibilidad(int idPista, boolean nuevaDisponibilidad) {
+		String query = "UPDATE Pista SET disponible = ? WHERE id = ?";
+		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			stmt.setBoolean(1, nuevaDisponibilidad);
+			stmt.setInt(2, idPista);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Error while updating Pista availability.");
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Inserta un nuevo registro en la tabla Reserva.
@@ -1268,6 +1285,25 @@ public class DBConnection {
 		}
 	}
 
+	/**
+	 * Actualiza el estado de un material en la tabla Material.
+	 *
+	 * @param idMaterial El id del material que se actualizará.
+	 * @param nuevoEstado El nuevo estado que se asignará al material.
+	 * @throws SQLException Si ocurre un error al ejecutar la actualización en la base de datos.
+	 */
+	public void updateMaterialEstado(int idMaterial, MaterialDTO.EstadoMaterial nuevoEstado) {
+		String query = "UPDATE Material SET estado = ? WHERE id = ?";
+		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			stmt.setString(1, nuevoEstado.name());
+			stmt.setInt(2, idMaterial);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Error while updating record in Material table.");
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Cierra la conexión a la base de datos si está abierta.
 	 * 

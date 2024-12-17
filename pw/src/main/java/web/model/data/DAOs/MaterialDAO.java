@@ -87,4 +87,17 @@ public class MaterialDAO {
         conexion.closeConnection();
         return material;
     }
+
+    /**
+     * Modifica el estado de un material en la base de datos.
+     *
+     * @param materialId El ID del material que se desea modificar.
+     * @param nuevoEstado El nuevo estado que se asignará al material.
+     */
+    public static void modificarMaterialEstado(int materialId, EstadoMaterial nuevoEstado) {
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        conexion.updateMaterialEstado(materialId, nuevoEstado);
+        conexion.closeConnection();
+    }
 }

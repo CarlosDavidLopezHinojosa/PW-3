@@ -22,7 +22,7 @@
         .filter(cliente -> cliente.getRol() == JugadorDTO.Roles.CLIENTE)
         .collect(Collectors.toList());
 
-    LocalDate fechaActual = LocalDate.now();
+    LocalDateTime fechaActual = LocalDateTime.now();
     List<ReservaDTO> reservas = ReservaDAO.obtenerReservas()
         .stream()
         .filter(reserva -> reserva.getDiaYHora().toLocalDate().isBefore(fechaActual))

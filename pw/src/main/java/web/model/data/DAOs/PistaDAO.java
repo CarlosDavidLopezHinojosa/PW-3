@@ -211,5 +211,16 @@ public class PistaDAO {
         conexion.closeConnection();
     }
 
-
+    /**
+     * Modifica la disponibilidad de una pista en la base de datos.
+     *
+     * @param idPista El id de la pista cuya disponibilidad se va a modificar.
+     * @param nuevaDisponibilidad La nueva disponibilidad que se asignará a la pista.
+     */
+    public static void modificarPistaDisponibilidad(int idPista, boolean nuevaDisponibilidad) {
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        conexion.updatePistaDisponibilidad(idPista, nuevaDisponibilidad);
+        conexion.closeConnection();
+    }
 }
