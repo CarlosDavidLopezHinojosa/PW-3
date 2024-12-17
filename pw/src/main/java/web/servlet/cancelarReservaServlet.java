@@ -22,7 +22,7 @@ public class cancelarReservaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        CustomerBean customer = (CustomerBean) session.getAttribute("customer");
+        CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
 
         if (customer == null) {
             request.setAttribute("mensaje", "Usuario no autenticado.");

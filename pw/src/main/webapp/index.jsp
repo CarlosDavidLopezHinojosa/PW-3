@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.io.InputStream" %>
+<%@ page import="web.model.data.common.DBConnection" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,14 +10,24 @@
     <link rel="stylesheet" href="static/css/styles.css"> <!-- Archivo CSS externo -->
 </head>
 <body>
+    <%
+        // Paso 1: Recuperar la ruta como String
+        String file = application.getInitParameter("config");
+
+        // Paso 2: Crear el flujo de entrada
+        InputStream myIO = application.getResourceAsStream(file);
+
+        // Paso 3: Inicializar DBConfig en DBConnection
+        DBConnection.setConfig(myIO);
+    %>
     <!-- Contenedor principal -->
     <div class="container">
         <!-- Cabecera -->
         <header class="header">
             <h1>Reserva tu Cancha de Baloncesto</h1>
             <p>Inicia sesión o regístrate para gestionar tus reservas.</p>
-        </header>
 
+        </header>
         <!-- Botones de acción -->
         <div class="actions">
             <a href="views/loginview.jsp" class="btn btn-primary">Iniciar Sesión</a>

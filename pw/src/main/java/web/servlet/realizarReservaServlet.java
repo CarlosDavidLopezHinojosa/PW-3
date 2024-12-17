@@ -40,8 +40,15 @@ public class realizarReservaServlet extends HttpServlet {
     private void buscarPistasDisponibles(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String tipoReservaStr = request.getParameter("tipoReserva");
-            PistaDTO.TamanoPista tipoReserva = PistaDTO.TamanoPista.valueOf(tipoReservaStr.toUpperCase());
             String diaYHoraStr = request.getParameter("diaYHora");
+
+            if (tipoReservaStr == null || diaYHoraStr == null || tipoReservaStr.isEmpty() || diaYHoraStr.isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("Tipo de reserva y fecha y hora son obligatorios.");
+                return;
+            }
+
+            PistaDTO.TamanoPista tipoReserva = PistaDTO.TamanoPista.valueOf(tipoReservaStr.toUpperCase());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
             LocalDateTime diaYHora = LocalDateTime.parse(diaYHoraStr, formatter);
 
@@ -50,7 +57,9 @@ public class realizarReservaServlet extends HttpServlet {
             StringBuilder options = new StringBuilder();
             options.append("<option value=''>Seleccione una pista</option>");
             for (PistaDTO pista : pistas) {
-                options.append("<option value='").append(pista.getId()).append("'>").append(pista.getNombre()).append("</option>");
+                if (esPistaValidaParaReserva(tipoReservaStr, pista.getTamano())) {
+                    options.append("<option value='").append(pista.getId()).append("' data-tamano='").append(pista.getTamano()).append("'>").append(pista.getNombre()).append("</option>");
+                }
             }
 
             response.setContentType("text/html");
@@ -59,6 +68,19 @@ public class realizarReservaServlet extends HttpServlet {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Error al buscar pistas disponibles: " + e.getMessage());
+        }
+    }
+
+    private boolean esPistaValidaParaReserva(String tipoReserva, PistaDTO.TamanoPista tamanoPista) {
+        switch (tipoReserva.toUpperCase()) {
+            case "ADULTOS":
+                return tamanoPista == PistaDTO.TamanoPista.ADULTOS;
+            case "FAMILIAR":
+                return tamanoPista == PistaDTO.TamanoPista.MINIBASKET || tamanoPista == PistaDTO.TamanoPista.VS3;
+            case "INFANTIL":
+                return tamanoPista == PistaDTO.TamanoPista.MINIBASKET;
+            default:
+                return false;
         }
     }
 
@@ -75,8 +97,19 @@ public class realizarReservaServlet extends HttpServlet {
 
         try {
             String tipoReserva = request.getParameter("tipoReserva");
+            String diaYHoraStr = request.getParameter("diaYHora");
+            String duracionStr = request.getParameter("duracion");
+            String idPistaStr = request.getParameter("pista");
+            String pistaTamanoStr = request.getParameter("pistaTamano");
+
+            if (tipoReserva == null || diaYHoraStr == null || duracionStr == null || idPistaStr == null || pistaTamanoStr == null || tipoReserva.isEmpty() || diaYHoraStr.isEmpty() || duracionStr.isEmpty() || idPistaStr.isEmpty() || pistaTamanoStr.isEmpty()) {
+                request.setAttribute("mensaje", "Todos los campos son obligatorios.");
+                request.getRequestDispatcher("/views/realizarReserva.jsp").forward(request, response);
+                return;
+            }
+
             int idUsuario = customer.getId();
-            LocalDateTime diaYHora = LocalDateTime.parse(request.getParameter("diaYHora"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            LocalDateTime diaYHora = LocalDateTime.parse(diaYHoraStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
             // Validar que la fecha y hora no sean pasadas
             if (diaYHora.isBefore(LocalDateTime.now())) {
@@ -88,9 +121,9 @@ public class realizarReservaServlet extends HttpServlet {
             boolean esBono = Boolean.parseBoolean(request.getParameter("esBono"));
             int idBono = esBono ? Integer.parseInt(request.getParameter("idBono")) : -1;
             int nSesionBono = esBono ? Integer.parseInt(request.getParameter("nSesionBono")) : -1;
-            int duracion = Integer.parseInt(request.getParameter("duracion"));
-            int idPista = Integer.parseInt(request.getParameter("pista"));
-            float precio = Float.parseFloat(request.getParameter("precio"));
+            int duracion = Integer.parseInt(duracionStr);
+            int idPista = Integer.parseInt(idPistaStr);
+            float precio = calcularPrecio(pistaTamanoStr, duracion);
             String codigoDescuento = request.getParameter("codigoDescuento");
             float descuento = 0;
 
@@ -107,15 +140,7 @@ public class realizarReservaServlet extends HttpServlet {
 
             int numAdultos = tipoReserva.equals("INFANTIL") ? 0 : Integer.parseInt(request.getParameter("numAdultos"));
             int numNinos = tipoReserva.equals("ADULTOS") ? 0 : Integer.parseInt(request.getParameter("numNinos"));
-            PistaDTO.TamanoPista pistaTamano;
-
-            if (tipoReserva.equals("ADULTOS")) {
-                pistaTamano = PistaDTO.TamanoPista.ADULTOS;
-            } else if (tipoReserva.equals("INFANTIL")) {
-                pistaTamano = PistaDTO.TamanoPista.MINIBASKET;
-            } else {
-                pistaTamano = PistaDTO.TamanoPista.valueOf(request.getParameter("pistaTamano").toUpperCase());
-            }
+            PistaDTO.TamanoPista pistaTamano = PistaDTO.TamanoPista.valueOf(pistaTamanoStr.toUpperCase());
 
             ReservaDTO reserva = ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
             request.setAttribute("mensaje", "Reserva realizada exitosamente. ID de la reserva: " + reserva.getIdReserva());
@@ -124,5 +149,18 @@ public class realizarReservaServlet extends HttpServlet {
         }
 
         request.getRequestDispatcher("/views/realizarReserva.jsp").forward(request, response);
+    }
+
+    private float calcularPrecio(String pistaTamano, int duracion) {
+        switch (pistaTamano) {
+            case "MINIBASKET":
+                return 0.1f * duracion;
+            case "VS3":
+                return 0.13f * duracion;
+            case "ADULTOS":
+                return 0.15f * duracion;
+            default:
+                return 0;
+        }
     }
 }

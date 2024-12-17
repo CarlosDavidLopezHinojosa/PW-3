@@ -16,10 +16,13 @@ public class VerJugadoresServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        List<JugadorDTO> jugadores = JugadorDAO.obtenerUsuarios();
-        // Set the list of players as a request attribute
-        request.setAttribute("jugadores", jugadores);
+        try {
+            List<JugadorDTO> jugadores = JugadorDAO.obtenerUsuarios();
+            // Set the list of players as a request attribute
+            request.setAttribute("jugadores", jugadores);
+        } catch (Exception e) {
+            request.setAttribute("mensaje", "Error al obtener la lista de jugadores: " + e.getMessage());
+        }
 
         // Forward the request to jugadores.jsp
         request.getRequestDispatcher("/views/jugadores.jsp").forward(request, response);

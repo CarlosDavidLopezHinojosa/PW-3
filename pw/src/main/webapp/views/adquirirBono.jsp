@@ -21,7 +21,7 @@
             if (tipoReserva === "ADULTOS") {
                 pistaTamano.innerHTML += "<option value='ADULTOS'>ADULTOS</option>";
             } else if (tipoReserva === "FAMILIAR") {
-                pistaTamano.innerHTML += "<option value='3VS3'>3VS3</option>";
+                pistaTamano.innerHTML += "<option value='VS3'>3VS3</option>";
                 pistaTamano.innerHTML += "<option value='MINIBASKET'>MINIBASKET</option>";
             } else if (tipoReserva === "INFANTIL") {
                 pistaTamano.innerHTML += "<option value='MINIBASKET'>MINIBASKET</option>";
@@ -45,6 +45,7 @@
         
         <label for="tipoReserva">Tipo de Reserva:</label>
         <select id="tipoReserva" name="tipoReserva" required>
+            <option value="">Seleccione un tipo de reserva</option>
             <option value="ADULTOS">ADULTOS</option>
             <option value="FAMILIAR">FAMILIAR</option>
             <option value="INFANTIL">INFANTIL</option>

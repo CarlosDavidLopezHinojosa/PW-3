@@ -1,4 +1,5 @@
 <%@ page import="web.model.business.Beans.CustomerBean" %>
+<%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
@@ -24,7 +25,7 @@
     LocalDateTime fechaActual = LocalDateTime.now();
     List<ReservaDTO> reservas = ReservaDAO.obtenerReservas()
         .stream()
-        .filter(reserva -> reserva.getDiaYHora().isBefore(fechaActual))
+        .filter(reserva -> reserva.getDiaYHora().toLocalDate().isBefore(fechaActual))
         .collect(Collectors.toList());
 
     // Mapear reservas completadas por cliente

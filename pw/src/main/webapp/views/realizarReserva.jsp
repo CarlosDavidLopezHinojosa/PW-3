@@ -41,32 +41,19 @@
         <label for="duracion">Duración (minutos):</label>
         <input type="number" id="duracion" name="duracion" required><br><br>
 
+        <label for="numAdultos" id="numAdultosLabel" style="display:none;">Número de Adultos:</label>
+        <input type="number" id="numAdultos" name="numAdultos" style="display:none;"><br><br>
+
+        <label for="numNinos" id="numNinosLabel" style="display:none;">Número de Niños:</label>
+        <input type="number" id="numNinos" name="numNinos" style="display:none;"><br><br>
+
         <label for="pista">Pista:</label>
-        <select id="pista" name="pista" required>
+        <select id="pista" name="pista" required onchange="actualizarPrecio()">
             <option value="">Seleccione una pista</option>
         </select><br><br>
 
-        <label for="precio">Precio:</label>
-        <input type="number" step="0.01" id="precio" name="precio" required><br><br>
-
-        <div id="numAdultosField">
-            <label for="numAdultos">Número de Adultos:</label>
-            <input type="number" id="numAdultos" name="numAdultos" required><br><br>
-        </div>
-
-        <div id="numNinosField">
-            <label for="numNinos">Número de Niños:</label>
-            <input type="number" id="numNinos" name="numNinos" value="0" required><br><br>
-        </div>
-
-        <div id="pistaTamanoField">
-            <label for="pistaTamano">Tamaño de la Pista:</label>
-            <select id="pistaTamano" name="pistaTamano">
-                <option value="MINIBASKET">MINIBASKET</option>
-                <option value="3VS3">3VS3</option>
-                <option value="ADULTOS">ADULTOS</option>
-            </select><br><br>
-        </div>
+        <input type="hidden" id="pistaTamano" name="pistaTamano">
+        <input type="hidden" id="precio" name="precio">
 
         <label for="usarCodigoDescuento">¿Usar Código de Descuento?:</label>
         <input type="checkbox" id="usarCodigoDescuento" name="usarCodigoDescuento" onchange="toggleCodigoDescuento()"><br><br>
@@ -98,38 +85,33 @@
 
         function actualizarCampos() {
             var tipoReserva = document.getElementById("tipoReserva").value;
-            var numAdultosField = document.getElementById("numAdultosField");
-            var numNinosField = document.getElementById("numNinosField");
-            var pistaTamanoField = document.getElementById("pistaTamanoField");
-            var pistaTamanoSelect = document.getElementById("pistaTamano");
+            var numAdultosField = document.getElementById("numAdultos");
+            var numAdultosLabel = document.getElementById("numAdultosLabel");
+            var numNinosField = document.getElementById("numNinos");
+            var numNinosLabel = document.getElementById("numNinosLabel");
 
             if (tipoReserva === "ADULTOS") {
                 numAdultosField.style.display = "block";
+                numAdultosLabel.style.display = "block";
                 numNinosField.style.display = "none";
+                numNinosLabel.style.display = "none";
                 numNinosField.value = 0;
-                pistaTamanoField.style.display = "none";
-                pistaTamanoSelect.value = "ADULTOS";
             } else if (tipoReserva === "INFANTIL") {
                 numAdultosField.style.display = "none";
+                numAdultosLabel.style.display = "none";
                 numAdultosField.value = 0;
                 numNinosField.style.display = "block";
-                pistaTamanoField.style.display = "none";
-                pistaTamanoSelect.value = "MINIBASKET";
+                numNinosLabel.style.display = "block";
             } else if (tipoReserva === "FAMILIAR") {
                 numAdultosField.style.display = "block";
+                numAdultosLabel.style.display = "block";
                 numNinosField.style.display = "block";
-                pistaTamanoField.style.display = "block";
-                // Limpiar las opciones de tamaño de pista
-                pistaTamanoSelect.innerHTML = "";
-                // Añadir opciones válidas para FAMILIAR
-                var option1 = document.createElement("option");
-                option1.value = "MINIBASKET";
-                option1.text = "MINIBASKET";
-                pistaTamanoSelect.add(option1);
-                var option2 = document.createElement("option");
-                option2.value = "3VS3";
-                option2.text = "3VS3";
-                pistaTamanoSelect.add(option2);
+                numNinosLabel.style.display = "block";
+            } else {
+                numAdultosField.style.display = "none";
+                numAdultosLabel.style.display = "none";
+                numNinosField.style.display = "none";
+                numNinosLabel.style.display = "none";
             }
         }
 
@@ -178,6 +160,23 @@
                 };
                 xhr.send();
             }
+        }
+
+        function actualizarPrecio() {
+            var duracion = document.getElementById("duracion").value;
+            var pistaTamano = document.getElementById("pista").selectedOptions[0].getAttribute("data-tamano");
+            var precio = 0;
+
+            if (pistaTamano === "MINIBASKET") {
+                precio = 0.1 * duracion;
+            } else if (pistaTamano === "VS3") {
+                precio = 0.13 * duracion;
+            } else if (pistaTamano === "ADULTOS") {
+                precio = 0.15 * duracion;
+            }
+
+            document.getElementById("pistaTamano").value = pistaTamano;
+            document.getElementById("precio").value = precio.toFixed(2);
         }
 
         // Inicializar campos al cargar la página

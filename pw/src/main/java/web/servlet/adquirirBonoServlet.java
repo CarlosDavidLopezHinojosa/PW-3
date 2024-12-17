@@ -24,7 +24,7 @@ public class adquirirBonoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            CustomerBean customer = (CustomerBean) session.getAttribute("customer");
+            CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
 
             if (customer == null) {
                 request.setAttribute("mensaje", "Usuario no autenticado.");
@@ -33,9 +33,18 @@ public class adquirirBonoServlet extends HttpServlet {
             }
 
             int idUser = customer.getId();
-            int sesiones = Integer.parseInt(request.getParameter("sesiones"));
+            String sesionesStr = request.getParameter("sesiones");
             String tipoReserva = request.getParameter("tipoReserva");
-            PistaDTO.TamanoPista pistaTamano = PistaDTO.TamanoPista.valueOf(request.getParameter("pistaTamano").toUpperCase());
+            String pistaTamanoStr = request.getParameter("pistaTamano");
+
+            if (sesionesStr == null || tipoReserva == null || pistaTamanoStr == null || sesionesStr.isEmpty() || tipoReserva.isEmpty() || pistaTamanoStr.isEmpty()) {
+                request.setAttribute("mensaje", "Todos los campos son obligatorios.");
+                request.getRequestDispatcher("/views/adquirirBono.jsp").forward(request, response);
+                return;
+            }
+
+            int sesiones = Integer.parseInt(sesionesStr);
+            PistaDTO.TamanoPista pistaTamano = PistaDTO.TamanoPista.valueOf(pistaTamanoStr.toUpperCase());
 
             BonoDTO nuevoBono = BonoDAO.insertarBono(sesiones, idUser, tipoReserva, pistaTamano);
 
