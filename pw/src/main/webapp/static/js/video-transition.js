@@ -1,10 +1,6 @@
 // Variables de control
 let currentVideoIndex = 0
-const videos = [
-  document.getElementById('video1'),
-  document.getElementById('video2'),
-  document.getElementById('video3'),
-]
+const videos = document.querySelectorAll('video') // Todos los videos
 const videoChangeInterval = [14000, 11000, 12000] // Duración de cada video
 let transitionDuration = 500 // Duración de la transición en ms
 
