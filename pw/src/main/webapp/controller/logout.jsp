@@ -17,6 +17,7 @@
         <p>Tu sesión se ha cerrado correctamente.</p>
         <p>¿Deseas iniciar sesión de nuevo?</p>
         <a href="../views/loginview.jsp" class="btn btn-primary">Iniciar Sesión</a>
+        <a href="../index.jsp" class="btn btn-primary"> Volver al inicio </a>
     </div>
 </body>
 </html>

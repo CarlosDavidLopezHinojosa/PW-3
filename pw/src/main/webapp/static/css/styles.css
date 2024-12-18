@@ -1,42 +1,64 @@
 /* General */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
+/* Contenedor de videos */
+#video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+/* Videos de fondo */
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s linear; /* Transición suave */
+  opacity: 0;
+}
+
+.background-video.active {
+  opacity: 1; /* Video visible */
+}
+
+/* Contenedor principal */
 .container {
+  position: relative;
+  z-index: 1;
   text-align: center;
   padding: 20px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Cabecera */
-.header h1 {
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.header p {
-  margin-bottom: 20px;
-  color: #666;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  margin: 50px auto;
 }
 
 /* Botones */
 .btn {
   text-decoration: none;
   padding: 10px 20px;
-  margin: 5px;
+  margin: 10px;
   border-radius: 5px;
   display: inline-block;
   font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .btn-primary {
@@ -50,12 +72,5 @@ body {
 }
 
 .btn:hover {
-  opacity: 0.8;
-}
-
-.body p {
-  color: #333;
-  line-height: 1.6;
-  margin: 10px 0;
-  padding: 0 20px;
+  opacity: 0.9;
 }
