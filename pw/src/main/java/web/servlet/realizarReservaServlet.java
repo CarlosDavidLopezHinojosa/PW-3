@@ -3,6 +3,7 @@ package web.servlet;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -48,11 +49,27 @@ public class realizarReservaServlet extends HttpServlet {
                 return;
             }
 
-            PistaDTO.TamanoPista tipoReserva = PistaDTO.TamanoPista.valueOf(tipoReservaStr.toUpperCase());
+            ReservaDTO.tipoReserva tipoReserva = ReservaDTO.tipoReserva.valueOf(tipoReservaStr.toUpperCase());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
             LocalDateTime diaYHora = LocalDateTime.parse(diaYHoraStr, formatter);
 
-            List<PistaDTO> pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tipoReserva);
+            List<PistaDTO> pistas;
+            PistaDTO.TamanoPista tamanoAdultos = PistaDTO.TamanoPista.ADULTOS;
+            PistaDTO.TamanoPista tamanoMinibasket = PistaDTO.TamanoPista.MINIBASKET;
+            PistaDTO.TamanoPista tamanoVS3 = PistaDTO.TamanoPista.VS3;
+            if (tipoReserva == ReservaDTO.tipoReserva.ADULTOS) {
+                pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoAdultos);
+            } else if (tipoReserva == ReservaDTO.tipoReserva.INFANTIL) {
+                pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoMinibasket);
+            } else if (tipoReserva == ReservaDTO.tipoReserva.FAMILIAR) {
+                List<PistaDTO> pistasMinibasket = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoMinibasket);
+                List<PistaDTO> pistasVS3 = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoVS3);
+                pistas = new ArrayList<>();
+                pistas.addAll(pistasMinibasket);
+                pistas.addAll(pistasVS3);
+            } else {
+                pistas = new ArrayList<>();
+            }
 
             StringBuilder options = new StringBuilder();
             options.append("<option value=''>Seleccione una pista</option>");

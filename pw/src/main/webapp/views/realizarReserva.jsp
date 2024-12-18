@@ -17,7 +17,7 @@
     <h1>Realizar Reserva</h1>
     <form id="reservaForm" action="<%= request.getContextPath() %>/realizarReserva" method="post" onsubmit="return validarFormulario()">
         <label for="tipoReserva">Tipo de Reserva:</label>
-        <select id="tipoReserva" name="tipoReserva" required onchange="actualizarCampos()">
+        <select id="tipoReserva" name="tipoReserva" required onchange="actualizarCampos(); buscarPistasDisponibles()">
             <option value="Seleccione una opción" selected>Seleccione una opción</option>
             <option value="ADULTOS">ADULTOS</option>
             <option value="FAMILIAR">FAMILIAR</option>
