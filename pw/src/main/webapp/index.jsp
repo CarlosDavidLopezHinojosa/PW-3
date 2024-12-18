@@ -18,9 +18,16 @@
     %>
 
     <!-- Dos videos superpuestos para la transición -->
-    <div id="video-container">
-        <video id="video1" class="background-video" autoplay muted></video>
-        <video id="video2" class="background-video" muted></video>
+   <div id="video-container">
+        <video id="video1" class="background-video active" autoplay muted>
+            <source src="static/videos/man_bouncing_and_dunking.mp4" type="video/mp4">
+        </video>
+        <video id="video2" class="background-video" muted>
+            <source src="static/videos/guy_running_towards_net.mp4" type="video/mp4">
+        </video>
+        <video id="video3" class="background-video" muted>
+            <source src="static/videos/beach_floor.mp4" type="video/mp4">
+        </video>
     </div>
 
     <!-- Contenedor principal -->

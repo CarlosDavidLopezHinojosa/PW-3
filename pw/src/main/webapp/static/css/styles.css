@@ -26,7 +26,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 1s ease-in-out; /* Transición suave */
+  transition: opacity 0.5s linear; /* Transición suave */
   opacity: 0;
 }
 

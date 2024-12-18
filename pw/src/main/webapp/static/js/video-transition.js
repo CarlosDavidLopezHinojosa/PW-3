@@ -1,40 +1,45 @@
-// Rutas de los videos
-const videos = [
-  'static/videos/guy_running_towards_net.mp4',
-  'static/videos/man_bouncing_ball.mp4',
-  'static/videos/beach_floor.mp4',
-]
-
+// Variables de control
 let currentVideoIndex = 0
-const video1 = document.getElementById('video1')
-const video2 = document.getElementById('video2')
+const videos = [
+  document.getElementById('video1'),
+  document.getElementById('video2'),
+  document.getElementById('video3'),
+]
+const videoChangeInterval = [14000, 11000, 12000] // Duración de cada video
+let transitionDuration = 500 // Duración de la transición en ms
 
-// Inicializamos el primer video
-video1.src = videos[currentVideoIndex]
-video1.classList.add('active')
+// Función para inicializar el primer video
+function initializeVideo() {
+  videos[currentVideoIndex].classList.add('active')
+  videos[currentVideoIndex].play()
 
-video1.addEventListener('ended', playNextVideo)
-
-// Función para alternar videos
-function playNextVideo() {
-  currentVideoIndex = (currentVideoIndex + 1) % videos.length
-
-  // Determinar qué video está activo y cuál no
-  if (video1.classList.contains('active')) {
-    video2.src = videos[currentVideoIndex]
-    video2.load()
-    video2.play()
-
-    // Transición suave
-    video1.classList.remove('active')
-    video2.classList.add('active')
-  } else {
-    video1.src = videos[currentVideoIndex]
-    video1.load()
-    video1.play()
-
-    // Transición suave
-    video2.classList.remove('active')
-    video1.classList.add('active')
-  }
+  // Comenzar la transición cíclica entre videos
+  setTimeout(playNextVideo, videoChangeInterval[currentVideoIndex])
 }
+
+// Función para reproducir el siguiente video
+function playNextVideo() {
+  // Video actual
+  const currentVideo = videos[currentVideoIndex]
+
+  // Calcular el siguiente índice del video
+  currentVideoIndex = (currentVideoIndex + 1) % videos.length
+  const nextVideo = videos[currentVideoIndex]
+
+  // Iniciar transición: apagar el video actual
+  currentVideo.classList.remove('active')
+  setTimeout(() => {
+    currentVideo.pause()
+    currentVideo.currentTime = 0 // Reiniciar video actual
+
+    // Encender el siguiente video
+    nextVideo.classList.add('active')
+    nextVideo.play()
+
+    // Programar la próxima transición
+    setTimeout(playNextVideo, videoChangeInterval[currentVideoIndex])
+  }, transitionDuration) // Esperar a que termine la transición CSS
+}
+
+// Inicializar el video
+initializeVideo()
