@@ -9,4 +9,8 @@
     <param-name>config</param-name>
     <param-value>/WEB-INF/resources/config.properties</param-value>
   </context-param>
+  <context-param>
+    <param-name>sql</param-name>
+    <param-value>/WEB-INF/resources/sql.properties</param-value>
+  </context-param>
 </web-app>

@@ -12,13 +12,17 @@
 <body>
     <%
         // Paso 1: Recuperar la ruta como String
-        String file = application.getInitParameter("config");
+        String configFile = application.getInitParameter("config");
+        String sqlFile = application.getInitParameter("sql");
 
         // Paso 2: Crear el flujo de entrada
-        InputStream myIO = application.getResourceAsStream(file);
+        InputStream configInput = application.getResourceAsStream(configFile);
+        InputStream sqlInput = application.getResourceAsStream(sqlFile);
 
         // Paso 3: Inicializar DBConfig en DBConnection
-        DBConnection.setConfig(myIO);
+        DBConnection.setConfig(configInput);
+        DBConnection.setSql(sqlInput);
+        
     %>
     <!-- Contenedor principal -->
     <div class="container">
