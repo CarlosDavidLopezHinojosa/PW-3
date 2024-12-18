@@ -1,5 +1,6 @@
 package web.model.data.common;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import web.model.business.DTOs.BonoDTO;
 import web.model.business.DTOs.JugadorDTO;
@@ -83,9 +85,9 @@ import web.model.business.DTOs.Reservas.ReservaInfantilDTO;
  * @see java.sql.SQLException
  */
 public class DBConnection {
-
 	protected Connection connection = null;
 	protected static DBConfig dbConfig = null;
+    protected static Properties sqlProperties = new Properties();
 
 	// Important: This configuration is hard-coded here for illustrative purposes only
 	//Vamos a usar mi bd porque Aurora aun no ha corregido la P2
@@ -118,6 +120,17 @@ public class DBConnection {
 		return this;
 	}
 
+	public static void setSql(InputStream input) {
+		try {
+            if (input == null) {
+                System.out.println("Sorry, unable to find the SQL configuration file.");
+                return;
+            }
+            sqlProperties.load(input);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+	}
 	public static void setConfig(InputStream input) {
 		DBConnection.dbConfig = new DBConfig(input);
 		url = DBConnection.dbConfig.getUrl();
@@ -136,7 +149,7 @@ public class DBConnection {
 	 * @param maxJugadores El número máximo de jugadores que pueden usar la pista.
 	 */
 	public void insertIntoPista(int id, String nombre, boolean disponible, boolean esExterior, TamanoPista tamano, int maxJugadores) {
-		String query = "INSERT INTO Pista (id, nombre, disponible, esExterior, tamano, maxJugadores) VALUES (?, ?, ?, ?, ?, ?)";
+		String query = sqlProperties.getProperty("insertIntoPista");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.setString(2, nombre);
@@ -159,7 +172,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistas() {
 		List<PistaDTO> pistas = new ArrayList<>();
-		String query = "SELECT * FROM Pista";
+		String query = sqlProperties.getProperty("selectPistas");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -188,7 +201,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistasNoDisponibles() {
 		List<PistaDTO> pistasNoDisponibles = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE disponible = false";
+		String query = sqlProperties.getProperty("selectPistasNoDisponibles");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -217,7 +230,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistasDisponibles() {
 		List<PistaDTO> pistasDisponibles = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE disponible = true";
+		String query = sqlProperties.getProperty("selectPistasDisponibles");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -343,7 +356,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistasDisponiblesJugadoresTipo(int maxJugadores, TamanoPista tamano) {
 		List<PistaDTO> pistasDisponibles = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE disponible = true AND maxJugadores <= ? AND tamano = ?";
+		String query = sqlProperties.getProperty("selectPistasDisponiblesJugadoresTipo");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, maxJugadores);
 			stmt.setString(2, tamano.name());
@@ -377,7 +390,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistaNombre(String nombre) {
 		List<PistaDTO> pistas = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE nombre = ?";
+		String query = sqlProperties.getProperty("selectPistaNombre");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, nombre);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -407,7 +420,7 @@ public class DBConnection {
 	 * @param nuevaDisponibilidad La nueva disponibilidad que se asignará a la pista.
 	 */
 	public void updatePistaDisponibilidad(int idPista, boolean nuevaDisponibilidad) {
-		String query = "UPDATE Pista SET disponible = ? WHERE id = ?";
+		String query = sqlProperties.getProperty("updatePistaDisponibilidad");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setBoolean(1, nuevaDisponibilidad);
 			stmt.setInt(2, idPista);
@@ -436,7 +449,7 @@ public class DBConnection {
 	 * @param numNinos El número de niños en la reserva.
 	 */
 	public void insertIntoReserva(int id, int idUsuario, LocalDateTime diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, String tipoReserva, int numAdultos, int numNinos) {
-		String query = "INSERT INTO Reserva (id, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, tipo, numAdultos, numNinos) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = sqlProperties.getProperty("insertIntoReserva");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.setInt(2, idUsuario);
@@ -467,7 +480,7 @@ public class DBConnection {
 	 */
 	public ReservaDTO selectReservaPorId(int id) {
 		ReservaDTO reserva = null;
-		String query = "SELECT * FROM Reserva WHERE id = ?";
+		String query = sqlProperties.getProperty("selectReservaPorId");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -543,7 +556,7 @@ public class DBConnection {
 	 */
 	public List<ReservaDTO> selectReservasFuturas() {
 		List<ReservaDTO> reservasFuturas = new ArrayList<>();
-		String query = "SELECT * FROM Reserva WHERE diaYHora > CURRENT_TIMESTAMP";
+		String query = sqlProperties.getProperty("selectReservasFuturas");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -618,7 +631,7 @@ public class DBConnection {
 	 */
 	public List<ReservaDTO> selectReservasFuturasUsuario(int idUsuario) {
 		List<ReservaDTO> reservasFuturasUsuario = new ArrayList<>();
-		String query = "SELECT * FROM Reserva WHERE diaYHora > CURRENT_TIMESTAMP AND idUsuario = ?";
+		String query = sqlProperties.getProperty("selectReservasFuturasUsuario");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idUsuario);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -696,7 +709,7 @@ public class DBConnection {
 	 */
 	public List<ReservaDTO> selectReservaPistaDia(int idPista, LocalDateTime dia) {
 		List<ReservaDTO> reservas = new ArrayList<>();
-		String query = "SELECT * FROM Reserva WHERE idPista = ? AND DATE(diaYHora) = ?";
+		String query = sqlProperties.getProperty("selectReservaPistaDia");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idPista);
 			stmt.setTimestamp(2, Timestamp.valueOf(dia));
@@ -773,7 +786,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al intentar eliminar la reserva de la base de datos.
 	 */
 	public void deleteReserva(int id) {
-		String query = "DELETE FROM Reserva WHERE id = ?";
+		String query = sqlProperties.getProperty("deleteReserva");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.executeUpdate();
@@ -793,7 +806,7 @@ public class DBConnection {
 	 */
 	public List<ReservaDTO> selectReservaUsuario(int idUsuario) {
 		List<ReservaDTO> reservas = new ArrayList<>();
-		String query = "SELECT * FROM Reserva WHERE idUsuario = ?";
+		String query = sqlProperties.getProperty("selectReservaUsuario");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idUsuario);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -863,64 +876,63 @@ public class DBConnection {
 
 	public List<ReservaDTO> selectTodasReservas() {
 		List<ReservaDTO> reservas = new ArrayList<>();
-		String query = "SELECT * FROM Reserva";
-		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
-			try (ResultSet rs = stmt.executeQuery()) {
-				while (rs.next()) {
-					if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.ADULTOS.name())){
-						ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
-							rs.getString("tipo"),
-							rs.getInt("idUsuario"),
-							rs.getTimestamp("diaYHora").toLocalDateTime(),
-							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
-							rs.getInt("duracion"),
-							rs.getInt("idPista"),
-							rs.getFloat("precio"),
-							rs.getFloat("descuento"),
-							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
-							rs.getInt("id"),
-							rs.getInt("numAdultos"),
-							rs.getInt("numNinos")	
-						);
-						reservas.add(reserva);
-					}
-					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.FAMILIAR.name())){
-						ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
-							rs.getString("tipo"),
-							rs.getInt("idUsuario"),
-							rs.getTimestamp("diaYHora").toLocalDateTime(),
-							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
-							rs.getInt("duracion"),
-							rs.getInt("idPista"),
-							rs.getFloat("precio"),
-							rs.getFloat("descuento"),
-							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
-							rs.getInt("id"),
-							rs.getInt("numAdultos"),
-							rs.getInt("numNinos")	
-						);
-						reservas.add(reserva);
-					}
-					else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.INFANTIL.name())){
-						ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
-							rs.getString("tipo"),
-							rs.getInt("idUsuario"),
-							rs.getTimestamp("diaYHora").toLocalDateTime(),
-							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
-							rs.getInt("duracion"),
-							rs.getInt("idPista"),
-							rs.getFloat("precio"),
-							rs.getFloat("descuento"),
-							PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
-							rs.getInt("id"),
-							rs.getInt("numAdultos"),
-							rs.getInt("numNinos")	
-						);
-						reservas.add(reserva);
-					}
+		String query = sqlProperties.getProperty("selectTodasReservas");
+		try (PreparedStatement stmt = this.connection.prepareStatement(query);
+			ResultSet rs = stmt.executeQuery()) {
+			while (rs.next()) {
+				if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.ADULTOS.name())){
+					ReservaAdultosDTO reserva = ReservaBonoFactoryDTO.crearReservaAdultos(
+						rs.getString("tipo"),
+						rs.getInt("idUsuario"),
+						rs.getTimestamp("diaYHora").toLocalDateTime(),
+						rs.getInt("idBono"),
+						rs.getInt("nSesionBono"),
+						rs.getInt("duracion"),
+						rs.getInt("idPista"),
+						rs.getFloat("precio"),
+						rs.getFloat("descuento"),
+						PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+						rs.getInt("id"),
+						rs.getInt("numAdultos"),
+						rs.getInt("numNinos")	
+					);
+					reservas.add(reserva);
+				}
+				else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.FAMILIAR.name())){
+					ReservaFamiliarDTO reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(
+						rs.getString("tipo"),
+						rs.getInt("idUsuario"),
+						rs.getTimestamp("diaYHora").toLocalDateTime(),
+						rs.getInt("idBono"),
+						rs.getInt("nSesionBono"),
+						rs.getInt("duracion"),
+						rs.getInt("idPista"),
+						rs.getFloat("precio"),
+						rs.getFloat("descuento"),
+						PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+						rs.getInt("id"),
+						rs.getInt("numAdultos"),
+						rs.getInt("numNinos")	
+					);
+					reservas.add(reserva);
+				}
+				else if(rs.getString("tipo").equals(ReservaDTO.tipoReserva.INFANTIL.name())){
+					ReservaInfantilDTO reserva = ReservaBonoFactoryDTO.crearReservaInfantil(
+						rs.getString("tipo"),
+						rs.getInt("idUsuario"),
+						rs.getTimestamp("diaYHora").toLocalDateTime(),
+						rs.getInt("idBono"),
+						rs.getInt("nSesionBono"),
+						rs.getInt("duracion"),
+						rs.getInt("idPista"),
+						rs.getFloat("precio"),
+						rs.getFloat("descuento"),
+						PistaDTO.TamanoPista.valueOf(rs.getString("pistaTamano")),
+						rs.getInt("id"),
+						rs.getInt("numAdultos"),
+						rs.getInt("numNinos")	
+					);
+					reservas.add(reserva);
 				}
 			}
 		} catch (SQLException e) {
@@ -941,7 +953,7 @@ public class DBConnection {
 	 * @param pistaTamano  El tamaño de la pista asociado al bono.
 	 */
 	public void insertIntoBono(int id, int sesiones, int idUser, String tipoReserva, PistaDTO.TamanoPista pistaTamano) {
-		String query = "INSERT INTO Bono (id, sesiones, idUser, tipoReserva, tamanoPista) VALUES (?, ?, ?, ?, ?)";
+		String query = sqlProperties.getProperty("insertIntoBono");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.setInt(2, sesiones);
@@ -962,9 +974,9 @@ public class DBConnection {
 	 * @param idBono El ID del bono a reducir.
 	 */
 	public void reducirBono(int idBono) {
-		String selectQuery = "SELECT sesiones FROM Bono WHERE id = ?";
-		String updateQuery = "UPDATE Bono SET sesiones = sesiones - 1 WHERE id = ?";
-		String deleteQuery = "DELETE FROM Bono WHERE id = ?";
+		String selectQuery = sqlProperties.getProperty("selectSesionesBono");
+		String updateQuery = sqlProperties.getProperty("updateSesionesBono");
+		String deleteQuery = sqlProperties.getProperty("deleteBono");
 		try (PreparedStatement selectStmt = this.connection.prepareStatement(selectQuery)) {
 			selectStmt.setInt(1, idBono);
 			try (ResultSet rs = selectStmt.executeQuery()) {
@@ -999,7 +1011,7 @@ public class DBConnection {
 	 */
 	public List<BonoDTO> selectBonos(int idUser) {
 		List<BonoDTO> bonos = new ArrayList<>();
-		String query = "SELECT * FROM Bono WHERE idUser = ?";
+		String query = sqlProperties.getProperty("selectBonos");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idUser);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -1034,7 +1046,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al insertar el registro en la base de datos.
 	 */
 	public void insertIntoJugador(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email, String password, JugadorDTO.Roles rol) {
-		String query = "INSERT INTO Jugador (nombre, apellidos, id, fechaNacimiento, fechaInscripcion, email, password, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = sqlProperties.getProperty("insertIntoJugador");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, nombre);
 			stmt.setString(2, apellidos);
@@ -1063,7 +1075,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al actualizar el registro en la base de datos.
 	 */
 	public void updateJugador(String nombre, String apellidos, int id, LocalDate fechaNacimiento, LocalDate fechaInscripcion, String email) {
-		String query = "UPDATE Jugador SET nombre = ?, apellidos = ?, fechaNacimiento = ?, fechaInscripcion = ?, email = ? WHERE id = ?";
+		String query = sqlProperties.getProperty("updateJugador");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, nombre);
 			stmt.setString(2, apellidos);
@@ -1087,7 +1099,7 @@ public class DBConnection {
 	 */
 	public List<JugadorDTO> selectJugadores() {
 		List<JugadorDTO> jugadores = new ArrayList<>();
-		String query = "SELECT * FROM Jugador";
+		String query = sqlProperties.getProperty("selectJugadores");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -1120,7 +1132,7 @@ public class DBConnection {
 	 */
 	public JugadorDTO selectJugadorEmail(String email) {
 		JugadorDTO jugador = null;
-		String query = "SELECT * FROM Jugador WHERE email = ?";
+		String query = sqlProperties.getProperty("selectJugadorEmail");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, email);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -1156,7 +1168,7 @@ public class DBConnection {
 	 */
 	public JugadorDTO selectJugadorId(int id) {
 		JugadorDTO jugador = null;
-		String query = "SELECT * FROM Jugador WHERE id = ?";
+		String query = sqlProperties.getProperty("selectJugadorId");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -1191,7 +1203,7 @@ public class DBConnection {
 	 * @param idPista El identificador de la pista asociada al material.
 	 */
 	public void insertIntoMaterial(int id, MaterialDTO.TipoMaterial tipo, boolean usoExterior, MaterialDTO.EstadoMaterial estado, int idPista) {
-		String query = "INSERT INTO Material (id, tipo, usoExterior, estado, idPista) VALUES (?, ?, ?, ?, ?)";
+		String query = sqlProperties.getProperty("insertIntoMaterial");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.setString(2, tipo.name());
@@ -1213,7 +1225,7 @@ public class DBConnection {
 	 */
 	public List<MaterialDTO> selectMateriales() {
 		List<MaterialDTO> materiales = new ArrayList<>();
-		String query = "SELECT * FROM Material";
+		String query = sqlProperties.getProperty("selectMateriales");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query);
 			 ResultSet rs = stmt.executeQuery()) {
 			while (rs.next()) {
@@ -1243,7 +1255,7 @@ public class DBConnection {
 	 */
 	public MaterialDTO selectMaterialId(int id) {
 		MaterialDTO material = null;
-		String query = "SELECT * FROM Material WHERE id = ?";
+		String query = sqlProperties.getProperty("selectMaterialId");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			try (ResultSet rs = stmt.executeQuery()) {
@@ -1273,7 +1285,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al ejecutar la actualización en la base de datos.
 	 */
 	public void updateMaterialPista(int idPista, int idMaterial) {
-		String query = "UPDATE Material SET idPista = ? WHERE id = ?";
+		String query = sqlProperties.getProperty("updateMaterialPista");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, idPista);
 			stmt.setInt(2, idMaterial);
@@ -1293,7 +1305,7 @@ public class DBConnection {
 	 * @throws SQLException Si ocurre un error al ejecutar la actualización en la base de datos.
 	 */
 	public void updateMaterialEstado(int idMaterial, MaterialDTO.EstadoMaterial nuevoEstado) {
-		String query = "UPDATE Material SET estado = ? WHERE id = ?";
+		String query = sqlProperties.getProperty("updateMaterialEstado");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, nuevoEstado.name());
 			stmt.setInt(2, idMaterial);
@@ -1331,7 +1343,7 @@ public class DBConnection {
 	 * @return el valor máximo de ID de la tabla especificada, o -1 si ocurre un error.
 	 */
 	public int getMaxId(String table) {
-		String query = "SELECT MAX(id) FROM " + table;
+		String query = sqlProperties.getProperty("getMaxId").replace("{table}", table);
 		try (Statement stmt = this.connection.createStatement();
 			 ResultSet rs = stmt.executeQuery(query)) {
 			if (rs.next()) {
@@ -1350,7 +1362,7 @@ public class DBConnection {
      * @param reserva El objeto ReservaDTO que representa la reserva a actualizar.
      */
     public void updateReserva(ReservaDTO reserva) {
-        String query = "UPDATE Reserva SET diaYHora = ? WHERE id = ?";
+        String query = sqlProperties.getProperty("updateReserva");
         try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setTimestamp(1, Timestamp.valueOf(reserva.getDiaYHora()));
             stmt.setInt(2, reserva.getIdReserva());
