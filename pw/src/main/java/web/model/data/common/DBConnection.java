@@ -259,7 +259,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistasDisponiblesPorFechaYTipo(LocalDateTime fecha, boolean esExterior) {
         List<PistaDTO> pistasDisponibles = new ArrayList<>();
-        String query = "SELECT * FROM Pista WHERE disponible = true AND esExterior = ? AND id NOT IN (SELECT idPista FROM Reserva WHERE DATE(diaYHora) = ?)";
+		String query = sqlProperties.getProperty("selectPistasDisponiblesFechaExterior");
         try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
             stmt.setBoolean(1, esExterior);
 			stmt.setTimestamp(2, Timestamp.valueOf(fecha));
@@ -289,7 +289,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistasDisponiblesPorFechaYTipo(LocalDateTime fecha, PistaDTO.TamanoPista tamano) {
 		List<PistaDTO> pistasDisponibles = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE disponible = true AND tamano = ? AND id NOT IN (SELECT idPista FROM Reserva WHERE DATE(diaYHora) = ?)";
+		String query = sqlProperties.getProperty("selectPistasDisponiblesFechaTamano");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setString(1, tamano.name());
 			stmt.setTimestamp(2, Timestamp.valueOf(fecha));
@@ -322,7 +322,7 @@ public class DBConnection {
 	 */
 	public List<PistaDTO> selectPistasDisponiblesFecha(LocalDateTime fecha) {
 		List<PistaDTO> pistasDisponibles = new ArrayList<>();
-		String query = "SELECT * FROM Pista WHERE disponible = true AND id NOT IN (SELECT idPista FROM Reserva WHERE diaYHora = ?)";
+		String query = sqlProperties.getProperty("selectPistasDisponiblesFecha");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setTimestamp(1, Timestamp.valueOf(fecha));
 			try (ResultSet rs = stmt.executeQuery()) {
