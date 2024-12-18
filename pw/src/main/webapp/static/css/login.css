@@ -1,8 +1,17 @@
 /* Estilos específicos para la página de inicio de sesión */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #8a33ca, #2575fc);
+  color: #333;
+}
+
 .container {
   width: 100%;
   max-width: 400px; /* Ancho máximo del contenedor */
-  margin: 0 auto; /* Centrar el contenedor horizontalmente */
+  margin: 50px auto; /* Centrar el contenedor horizontalmente y añadir margen superior */
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background: #fff;

@@ -30,7 +30,7 @@
             CustomerBean customerBean = new CustomerBean();
             customerBean.setData(jugador);
             session.setAttribute("customerBean", customerBean);
-            response.sendRedirect("../views/welcome.jsp");
+            response.sendRedirect("welcomeclientcontroller.jsp");
             return;
         } else {
             // Usuario ya existe, mostrar mensaje de error
