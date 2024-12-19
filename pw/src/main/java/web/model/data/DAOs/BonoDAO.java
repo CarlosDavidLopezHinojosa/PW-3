@@ -1,5 +1,7 @@
 package web.model.data.DAOs;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import web.model.business.DTOs.BonoDTO;
@@ -82,6 +84,51 @@ public class BonoDAO {
         List<BonoDTO> bonos = conexion.selectBonos(idUser);
         conexion.closeConnection();
         return bonos;
+    }
+
+    public static void restarSesion(int idBono) throws SQLException {
+        DBConnection dbConnection = new DBConnection();
+        dbConnection.getConnection();
+        try {
+            int sesiones = dbConnection.obtenerSesionesBono(idBono);
+            if (sesiones > 1) {
+                dbConnection.actualizarSesionesBono(idBono, sesiones - 1);
+            } else {
+                dbConnection.eliminarBono(idBono);
+            }
+        } finally {
+            dbConnection.closeConnection();
+        }
+    }
+
+        public static List<BonoDTO> obtenerBonosDisponibles(int idUsuario, String tipoReserva) {
+        List<BonoDTO> bonosDisponibles = new ArrayList<>();
+        DBConnection dbConnection = new DBConnection();
+        dbConnection.getConnection();
+        try {
+            List<BonoDTO> bonos = dbConnection.selectBonos(idUsuario);
+            for (BonoDTO bono : bonos) {
+                if (bono.getSesiones() > 0 && esBonoValidoParaReserva(bono, tipoReserva)) {
+                    bonosDisponibles.add(bono);
+                }
+            }
+        } finally {
+            dbConnection.closeConnection();
+        }
+        return bonosDisponibles;
+    }
+
+    public static boolean esBonoValidoParaReserva(BonoDTO bono, String tipoReserva) {
+        switch (tipoReserva.toUpperCase()) {
+            case "ADULTOS":
+                return bono.getPistaTamano() == PistaDTO.TamanoPista.ADULTOS;
+            case "INFANTIL":
+                return bono.getPistaTamano() == PistaDTO.TamanoPista.MINIBASKET;
+            case "FAMILIAR":
+                return bono.getPistaTamano() == PistaDTO.TamanoPista.MINIBASKET || bono.getPistaTamano() == PistaDTO.TamanoPista.VS3;
+            default:
+                return false;
+        }
     }
 
 
