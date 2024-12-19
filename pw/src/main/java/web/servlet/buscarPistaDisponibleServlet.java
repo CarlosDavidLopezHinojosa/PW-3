@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.DTOs.PistaDTO;
-import web.model.data.DAOs.PistaDAO;
+import web.model.business.Gestores.GestorDePistas;
 
 @WebServlet("/buscarPistaDisponible")
 public class buscarPistaDisponibleServlet extends HttpServlet {
@@ -29,10 +29,10 @@ public class buscarPistaDisponibleServlet extends HttpServlet {
                 request.setAttribute("mensaje", "La fecha y hora no pueden ser pasadas.");
             } else {
                 if (tipoPista == null || tipoPista.isEmpty()) {
-                    pistas = PistaDAO.listarPistasDisponiblesPorFecha(fechaHora);
+                    pistas = GestorDePistas.listarPistasDisponiblesPorFecha(fechaHora);
                 } else {
                     boolean esExterior = "EXTERIOR".equalsIgnoreCase(tipoPista);
-                    pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(fechaHora, esExterior);
+                    pistas = GestorDePistas.listarPistasDisponiblesPorFechaYTipo2(fechaHora, esExterior);
                 }
             }
 
