@@ -1,0 +1,47 @@
+/* Inputs y Selects */
+.input-field {
+  width: 100%;
+  padding: 15px; /* Aumentar el padding */
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 18px; /* Aumentar el tamaño de la fuente */
+}
+
+/* Checkboxes */
+.checkbox {
+  margin-right: 10px;
+}
+
+/* Mensajes de error y éxito */
+.error-message {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #e3342f;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Mensajes de éxito (si en algún momento se usa) */
+.success-message {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #38c172;
+  background-color: #d4edda;
+  color: #155724;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Fondo */
+.background {
+  background-color: #f4f4f4;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

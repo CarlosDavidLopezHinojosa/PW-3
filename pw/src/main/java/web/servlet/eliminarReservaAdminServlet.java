@@ -2,6 +2,7 @@ package web.servlet;
 
 import java.io.IOException;
 import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,7 +23,7 @@ public class eliminarReservaAdminServlet extends HttpServlet {
             List<ReservaDTO> reservasFuturas = ReservaDAO.obtenerReservasFuturas();
             request.setAttribute("reservasFuturas", reservasFuturas);
         } catch (Exception e) {
-            request.setAttribute("mensaje", "Error al obtener las reservas futuras: " + e.getMessage());
+            request.setAttribute("error", "Error al obtener las reservas futuras: " + e.getMessage());
         }
 
         request.getRequestDispatcher("/views/eliminarReservaAdmin.jsp").forward(request, response);
@@ -37,7 +38,7 @@ public class eliminarReservaAdminServlet extends HttpServlet {
 
             request.setAttribute("mensaje", "Reserva eliminada exitosamente.");
         } catch (Exception e) {
-            request.setAttribute("mensaje", "Error al eliminar la reserva: " + e.getMessage());
+            request.setAttribute("error", "Error al eliminar la reserva: " + e.getMessage());
         }
 
         doGet(request, response);

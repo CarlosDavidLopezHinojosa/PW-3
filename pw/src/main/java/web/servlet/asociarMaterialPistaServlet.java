@@ -24,13 +24,18 @@ public class asociarMaterialPistaServlet extends HttpServlet {
             int materialId = Integer.parseInt(request.getParameter("materialId"));
             int pistaId = Integer.parseInt(request.getParameter("pistaId"));
 
-            PistaDAO.asociarMaterialAPista(pistaId, materialId);
-
-            request.setAttribute("mensaje", "Material asociado a la pista exitosamente.");
+            MaterialDTO mat = MaterialDAO.obtenerMaterialId(materialId);
+            if(mat.getIdPista() == (pistaId)){
+                request.setAttribute("error", "El material que ha seleccionado ya esta asociado a esa pista");
+            }
+            else{
+                PistaDAO.asociarMaterialAPista(pistaId, materialId);
+                request.setAttribute("mensaje", "Material asociado a la pista exitosamente.");
+            }
         } catch (Exception e) {
-            request.setAttribute("mensaje", "Error al asociar el material a la pista: " + e.getMessage());
+            request.setAttribute("error", "Error al asociar el material a la pista: " + e.getMessage());
         }
-
+        doGet(request, response);
         request.getRequestDispatcher("/views/asociarMaterialPista.jsp").forward(request, response);
     }
     
