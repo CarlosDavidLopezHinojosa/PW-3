@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/cliente.css">
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/user.png" %>" type="image/x-icon">
 </head>
 <body>
     <div class="main-container">

@@ -7,7 +7,7 @@
     <title>Iniciar Sesión</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/login.css">
-
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/basketball.png" %>" type="image/x-icon">
 </head>
 <body>
     <div class="container">

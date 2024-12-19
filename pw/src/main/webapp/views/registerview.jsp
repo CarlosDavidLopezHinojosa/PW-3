@@ -7,6 +7,7 @@
     <title>Registrarse</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/styles.css"> <!-- Enlace al CSS global -->
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/register.css"> <!-- Enlace al CSS específico -->
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/basketball.png" %>" type="image/x-icon">
 </head>
 <body>
     <div class="container">
