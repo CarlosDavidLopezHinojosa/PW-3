@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.BonoDTO;
-import web.model.data.DAOs.BonoDAO;
+import web.model.business.Gestores.GestorDeBonos;
 
 @WebServlet("/verBonos")
 public class verBonosServlet extends HttpServlet {
@@ -28,7 +28,8 @@ public class verBonosServlet extends HttpServlet {
                 return;
             }
 
-            List<BonoDTO> bonos = BonoDAO.mostrarBonosUsuario(customer.getId());
+            GestorDeBonos gestor = GestorDeBonos.getGestor();
+            List<BonoDTO> bonos = gestor.mostrarBonosUsuario(customer.getId());
             request.setAttribute("bonos", bonos);
 
             request.getRequestDispatcher("/views/verBonos.jsp").forward(request, response);
