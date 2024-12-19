@@ -6,8 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido</title>
+        <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/cliente.css">
-    <link rel="icon" href="<%= request.getContextPath() + "/static/images/user.png" %>" type="image/x-icon">
+    <link rel="icon" href="<%= request.getContextPath() %>/static/images/user.png" type="image/x-icon">
 </head>
 <body>
     <div class="main-container">
@@ -24,7 +25,6 @@
                         response.sendRedirect("../views/loginview.jsp");
                     }
                 %>
-
             </h1>
             <p class="subtitle">Has iniciado sesión correctamente.</p>
         </header>
@@ -65,8 +65,8 @@
 
         <!-- Enlaces secundarios -->
         <footer class="footer">
-            <a href="<%= request.getContextPath() %>/controller/logout.jsp" class="footer-link">Cerrar Sesión</a>
-            <a href="<%= request.getContextPath() %>/views/updateview.jsp" class="footer-link">Modificar Datos</a>
+            <a href="<%= request.getContextPath() %>/controller/logout.jsp" class="btn btn-danger">Cerrar Sesión</a>
+            <a href="<%= request.getContextPath() %>/views/updateview.jsp" class="btn btn-secondary">Modificar Datos</a>
         </footer>
     </div>
 </body>
