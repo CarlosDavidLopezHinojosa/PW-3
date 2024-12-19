@@ -38,7 +38,7 @@
             String mensaje = (String) request.getAttribute("mensaje");
             if (mensaje != null) {
         %>
-            <div class="error-message"><%= mensaje %></div>
+            <div class="success-message"><%= mensaje %></div>
         <% 
             }
         %>
