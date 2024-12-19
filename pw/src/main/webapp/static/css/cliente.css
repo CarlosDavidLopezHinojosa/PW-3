@@ -68,8 +68,13 @@ html {
 
 .actions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(200px, 1fr)
+  ); /* Más columnas si hay espacio */
   gap: 15px;
+  width: 100%; /* Abarca todo el contenedor */
+  margin-top: 20px;
 }
 
 /* Botones */
@@ -88,29 +93,26 @@ html {
   color: #fff;
 }
 
+.btn-primary:hover {
+  background: #0056b3;
+}
+
 .btn-secondary {
   background: #6c757d;
   color: #fff;
 }
 
-.btn:hover {
-  opacity: 0.8;
+.btn-secondary:hover {
+  background: #5a6268;
 }
 
-/* Enlaces secundarios */
-.footer {
-  text-align: center;
-  margin-top: 20px;
+.btn-danger {
+  background: #dc3545;
+  color: #fff;
 }
 
-.footer-link {
-  margin: 0 10px;
-  text-decoration: none;
-  color: #007bff;
-}
-
-.footer-link:hover {
-  text-decoration: underline;
+.btn-danger:hover {
+  background: #b02a37;
 }
 
 .btn:hover {

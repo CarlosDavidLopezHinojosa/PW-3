@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido Administrador</title>
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/admin.css">
     <link rel="icon" href="<%= request.getContextPath() + "/static/images/admin.png" %>" type="image/x-icon">
 </head>
