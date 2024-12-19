@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.DTOs.MaterialDTO;
-import web.model.data.DAOs.MaterialDAO;
+import web.model.business.Gestores.GestorDeMateriales;
 
 @WebServlet("/verMateriales")
 public class verMaterialesServlet extends HttpServlet {
@@ -17,7 +17,8 @@ public class verMaterialesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        List<MaterialDTO> materiales = MaterialDAO.obtenerMateriales();
+        GestorDeMateriales gestor = GestorDeMateriales.getGestor();
+        List<MaterialDTO> materiales = gestor.obtenerMateriales();
         // Set the list of materials as a request attribute
         request.setAttribute("materiales", materiales);
 
@@ -31,3 +32,4 @@ public class verMaterialesServlet extends HttpServlet {
     }
     
 }
+
