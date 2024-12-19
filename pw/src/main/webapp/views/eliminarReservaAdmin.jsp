@@ -6,57 +6,58 @@
 <html>
 <head>
     <title>Eliminar Reserva</title>
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/admin.png" %>" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
-    <style>
-        .back-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-    </style>
-    <script>
-        function validateForm() {
-            var checkbox = document.getElementById("confirmDelete");
-            if (!checkbox.checked) {
-                alert("Debe confirmar que desea eliminar la reserva.");
-                return false;
-            }
-            return true;
-        }
-    </script>
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/eliminarreserva.css">
+    <script src="<%= request.getContextPath() %>/static/js/eliminar-reserva.js" defer></script>
 </head>
 <body>
-    <a href="<%= request.getContextPath() %>/controller/welcomeadmincontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
-    <h1>Eliminar Reserva</h1>
-    <%
-        List<ReservaDTO> reservasFuturas = (List<ReservaDTO>) request.getAttribute("reservasFuturas");
-        if (reservasFuturas == null || reservasFuturas.isEmpty()) {
-    %>
-        <p style="color:red;">No hay reservas futuras disponibles para eliminar.</p>
-    <%
-        } else {
-    %>
-        <form id="eliminarReservaForm" action="<%= request.getContextPath() %>/eliminarReservaAdmin" method="post" onsubmit="return validateForm();">
-            <label for="reservaId">Reserva:</label>
-            <select id="reservaId" name="reservaId" required>
-                <%
-                    for (ReservaDTO reserva : reservasFuturas) {
-                        out.println("<option value='" + reserva.getIdReserva() + "'>" + reserva.getIdReserva() + " - Usuario: " + reserva.getIdUsuario() + " - Día: " + reserva.getDiaYHora().toLocalDate() + " - Pista: " + reserva.getIdPista() + "</option>");
-                    }
-                %>
-            </select><br><br>
+    <div class="page-container">
+        <a href="<%= request.getContextPath() %>/controller/welcomeadmincontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
+        <div class="form-container">
+            <h1>Eliminar Reserva</h1>
+            <%
+                List<ReservaDTO> reservasFuturas = (List<ReservaDTO>) request.getAttribute("reservasFuturas");
+                if (reservasFuturas == null || reservasFuturas.isEmpty()) {
+            %>
+                <p class="error-message">No hay reservas futuras disponibles para eliminar.</p>
+            <%
+                } else {
+            %>
+                <form id="eliminarReservaForm" action="<%= request.getContextPath() %>/eliminarReservaAdmin" method="post">
+                    <div class="form-group">
+                        <label for="reservaId">Reserva:</label>
+                        <select id="reservaId" name="reservaId" required>
+                            <%
+                                for (ReservaDTO reserva : reservasFuturas) {
+                                    out.println("<option value='" + reserva.getIdReserva() + "'>" + reserva.getIdReserva() + " - Usuario: " + reserva.getIdUsuario() + " - Día: " + reserva.getDiaYHora().toLocalDate() + " - Pista: " + reserva.getIdPista() + "</option>");
+                                }
+                            %>
+                        </select>
+                    </div>
 
-            <input type="checkbox" id="confirmDelete" name="confirmDelete" required>
-            <label for="confirmDelete">Estoy seguro de que deseo eliminar la reserva</label><br><br>
+                    <div class="form-group">
+                        <input type="checkbox" id="confirmDelete" name="confirmDelete" required>
+                        <label for="confirmDelete">Estoy seguro de que deseo eliminar la reserva</label>
+                    </div>
 
-            <input type="submit" value="Eliminar Reserva">
-        </form>
-    <%
-        }
-        String mensaje = (String) request.getAttribute("mensaje");
-        if (mensaje != null) {
-            out.println("<p style='color:red;'>" + mensaje + "</p>");
-        }
-    %>
+                    <div class="form-group">
+                        <input type="submit" value="Eliminar Reserva" class="btn-submit">
+                    </div>
+                </form>
+            <%
+                }
+                String mensaje = (String) request.getAttribute("mensaje");
+                String error = (String) request.getAttribute("error");
+                if (mensaje != null) {
+                    out.println("<p class='success-message'>" + mensaje + "</p>");
+                }
+
+                if(error != null){
+                    out.println("<p class='error-message'>" + error + "</p>");
+                }
+            %>
+        </div>
+    </div>
 </body>
 </html>

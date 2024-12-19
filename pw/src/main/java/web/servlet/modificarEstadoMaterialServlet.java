@@ -2,6 +2,7 @@ package web.servlet;
 
 import java.io.IOException;
 import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,7 +23,7 @@ public class modificarEstadoMaterialServlet extends HttpServlet {
             List<MaterialDTO> materiales = MaterialDAO.obtenerMateriales();
             request.setAttribute("materiales", materiales);
         } catch (Exception e) {
-            request.setAttribute("mensaje", "Error al obtener los materiales: " + e.getMessage());
+            request.setAttribute("error", "Error al obtener los materiales: " + e.getMessage());
         }
 
         request.getRequestDispatcher("/views/modificarEstadoMaterial.jsp").forward(request, response);
@@ -38,7 +39,7 @@ public class modificarEstadoMaterialServlet extends HttpServlet {
 
             request.setAttribute("mensaje", "Estado del material modificado exitosamente.");
         } catch (Exception e) {
-            request.setAttribute("mensaje", "Error al modificar el estado del material: " + e.getMessage());
+            request.setAttribute("error", "Error al modificar el estado del material: " + e.getMessage());
         }
 
         doGet(request, response);
