@@ -1,9 +1,9 @@
 package web.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -16,9 +16,9 @@ import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.JugadorDTO;
 import web.model.business.DTOs.PistaDTO;
 import web.model.business.DTOs.Reservas.ReservaDTO;
-import web.model.data.DAOs.JugadorDAO;
-import web.model.data.DAOs.PistaDAO;
-import web.model.data.DAOs.ReservaDAO;
+import web.model.business.Gestores.GestorDePistas;
+import web.model.business.Gestores.GestorDeReservas;
+import web.model.business.Gestores.GestorDeUsuarios;
 
 @WebServlet("/modificarReserva")
 public class modificarReservaServlet extends HttpServlet {
@@ -27,94 +27,26 @@ public class modificarReservaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
-        String action = request.getParameter("action");
-        if ("buscarPistasDisponibles".equals(action)) {
-            buscarPistasDisponibles(request, response);
+
+        if (customer == null) {
+            request.setAttribute("mensaje", "Usuario no autenticado.");
+            request.getRequestDispatcher("/views/modificarReserva.jsp").forward(request, response);
             return;
-        } else {
-            if (customer == null) {
-                request.setAttribute("mensaje", "Usuario no autenticado.");
-                request.getRequestDispatcher("/views/modificarReserva.jsp").forward(request, response);
-                return;
-            }
         }
 
         String email = customer.getEmail();
-        JugadorDTO user = JugadorDAO.getUsuarioEmail(email); // Método para obtener JugadorDTO por email
+        JugadorDTO user = GestorDeUsuarios.getUsuarioEmail(email); // Método para obtener JugadorDTO por email
         
         if (user == null) {
             request.setAttribute("mensaje", "Usuario no encontrado.");
         } else {
-            List<ReservaDTO> reservas = ReservaDAO.obtenerReservasFuturasUsuario(user.getId());
+            List<ReservaDTO> reservas = GestorDeReservas.obtenerReservasFuturasUsuario(user.getId());
             request.setAttribute("reservas", reservas);
         }
 
         request.getRequestDispatcher("/views/modificarReserva.jsp").forward(request, response);
     }
 
-    private void buscarPistasDisponibles(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-            String tipoReservaStr = request.getParameter("tipoReserva");
-            String diaYHoraStr = request.getParameter("diaYHora");
-
-            if (tipoReservaStr == null || diaYHoraStr == null || tipoReservaStr.isEmpty() || diaYHoraStr.isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("Tipo de reserva y fecha y hora son obligatorios.");
-                return;
-            }
-
-            ReservaDTO.tipoReserva tipoReserva = ReservaDTO.tipoReserva.valueOf(tipoReservaStr.toUpperCase());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-            LocalDateTime diaYHora = LocalDateTime.parse(diaYHoraStr, formatter);
-
-            List<PistaDTO> pistas;
-            PistaDTO.TamanoPista tamanoAdultos = PistaDTO.TamanoPista.ADULTOS;
-            PistaDTO.TamanoPista tamanoMinibasket = PistaDTO.TamanoPista.MINIBASKET;
-            PistaDTO.TamanoPista tamanoVS3 = PistaDTO.TamanoPista.VS3;
-            if (tipoReserva == ReservaDTO.tipoReserva.ADULTOS) {
-                pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoAdultos);
-            } else if (tipoReserva == ReservaDTO.tipoReserva.INFANTIL) {
-                pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoMinibasket);
-            } else if (tipoReserva == ReservaDTO.tipoReserva.FAMILIAR) {
-                List<PistaDTO> pistasMinibasket = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoMinibasket);
-                List<PistaDTO> pistasVS3 = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoVS3);
-                pistas = new ArrayList<>();
-                pistas.addAll(pistasMinibasket);
-                pistas.addAll(pistasVS3);
-            } else {
-                pistas = new ArrayList<>();
-            }
-
-            StringBuilder options = new StringBuilder();
-            options.append("<option value=''>Seleccione una pista</option>");
-            for (PistaDTO pista : pistas) {
-                if (esPistaValidaParaReserva(tipoReservaStr, pista.getTamano())) {
-                    options.append("<option value='").append(pista.getId()).append("' data-tamano='").append(pista.getTamano()).append("'>").append(pista.getId()).append(" - ").append(pista.getNombre()).append("</option>");
-                }
-            }
-
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(options.toString());
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("Error al buscar pistas disponibles: " + e.getMessage());
-        }
-    }
-
-    private boolean esPistaValidaParaReserva(String tipoReserva, PistaDTO.TamanoPista tamanoPista) {
-        switch (tipoReserva.toUpperCase()) {
-            case "ADULTOS":
-                return tamanoPista == PistaDTO.TamanoPista.ADULTOS;
-            case "FAMILIAR":
-                return tamanoPista == PistaDTO.TamanoPista.MINIBASKET || tamanoPista == PistaDTO.TamanoPista.VS3;
-            case "INFANTIL":
-                return tamanoPista == PistaDTO.TamanoPista.MINIBASKET;
-            default:
-                return false;
-        }
-    }
-    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -132,9 +64,9 @@ public class modificarReservaServlet extends HttpServlet {
 
         if (idReservaStr == null) {
             // Buscar reservas futuras del usuario
-            JugadorDTO user = JugadorDAO.getUsuarioEmail(email);
+            JugadorDTO user = GestorDeUsuarios.getUsuarioEmail(email);
             if (user != null) {
-                List<ReservaDTO> reservas = ReservaDAO.obtenerReservasFuturasUsuario(user.getId());
+                List<ReservaDTO> reservas = GestorDeReservas.obtenerReservasFuturasUsuario(user.getId());
                 request.setAttribute("reservas", reservas);
             } else {
                 request.setAttribute("mensaje", "Usuario no encontrado.");
@@ -142,22 +74,72 @@ public class modificarReservaServlet extends HttpServlet {
         } else if (idReservaStr != null && confirmar != null) {
             // Confirmar modificación de la reserva
             int idReserva = Integer.parseInt(idReservaStr);
-            ReservaDTO reserva = ReservaDAO.obtenerReservaPorId(idReserva);
+            ReservaDTO reserva = GestorDeReservas.obtenerReservaPorId(idReserva);
             if (reserva != null && reserva.getDiaYHora().isAfter(LocalDateTime.now().plusHours(24))) {
-                // Aquí puedes agregar la lógica para modificar la reserva
-                // Por ejemplo, cambiar la fecha de la reserva
+                // Obtener los nuevos valores del formulario
                 String nuevaFechaStr = request.getParameter("nuevaFecha");
+                String nuevoTipoReserva = request.getParameter("tipoReserva");
+                String nuevaDuracionStr = request.getParameter("duracion");
+                String nuevaPistaStr = request.getParameter("pista");
+                String numAdultosStr = request.getParameter("numAdultos");
+                String numNinosStr = request.getParameter("numNinos");
+
                 LocalDateTime nuevaFecha = LocalDateTime.parse(nuevaFechaStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-                reserva.setDiaYHora(nuevaFecha);
-                ReservaDAO.actualizarReserva(reserva);
-                request.setAttribute("mensaje", "Reserva modificada exitosamente.");
+                int nuevaDuracion = Integer.parseInt(nuevaDuracionStr);
+                int nuevaPistaId = Integer.parseInt(nuevaPistaStr);
+                int numAdultos = numAdultosStr != null && !numAdultosStr.isEmpty() ? Integer.parseInt(numAdultosStr) : 0;
+                int numNinos = numNinosStr != null && !numNinosStr.isEmpty() ? Integer.parseInt(numNinosStr) : 0;
+
+                // Validar que la nueva fecha no sea pasada
+                if (nuevaFecha.isBefore(LocalDateTime.now())) {
+                    request.setAttribute("mensaje", "La nueva fecha no puede ser pasada.");
+                    request.getRequestDispatcher("/views/modificarReserva.jsp").forward(request, response);
+                    return;
+                }
+
+                try {
+                    // Validar que la suma de participantes no supere el límite de la pista
+                    PistaDTO nuevaPista = GestorDePistas.obtenerPistaPorId(nuevaPistaId);
+                    int maxJugadores = nuevaPista.getMaxJugadores();
+                    if (numAdultos + numNinos > maxJugadores) {
+                        request.setAttribute("mensaje", "El número total de participantes supera el límite permitido para esta pista.");
+                        request.getRequestDispatcher("/views/modificarReserva.jsp").forward(request, response);
+                        return;
+                    }
+
+                    // Validar que la pista esté disponible para la nueva fecha y duración
+                    List<PistaDTO> pistasDisponibles = GestorDePistas.listarPistasDisponiblesPorFechaYTipo(nuevaFecha, nuevaDuracion, nuevaPista.getTamano());
+                    boolean pistaDisponible = pistasDisponibles.stream().anyMatch(p -> p.getId() == nuevaPistaId);
+                    if (!pistaDisponible) {
+                        request.setAttribute("mensaje", "La pista seleccionada no está disponible para la nueva fecha y duración.");
+                        request.getRequestDispatcher("/views/modificarReserva.jsp").forward(request, response);
+                        return;
+                    }
+
+                    // Calcular el nuevo precio
+                    float nuevoPrecio = calcularPrecio(nuevaPista.getTamano().name(), nuevaDuracion);
+
+                    // Actualizar la reserva
+                    reserva.setDiaYHora(nuevaFecha);
+                    reserva.setTipoReserva(nuevoTipoReserva);
+                    reserva.setDuracion(nuevaDuracion);
+                    reserva.setIdPista(nuevaPistaId);
+                    reserva.setNumAdultos(numAdultos);
+                    reserva.setNumNinos(numNinos);
+                    reserva.setPrecio(nuevoPrecio);
+
+                    GestorDeReservas.actualizarReserva(reserva);
+                    request.setAttribute("mensaje", "Reserva modificada exitosamente.");
+                } catch (SQLException e) {
+                    request.setAttribute("mensaje", "Error al modificar la reserva: " + e.getMessage());
+                }
             } else {
                 request.setAttribute("mensaje", "No se puede modificar la reserva porque quedan menos de 24 horas para su inicio.");
             }
         } else if (idReservaStr != null) {
             // Preguntar al usuario si está seguro de la modificación
             int idReserva = Integer.parseInt(idReservaStr);
-            ReservaDTO reserva = ReservaDAO.obtenerReservaPorId(idReserva);
+            ReservaDTO reserva = GestorDeReservas.obtenerReservaPorId(idReserva);
             if (reserva != null && reserva.getDiaYHora().isAfter(LocalDateTime.now().plusHours(24))) {
                 request.setAttribute("mensaje", "¿Está seguro de que desea modificar la reserva con ID: " + idReserva + "?");
                 request.setAttribute("idReserva", idReserva);
@@ -167,5 +149,18 @@ public class modificarReservaServlet extends HttpServlet {
         }
 
         request.getRequestDispatcher("/views/modificarReserva.jsp").forward(request, response);
+    }
+
+    private float calcularPrecio(String pistaTamano, int duracion) {
+        switch (pistaTamano) {
+            case "MINIBASKET":
+                return 0.1f * duracion;
+            case "VS3":
+                return 0.13f * duracion;
+            case "ADULTOS":
+                return 0.15f * duracion;
+            default:
+                return 0;
+        }
     }
 }
