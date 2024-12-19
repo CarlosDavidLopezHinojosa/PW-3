@@ -2,6 +2,7 @@ package web.servlet;
 
 import java.io.IOException;
 import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,7 +22,7 @@ public class modificarEstadoPistaServlet extends HttpServlet {
             List<PistaDTO> pistas = PistaDAO.obtenerPistas();
             request.setAttribute("pistas", pistas);
         } catch (Exception e) {
-            request.setAttribute("mensaje", "Error al obtener las pistas: " + e.getMessage());
+            request.setAttribute("error", "Error al obtener las pistas: " + e.getMessage());
         }
 
         request.getRequestDispatcher("/views/modificarEstadoPista.jsp").forward(request, response);
@@ -35,7 +36,7 @@ public class modificarEstadoPistaServlet extends HttpServlet {
             PistaDAO.modificarPistaDisponibilidad(idPista, nuevaDisponibilidad);
             request.setAttribute("mensaje", "Disponibilidad de la pista actualizada correctamente.");
         } catch (Exception e) {
-            request.setAttribute("mensaje", "Error al actualizar la disponibilidad de la pista: " + e.getMessage());
+            request.setAttribute("error", "Error al actualizar la disponibilidad de la pista: " + e.getMessage());
         }
 
         doGet(request, response);
