@@ -13,10 +13,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import web.model.business.Beans.CustomerBean;
+import web.model.business.DTOs.BonoDTO;
 import web.model.business.DTOs.PistaDTO;
 import web.model.business.DTOs.Reservas.ReservaDTO;
-import web.model.data.DAOs.PistaDAO;
-import web.model.data.DAOs.ReservaDAO;
+import web.model.business.Gestores.GestorDeBonos;
+import web.model.business.Gestores.GestorDePistas;
+import web.model.business.Gestores.GestorDeReservas;
 
 @WebServlet("/realizarReserva")
 public class realizarReservaServlet extends HttpServlet {
@@ -26,12 +28,19 @@ public class realizarReservaServlet extends HttpServlet {
         String action = request.getParameter("action");
         if ("buscarPistasDisponibles".equals(action)) {
             buscarPistasDisponibles(request, response);
+        } else if ("buscarBonosDisponibles".equals(action)) {
+            buscarBonosDisponibles(request, response);
         } else {
             HttpSession session = request.getSession();
             CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
 
             if (customer == null) {
                 request.setAttribute("mensaje", "Usuario no autenticado. Por favor, inicie sesión para realizar una reserva.");
+            } else {
+                GestorDeBonos gestorDeBonos = GestorDeBonos.getGestor();
+                int tipoReserva = Integer.parseInt(request.getParameter("tipoReserva"));
+                List<BonoDTO> bonos = gestorDeBonos.obtenerBonosDisponibles(customer.getId(), String.valueOf(tipoReserva));
+                request.setAttribute("bonos", bonos);
             }
 
             request.getRequestDispatcher("/views/realizarReserva.jsp").forward(request, response);
@@ -42,43 +51,43 @@ public class realizarReservaServlet extends HttpServlet {
         try {
             String tipoReservaStr = request.getParameter("tipoReserva");
             String diaYHoraStr = request.getParameter("diaYHora");
-
-            if (tipoReservaStr == null || diaYHoraStr == null || tipoReservaStr.isEmpty() || diaYHoraStr.isEmpty()) {
+            String duracionStr = request.getParameter("duracion");
+    
+            if (tipoReservaStr == null || diaYHoraStr == null || duracionStr == null || tipoReservaStr.isEmpty() || diaYHoraStr.isEmpty() || duracionStr.isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("Tipo de reserva y fecha y hora son obligatorios.");
+                response.getWriter().write("Tipo de reserva, fecha y hora, y duración son obligatorios.");
                 return;
             }
-
+    
             ReservaDTO.tipoReserva tipoReserva = ReservaDTO.tipoReserva.valueOf(tipoReservaStr.toUpperCase());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
             LocalDateTime diaYHora = LocalDateTime.parse(diaYHoraStr, formatter);
-
+            int duracion = Integer.parseInt(duracionStr);
+    
             List<PistaDTO> pistas;
-            PistaDTO.TamanoPista tamanoAdultos = PistaDTO.TamanoPista.ADULTOS;
-            PistaDTO.TamanoPista tamanoMinibasket = PistaDTO.TamanoPista.MINIBASKET;
-            PistaDTO.TamanoPista tamanoVS3 = PistaDTO.TamanoPista.VS3;
             if (tipoReserva == ReservaDTO.tipoReserva.ADULTOS) {
-                pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoAdultos);
+                pistas = GestorDePistas.listarPistasDisponiblesPorFechaYTipo(diaYHora, duracion, PistaDTO.TamanoPista.ADULTOS);
             } else if (tipoReserva == ReservaDTO.tipoReserva.INFANTIL) {
-                pistas = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoMinibasket);
+                pistas = GestorDePistas.listarPistasDisponiblesPorFechaYTipo(diaYHora, duracion, PistaDTO.TamanoPista.MINIBASKET);
             } else if (tipoReserva == ReservaDTO.tipoReserva.FAMILIAR) {
-                List<PistaDTO> pistasMinibasket = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoMinibasket);
-                List<PistaDTO> pistasVS3 = PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, tamanoVS3);
+                List<PistaDTO> pistasMinibasket = GestorDePistas.listarPistasDisponiblesPorFechaYTipo(diaYHora, duracion, PistaDTO.TamanoPista.MINIBASKET);
+                List<PistaDTO> pistasVS3 = GestorDePistas.listarPistasDisponiblesPorFechaYTipo(diaYHora, duracion, PistaDTO.TamanoPista.VS3);
                 pistas = new ArrayList<>();
                 pistas.addAll(pistasMinibasket);
                 pistas.addAll(pistasVS3);
             } else {
                 pistas = new ArrayList<>();
             }
-
+    
             StringBuilder options = new StringBuilder();
             options.append("<option value=''>Seleccione una pista</option>");
             for (PistaDTO pista : pistas) {
                 if (esPistaValidaParaReserva(tipoReservaStr, pista.getTamano())) {
-                    options.append("<option value='").append(pista.getId()).append("' data-tamano='").append(pista.getTamano()).append("'>").append(pista.getNombre()).append("</option>");
+                    options.append("<option value='").append(pista.getId()).append("' data-tamano='").append(pista.getTamano()).append("'>")
+                           .append(pista.getNombre()).append(" - ").append(pista.getTamano()).append(" - Max Participantes: ").append(pista.getMaxJugadores()).append("</option>");
                 }
             }
-
+    
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(options.toString());
@@ -98,6 +107,42 @@ public class realizarReservaServlet extends HttpServlet {
                 return tamanoPista == PistaDTO.TamanoPista.MINIBASKET;
             default:
                 return false;
+        }
+    }
+
+    private void buscarBonosDisponibles(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            HttpSession session = request.getSession();
+            CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
+
+            if (customer == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Usuario no autenticado.");
+                return;
+            }
+
+            String tipoReservaStr = request.getParameter("tipoReserva");
+            if (tipoReservaStr == null || tipoReservaStr.isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("Tipo de reserva es obligatorio.");
+                return;
+            }
+
+            GestorDeBonos gestor = GestorDeBonos.getGestor();
+            List<BonoDTO> bonos = gestor.obtenerBonosDisponibles(customer.getId(), tipoReservaStr);
+            StringBuilder options = new StringBuilder();
+            options.append("<option value=''>Seleccione un bono</option>");
+            for (BonoDTO bono : bonos) {
+                options.append("<option value='").append(bono.getId()).append("' data-tamano='").append(bono.getPistaTamano()).append("'>")
+                       .append("Bono ID: ").append(bono.getId()).append(" - Sesiones restantes: ").append(bono.getSesiones()).append("</option>");
+            }
+
+            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(options.toString());
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Error al buscar bonos disponibles: " + e.getMessage());
         }
     }
 
@@ -137,7 +182,6 @@ public class realizarReservaServlet extends HttpServlet {
 
             boolean esBono = Boolean.parseBoolean(request.getParameter("esBono"));
             int idBono = esBono ? Integer.parseInt(request.getParameter("idBono")) : -1;
-            int nSesionBono = esBono ? Integer.parseInt(request.getParameter("nSesionBono")) : -1;
             int duracion = Integer.parseInt(duracionStr);
             int idPista = Integer.parseInt(idPistaStr);
             float precio = calcularPrecio(pistaTamanoStr, duracion);
@@ -159,14 +203,33 @@ public class realizarReservaServlet extends HttpServlet {
             int numNinos = tipoReserva.equals("ADULTOS") ? 0 : Integer.parseInt(request.getParameter("numNinos"));
             PistaDTO.TamanoPista pistaTamano = PistaDTO.TamanoPista.valueOf(pistaTamanoStr.toUpperCase());
 
-            ReservaDTO reserva = ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
-            request.setAttribute("mensaje", "Reserva realizada exitosamente. ID de la reserva: " + reserva.getIdReserva());
+            // Obtener el número máximo de jugadores de la pista
+            PistaDTO pista = GestorDePistas.obtenerPistaPorId(idPista);
+            int maxJugadores = pista.getMaxJugadores();
+
+            // Comprobar si la suma de participantes supera el límite
+            if (numAdultos + numNinos > maxJugadores) {
+                request.setAttribute("mensaje", "El número total de participantes supera el límite permitido para esta pista.");
+                request.getRequestDispatcher("/views/realizarReserva.jsp").forward(request, response);
+                return;
+            }
+
+            GestorDeReservas.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
+
+            // Restar una sesión al bono si es una reserva de bono
+            if (esBono) {
+                GestorDeBonos gestor = GestorDeBonos.getGestor();
+                gestor.restarSesion(idBono);
+            }
+
+            request.setAttribute("mensaje", "Reserva realizada exitosamente.");
         } catch (Exception e) {
             request.setAttribute("mensaje", "Error al realizar la reserva: " + e.getMessage());
         }
 
         request.getRequestDispatcher("/views/realizarReserva.jsp").forward(request, response);
     }
+
 
     private float calcularPrecio(String pistaTamano, int duracion) {
         switch (pistaTamano) {
