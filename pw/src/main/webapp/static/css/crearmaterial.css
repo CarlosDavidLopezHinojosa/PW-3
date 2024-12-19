@@ -1,0 +1,36 @@
+/* Inputs y Selects */
+.input-field {
+  width: 100%;
+  padding: 15px; /* Aumentar el padding */
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 18px; /* Aumentar el tamaño de la fuente */
+}
+
+/* Checkboxes */
+.checkbox {
+  margin-right: 10px;
+}
+
+/* Mensajes de error y éxito */
+.error-message {
+  color: #dc3545;
+  font-size: 14px;
+  text-align: center;
+}
+
+.success-message {
+  color: #28a745;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Fondo */
+.background {
+  background-color: #f4f4f4;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

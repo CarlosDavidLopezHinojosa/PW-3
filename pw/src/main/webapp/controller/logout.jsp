@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sesión Finalizada</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/styles.css"> <!-- Estilo opcional -->
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/basketball.png" %>" type="image/x-icon">
 </head>
 <body>
     <div class="container">

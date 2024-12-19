@@ -4,6 +4,7 @@
 <head>
     <title>Crear Pista</title>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
+    
     <style>
         .back-button {
             position: absolute;
