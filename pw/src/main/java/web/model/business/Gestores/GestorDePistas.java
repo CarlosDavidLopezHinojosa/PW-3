@@ -1,13 +1,15 @@
 package web.model.business.Gestores;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import web.model.business.DTOs.MaterialDTO;
 import web.model.business.DTOs.MaterialDTO.EstadoMaterial;
 import web.model.business.DTOs.MaterialDTO.TipoMaterial;
 import web.model.business.DTOs.PistaDTO;
 import web.model.business.DTOs.PistaDTO.TamanoPista;
-import web.model.data.DAOs.MaterialDAO;
 import web.model.data.DAOs.PistaDAO;
-import java.util.List;
 
 /**
  * La clase {@code GestorDePistas} gestiona la creación y mantenimiento de pistas y materiales asociados,
@@ -86,19 +88,6 @@ public class GestorDePistas {
     }
 
     /**
-     * Crea un nuevo material y lo registra en la base de datos.
-     *
-     * @param tipo         Tipo de material.
-     * @param usoExterior  Indica si el material es para uso en exterior.
-     * @param estado       Estado actual del material.
-     * @return             El material creado y registrado en la base de datos.
-     */
-    public static MaterialDTO crearMaterial(TipoMaterial tipo, boolean usoExterior, EstadoMaterial estado) {
-        MaterialDTO material = MaterialDAO.insertarMaterial(tipo, usoExterior, estado);
-        return material;
-    }
-
-    /**
      * Devuelve una lista con las pistas de la base de datos que no están disponibles.
      * @return La lista de pistas no disponibles
      */
@@ -124,6 +113,38 @@ public class GestorDePistas {
      */
     public static List<PistaDTO> listarPistasDisponibles() {
         return PistaDAO.listarPistasDisponibles();
+    }
+
+    public static List<PistaDTO> listarPistasDisponibles_G(int jugadores, TamanoPista tamano) {
+        return PistaDAO.listarPistasDisponibles(jugadores, tamano);
+    }
+
+    public static List<PistaDTO> listarPistasDisponiblesPorFechaYTipo2(LocalDateTime fecha, boolean esExterior) {
+        return PistaDAO.listarPistasDisponiblesPorFechaYTipo2(fecha, esExterior);
+    }
+
+    public static List<PistaDTO> listarPistasDisponiblesPorFechaYTipo(LocalDateTime diaYHora, int duracion, PistaDTO.TamanoPista tamanoPista) throws SQLException {
+        return PistaDAO.listarPistasDisponiblesPorFechaYTipo(diaYHora, duracion, tamanoPista);
+    }
+
+    public static List<PistaDTO> listarPistasDisponiblesPorFecha(LocalDateTime fecha){
+        return PistaDAO.listarPistasDisponiblesPorFecha(fecha);
+    }
+
+    public static boolean booleanPistaNombre(String nombre){
+        return PistaDAO.booleanPistaNombre(nombre);
+    }
+
+    public static List<PistaDTO> obtenerPistas(){
+        return PistaDAO.obtenerPistas();
+    }
+
+    public static PistaDTO obtenerPistaNombre(String pistaNombre){
+        return PistaDAO.obtenerPistaNombre(pistaNombre);
+    }
+
+    public static PistaDTO obtenerPistaPorId(int idPista) throws SQLException {
+        return PistaDAO.obtenerPistaPorId(idPista);
     }
 
     public static void asociarMaterialAPista(PistaDTO pista, MaterialDTO material) {
