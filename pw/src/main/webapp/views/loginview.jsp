@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.io.InputStream" %>
+<%@ page import="web.model.data.common.DBConnection" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,6 +12,21 @@
     <link rel="icon" href="<%= request.getContextPath() + "/static/images/basketball.png" %>" type="image/x-icon">
 </head>
 <body>
+
+    <%
+        // Paso 1: Recuperar la ruta como String
+        String configFile = application.getInitParameter("config");
+        String sqlFile = application.getInitParameter("sql");
+
+        // Paso 2: Crear el flujo de entrada
+        InputStream configInput = application.getResourceAsStream(configFile);
+        InputStream sqlInput = application.getResourceAsStream(sqlFile);
+
+        // Paso 3: Inicializar DBConfig en DBConnection
+        DBConnection.setConfig(configInput);
+        DBConnection.setSql(sqlInput);
+    %>
+
     <div class="container">
         <h2>Iniciar Sesión</h2>
         <form action="<%= request.getContextPath() %>/controller/logincontroller.jsp" method="post" onsubmit="return validateForm()">

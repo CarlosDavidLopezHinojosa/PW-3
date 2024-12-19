@@ -64,10 +64,27 @@ input:focus {
   transform: scale(1.02);
 }
 
+/* Mensajes de error */
 .error-message {
-  color: red;
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #e3342f;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 4px;
   font-size: 14px;
-  margin-top: 10px;
+  text-align: center;
+}
+
+.success-message {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #38c172;
+  background-color: #d4edda;
+  color: #155724;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
 }
 
 /* Estilos para pantallas pequeñas */

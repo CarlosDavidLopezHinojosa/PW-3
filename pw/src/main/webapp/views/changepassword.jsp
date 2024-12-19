@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modificar Datos</title>
+    <title>Cambiar Contraseña</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/styles.css">
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/update.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/changepassword.css">
 
 <%
     CustomerBean customerBean = (CustomerBean) session.getAttribute("customerBean");
@@ -20,21 +20,21 @@
 %>
 
 <link rel="icon" href="<%= iconPath %>" type="image/x-icon">
-
 </head>
 <body>
     <a href="<%= request.getContextPath() + "/controller/welcome" + (isAdmin ? "admin" : "client") + "controller.jsp" %>" class="btn-back"><strong>VOLVER AL MENÚ PRINCIPAL</strong></a>
     <div class="container">
-        <h2>Modificar Datos</h2>
-
-        <form action="<%= request.getContextPath() %>/controller/updatecontroller.jsp" method="post">
-            <label for="name">Nombre:</label>
-            <input type="text" id="name" name="name" value="<%= customerBean.getNombre() %>" required><br>
-            <label for="lastName">Apellidos:</label>
-            <input type="text" id="lastName" name="lastName" value="<%= customerBean.getApellidos() %>" required><br>
-            <button type="submit">Guardar Cambios</button>
+        <h2>Cambiar Contraseña</h2>
+        <form id="changePasswordForm" action="<%= request.getContextPath() %>/controller/changepasswordcontroller.jsp" method="post" onsubmit="return validatePassword()">
+            <label for="currentPassword">Contraseña Actual:</label>
+            <input type="password" id="currentPassword" name="currentPassword" required><br>
+            <label for="newPassword">Nueva Contraseña:</label>
+            <input type="password" id="newPassword" name="newPassword" required><br>
+            <label for="confirmPassword">Confirmar Nueva Contraseña:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required><br>
+            <button type="submit">Cambiar Contraseña</button>
         </form>
-        <a href="<%= request.getContextPath() %>/views/changepassword.jsp" class="btn btn-secondary">Cambiar Contraseña</a>
     </div>
+    <script src="<%= request.getContextPath() %>/static/js/validatepassword.js"></script>
 </body>
 </html>

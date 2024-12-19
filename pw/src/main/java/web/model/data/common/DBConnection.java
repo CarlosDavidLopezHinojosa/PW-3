@@ -1371,4 +1371,21 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
+	
+		  /**
+     * Actualiza la contraseña de un usuario en la base de datos.
+     *
+     * @param email El correo electrónico del usuario.
+     * @param nuevaContrasena La nueva contraseña del usuario.
+     */
+    public void updateContrasena(String email, String nuevaContrasena) {
+			String query = sqlProperties.getProperty("updateContrasena");
+			try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+					stmt.setString(1, nuevaContrasena);
+					stmt.setString(2, email);
+					stmt.executeUpdate();
+			} catch (SQLException e) {
+					e.printStackTrace();
+			}
+	}
 }
