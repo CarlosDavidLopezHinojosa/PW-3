@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Pista</title>
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/admin.png" %>" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/crearpista.css">
+    
 
 </head>
 <body>

@@ -7,6 +7,7 @@
 <html>
 <head>
     <title>Asociar Material a Pista</title>
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/admin.png" %>" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/asociarmaterialpista.css">
 </head>
