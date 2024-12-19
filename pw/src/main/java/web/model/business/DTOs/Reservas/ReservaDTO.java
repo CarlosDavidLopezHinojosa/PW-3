@@ -13,7 +13,6 @@ import web.model.business.DTOs.PistaDTO;
  *   <li>{@link #getIdUsuario()}: El ID del usuario que realiza la reserva.</li>
  *   <li>{@link #getDiaYHora()}: La fecha y hora de la reserva.</li>
  *   <li>{@link #getIdBono()}: El ID del bono asociado a la reserva.</li>
- *   <li>{@link #getNSesionBono()}: El número de sesión del bono.</li>
  *   <li>{@link #getDuracion()}: La duración de la reserva.</li>
  *   <li>{@link #getIdPista()}: El ID de la pista reservada.</li>
  *   <li>{@link #getPrecio()}: El precio de la reserva.</li>
@@ -35,8 +34,6 @@ import web.model.business.DTOs.PistaDTO;
  *   <li>{@link #setDiaYHora(LocalDate)}: Establece la fecha y hora de la reserva.</li>
  *   <li>{@link #getIdBono()}: Obtiene el ID del bono asociado a la reserva.</li>
  *   <li>{@link #setIdBono(int)}: Establece el ID del bono asociado a la reserva.</li>
- *   <li>{@link #getNSesionBono()}: Obtiene el número de sesión del bono.</li>
- *   <li>{@link #setNSesionBono(int)}: Establece el número de sesión del bono.</li>
  *   <li>{@link #getDuracion()}: Obtiene la duración de la reserva.</li>
  *   <li>{@link #setDuracion(int)}: Establece la duración de la reserva.</li>
  *   <li>{@link #getIdPista()}: Obtiene el ID de la pista reservada.</li>
@@ -73,7 +70,6 @@ public class ReservaDTO {
     private int idUsuario;
     private LocalDateTime diaYHora; // Fecha y hora de la reserva
     private int idBono;
-    private int nSesionBono;
     private int duracion;
     public int idPista;
     private float precio;
@@ -112,7 +108,6 @@ public class ReservaDTO {
         this.idUsuario = idUsuario;
         this.diaYHora = diaYHora;
         this.idBono = idBono;
-        this.nSesionBono = nSesionBono;
         this.duracion = duracion;
         this.idPista = idPista;
         this.precio = precio;
@@ -179,23 +174,6 @@ public class ReservaDTO {
         this.idBono = idBono;
     }
 
-    /**
-     * Obtiene el número de sesión del bono.
-     *
-     * @return El número de sesión del bono.
-     */
-    public int getNSesionBono() {
-        return nSesionBono;
-    }
-
-    /**
-     * Establece el número de sesión del bono.
-     *
-     * @param nSesionBono El número de sesión del bono.
-     */
-    public void setNSesionBono(int nSesionBono) {
-        this.nSesionBono = nSesionBono;
-    }
 
     /**
      * Obtiene la duración de la reserva en minutos.
@@ -365,7 +343,6 @@ public class ReservaDTO {
                 "idUsuario='" + idUsuario + '\'' +
                 ", diaYHora=" + diaYHora +
                 ", idBono='" + idBono + '\'' +
-                ", nSesionBono=" + nSesionBono +
                 ", duracion=" + duracion +
                 ", idPista='" + idPista + '\'' +
                 ", precio=" + precio +
