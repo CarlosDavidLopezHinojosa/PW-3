@@ -21,8 +21,7 @@
             if (jugador.getRol() == JugadorDTO.Roles.ADMIN) {
                 response.sendRedirect("welcomeadmincontroller.jsp");
                 return;
-            }
-            else{
+            }else{
                 response.sendRedirect("welcomeclientcontroller.jsp");
                 return;
             }

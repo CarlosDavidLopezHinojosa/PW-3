@@ -1,0 +1,141 @@
+/* General */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(
+    180deg,
+    #016bd4,
+    #0047cc
+  ); /* Colores más claros */
+  color: #333;
+}
+
+html {
+  height: 100%;
+}
+
+/* Contenedor Principal */
+.main-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-top: 50px;
+}
+
+/* Encabezado */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 24px;
+  color: #007bff;
+}
+
+.header-links {
+  margin-top: 10px;
+}
+
+.header-links .btn {
+  margin: 5px;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: #fff;
+}
+
+/* Información de usuarios */
+.table-container {
+  overflow-x: auto;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  margin-bottom: 30px; /* Espacio entre secciones */
+}
+
+.styled-table {
+  width: 100%; /* Ocupa todo el contenedor */
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 16px;
+  text-align: left;
+}
+
+.styled-table thead tr {
+  background-color: #007bff;
+  color: #fff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #007bff;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Funcionalidades */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(200px, 1fr)
+  ); /* Más columnas si hay espacio */
+  gap: 15px;
+  width: 100%; /* Abarca todo el contenedor */
+  margin-top: 20px;
+}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.btn-danger:hover {
+  background: #b02a37;
+}
+
+.btn:hover {
+  transform: translateY(-2px); /* Efecto sutil de elevación */
+}

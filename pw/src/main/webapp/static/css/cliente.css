@@ -1,0 +1,114 @@
+/* General */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(
+    180deg,
+    #0047cc,
+    #016bd4
+  ); /* Colores más claros */
+  color: #333;
+}
+
+html {
+  height: 100%;
+}
+
+/* Contenedor Principal */
+.main-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-top: 50px;
+}
+
+/* Encabezado */
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 24px;
+  color: #007bff;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Información del usuario */
+.user-info {
+  background: #f4f4f4;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.user-info p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+/* Acciones principales */
+.actions-container {
+  margin-bottom: 30px;
+}
+
+.actions-container h2 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+/* Botones */
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: #fff;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+/* Enlaces secundarios */
+.footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.footer-link {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
