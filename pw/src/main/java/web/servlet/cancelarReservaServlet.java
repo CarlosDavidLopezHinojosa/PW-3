@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpSession;
 import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.JugadorDTO;
 import web.model.business.DTOs.Reservas.ReservaDTO;
-import web.model.data.DAOs.JugadorDAO;
-import web.model.data.DAOs.ReservaDAO;
+import web.model.business.Gestores.GestorDeReservas;
+import web.model.business.Gestores.GestorDeUsuarios;
 
 @WebServlet("/cancelarReserva")
 public class cancelarReservaServlet extends HttpServlet {
@@ -31,12 +31,12 @@ public class cancelarReservaServlet extends HttpServlet {
         }
 
         String email = customer.getEmail();
-        JugadorDTO user = JugadorDAO.getUsuarioEmail(email); // Método para obtener JugadorDTO por email
+        JugadorDTO user = GestorDeUsuarios.getUsuarioEmail(email); // Método para obtener JugadorDTO por email
         
         if (user == null) {
             request.setAttribute("mensaje", "Usuario no encontrado.");
         } else {
-            List<ReservaDTO> reservas = ReservaDAO.obtenerReservasFuturasUsuario(user.getId());
+            List<ReservaDTO> reservas = GestorDeReservas.obtenerReservasFuturasUsuario(user.getId());
             request.setAttribute("reservas", reservas);
         }
 
@@ -51,9 +51,9 @@ public class cancelarReservaServlet extends HttpServlet {
         if (idReservaStr != null && confirmar != null) {
             // Confirmar cancelación de la reserva
             int idReserva = Integer.parseInt(idReservaStr);
-            ReservaDTO reserva = ReservaDAO.obtenerReservaPorId(idReserva);
+            ReservaDTO reserva = GestorDeReservas.obtenerReservaPorId(idReserva);
             if (reserva != null && reserva.getDiaYHora().isAfter(LocalDateTime.now().plusHours(24))) {
-                ReservaDAO.eliminarReserva(idReserva);
+                GestorDeReservas.eliminarReserva(idReserva);
                 request.setAttribute("mensaje", "Reserva cancelada exitosamente.");
             } else {
                 request.setAttribute("mensaje", "No se puede cancelar la reserva porque quedan menos de 24 horas para su inicio.");
@@ -61,7 +61,7 @@ public class cancelarReservaServlet extends HttpServlet {
         } else if (idReservaStr != null) {
             // Preguntar al usuario si está seguro de la cancelación
             int idReserva = Integer.parseInt(idReservaStr);
-            ReservaDTO reserva = ReservaDAO.obtenerReservaPorId(idReserva);
+            ReservaDTO reserva = GestorDeReservas.obtenerReservaPorId(idReserva);
             if (reserva != null && reserva.getDiaYHora().isAfter(LocalDateTime.now().plusHours(24))) {
                 request.setAttribute("mensaje", "¿Está seguro de que desea cancelar la reserva con ID: " + idReserva + "?");
                 request.setAttribute("idReserva", idReserva);
