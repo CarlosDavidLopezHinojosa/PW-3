@@ -10,8 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.DTOs.MaterialDTO;
 import web.model.business.DTOs.PistaDTO;
-import web.model.data.DAOs.MaterialDAO;
-import web.model.data.DAOs.PistaDAO;
+import web.model.business.Gestores.GestorDeMateriales;
+import web.model.business.Gestores.GestorDePistas;
 
 
 
@@ -24,12 +24,15 @@ public class asociarMaterialPistaServlet extends HttpServlet {
             int materialId = Integer.parseInt(request.getParameter("materialId"));
             int pistaId = Integer.parseInt(request.getParameter("pistaId"));
 
-            MaterialDTO mat = MaterialDAO.obtenerMaterialId(materialId);
+            GestorDeMateriales gestorDeMateriales = GestorDeMateriales.getGestor();
+            MaterialDTO mat = gestorDeMateriales.obtenerMaterialId(materialId);
             if(mat.getIdPista() == (pistaId)){
                 request.setAttribute("error", "El material que ha seleccionado ya esta asociado a esa pista");
             }
             else{
-                PistaDAO.asociarMaterialAPista(pistaId, materialId);
+                PistaDTO pista = GestorDePistas.obtenerPistaPorId(pistaId);
+                MaterialDTO material = gestorDeMateriales.obtenerMaterialId(materialId);
+                GestorDePistas.asociarMaterialAPista(pista, material);
                 request.setAttribute("mensaje", "Material asociado a la pista exitosamente.");
             }
         } catch (Exception e) {
@@ -42,8 +45,9 @@ public class asociarMaterialPistaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<MaterialDTO> materiales = MaterialDAO.obtenerMateriales();
-            List<PistaDTO> pistas = PistaDAO.obtenerPistas();
+            GestorDeMateriales gestorDeMateriales = GestorDeMateriales.getGestor();
+            List<MaterialDTO> materiales = gestorDeMateriales.obtenerMateriales();
+            List<PistaDTO> pistas = GestorDePistas.obtenerPistas();
 
             request.setAttribute("materiales", materiales);
             request.setAttribute("pistas", pistas);

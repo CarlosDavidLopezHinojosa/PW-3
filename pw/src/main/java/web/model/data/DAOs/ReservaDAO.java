@@ -22,7 +22,7 @@ import web.model.data.common.DBConnection;
  * 
  * <p>Los métodos principales de esta clase son:</p>
  * <ul>
- *   <li>{@link #insertarReserva(String, int, LocalDate, int, int, int, int, float, float, PistaDTO.TamanoPista, int, int)}: Inserta una nueva reserva en la base de datos y devuelve un objeto ReservaDTO con los datos de la reserva insertada.</li>
+ *   <li>{@link #insertarReserva(String, int, LocalDate, int, int, int, float, float, PistaDTO.TamanoPista, int, int)}: Inserta una nueva reserva en la base de datos y devuelve un objeto ReservaDTO con los datos de la reserva insertada.</li>
  *   <li>{@link #obtenerReservasFuturas()}: Devuelve una lista con las reservas cuya fecha sea posterior a la fecha actual.</li>
  *   <li>{@link #obtenerReservasFuturasUsuario(int)}: Devuelve una lista con las reservas cuya fecha sea posterior a la fecha actual y el id del usuario sea el pasado como argumento.</li>
  *   <li>{@link #obtenerReservasPistaDia(int, LocalDate)}: Devuelve una lista con las reservas cuya fecha sea igual a la fecha actual para una pista específica.</li>
@@ -54,7 +54,6 @@ public class ReservaDAO {
      * @param idUsuario El ID del usuario que realiza la reserva.
      * @param diaYHora La fecha y hora de la reserva.
      * @param idBono El ID del bono asociado a la reserva.
-     * @param nSesionBono El número de sesión del bono.
      * @param duracion La duración de la reserva en minutos.
      * @param idPista El ID de la pista reservada.
      * @param precio El precio de la reserva.
@@ -64,12 +63,12 @@ public class ReservaDAO {
      * @param numNinos El número de niños en la reserva.
      * @return El objeto ReservaDTO que representa la reserva creada.
      */
-    public static ReservaDTO insertarReserva(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos){
+    public static ReservaDTO insertarReserva(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos){
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
         int id = conexion.getMaxId("Reserva") + 1;
         ReservaDTO reserva;
-        if(idBono==-1 && nSesionBono==-1){
+        if(idBono==-1){
             ReservaIndFactoryDTO reservaIndFactory = new ReservaIndFactoryDTO();
 
             reserva = switch (tipoReserva) {
@@ -82,14 +81,14 @@ public class ReservaDAO {
         }
         else{
             switch (tipoReserva) {
-                case "ADULTOS" -> reserva = ReservaBonoFactoryDTO.crearReservaAdultos(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
-                case "INFANTIL" -> reserva = ReservaBonoFactoryDTO.crearReservaInfantil(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
-                case "FAMILIAR" -> reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                case "ADULTOS" -> reserva = ReservaBonoFactoryDTO.crearReservaAdultos(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                case "INFANTIL" -> reserva = ReservaBonoFactoryDTO.crearReservaInfantil(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
+                case "FAMILIAR" -> reserva = ReservaBonoFactoryDTO.crearReservaFamiliar(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, id, numAdultos, numNinos);
                 default -> throw new IllegalArgumentException("Tipo de reserva desconocido: " + tipoReserva);
                 }
         }
         
-        conexion.insertIntoReserva(id, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, tipoReserva, numAdultos, numNinos);
+        conexion.insertIntoReserva(id, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, tipoReserva, numAdultos, numNinos);
 
         conexion.closeConnection();
 

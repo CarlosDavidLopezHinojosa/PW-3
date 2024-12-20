@@ -102,7 +102,7 @@ public class GestorDeReservas {
      * <p>Si el usuario confirma, se crea y almacena la reserva.</p>
      * <p>Si el usuario no confirma, la reserva se cancela.</p>
      */
-    public static int hacerReservaIndividual(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
+    public static ReservaDTO hacerReservaIndividual(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
         return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, -1, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
     }
 
@@ -168,7 +168,7 @@ public class GestorDeReservas {
  *   <li><code>Exception</code>: Captura errores de formato de fecha.</li>
  * </ul>
  */
-    public static int hacerReservaBono(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
+    public static ReservaDTO hacerReservaBono(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
         return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
     }
 
@@ -339,7 +339,7 @@ public class GestorDeReservas {
         ReservaDAO.eliminarReserva(id);
     }
 
-    public static int insertarReserva(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos){
+    public static ReservaDTO insertarReserva(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos){
         return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
     }
 

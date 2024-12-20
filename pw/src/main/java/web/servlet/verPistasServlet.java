@@ -8,33 +8,26 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import web.model.business.Beans.CustomerBean;
-import web.model.business.DTOs.Reservas.ReservaDTO;
-import web.model.business.Gestores.GestorDeReservas;
+import web.model.business.DTOs.PistaDTO;
+import web.model.business.Gestores.GestorDePistas;
 
-@WebServlet("/verReservas")
-public class verReservasServlet extends HttpServlet {
+@WebServlet("/verPistas")
+public class verPistasServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            HttpSession session = request.getSession();
-            CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
-
-            if (customer == null) {
-                request.setAttribute("mensaje", "Usuario no autenticado.");
-                request.getRequestDispatcher("/views/verReservas.jsp").forward(request, response);
-                return;
-            }
-
-            List<ReservaDTO> reservas = GestorDeReservas.obtenerReservasFuturasUsuario(customer.getId());
-            request.setAttribute("reservas", reservas);
-
-            request.getRequestDispatcher("/views/verReservas.jsp").forward(request, response);
+            // Obtener todas las pistas de la base de datos
+            List<PistaDTO> pistas = GestorDePistas.obtenerPistas();
+            // Establecer la lista de pistas como un atributo en el objeto request
+            request.setAttribute("pistas", pistas);
+            // Reenviar la solicitud a la página JSP verPistas.jsp
+            request.getRequestDispatcher("/views/verPistas.jsp").forward(request, response);
         } catch (Exception e) {
-            request.setAttribute("mensaje", "Error al obtener las reservas: " + e.getMessage());
-            request.getRequestDispatcher("/views/verReservas.jsp").forward(request, response);
+            // Establecer un mensaje de error en caso de excepción
+            request.setAttribute("mensaje", "Error al obtener las pistas: " + e.getMessage());
+            // Reenviar la solicitud a la página JSP verPistas.jsp
+            request.getRequestDispatcher("/views/verPistas.jsp").forward(request, response);
         }
     }
 }

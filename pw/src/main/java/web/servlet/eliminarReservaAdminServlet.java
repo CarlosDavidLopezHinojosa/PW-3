@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.DTOs.Reservas.ReservaDTO;
-import web.model.data.DAOs.ReservaDAO;
+import web.model.business.Gestores.GestorDeReservas;
 
 
 
@@ -20,7 +20,7 @@ public class eliminarReservaAdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<ReservaDTO> reservasFuturas = ReservaDAO.obtenerReservasFuturas();
+            List<ReservaDTO> reservasFuturas = GestorDeReservas.obtenerReservasFuturas();
             request.setAttribute("reservasFuturas", reservasFuturas);
         } catch (Exception e) {
             request.setAttribute("error", "Error al obtener las reservas futuras: " + e.getMessage());
@@ -34,7 +34,7 @@ public class eliminarReservaAdminServlet extends HttpServlet {
         try {
             int reservaId = Integer.parseInt(request.getParameter("reservaId"));
 
-            ReservaDAO.eliminarReserva(reservaId);
+            GestorDeReservas.eliminarReserva(reservaId);
 
             request.setAttribute("mensaje", "Reserva eliminada exitosamente.");
         } catch (Exception e) {

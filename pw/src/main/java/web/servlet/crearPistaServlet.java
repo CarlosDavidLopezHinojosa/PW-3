@@ -1,6 +1,7 @@
 package web.servlet;
 
 import java.io.IOException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.DTOs.PistaDTO;
 import web.model.business.DTOs.PistaDTO.TamanoPista;
-import web.model.data.DAOs.PistaDAO;
+import web.model.business.Gestores.GestorDePistas;
 
 
 
@@ -24,7 +25,7 @@ public class crearPistaServlet extends HttpServlet {
             TamanoPista tamanoPista = TamanoPista.valueOf(request.getParameter("tamanoPista"));
             int maxJugadores = Integer.parseInt(request.getParameter("maxJugadores"));
 
-            PistaDTO nuevaPista = PistaDAO.insertarPista(nombrePista, disponible, esExterior, tamanoPista, maxJugadores);
+            PistaDTO nuevaPista = GestorDePistas.insertarPista(nombrePista, disponible, esExterior, tamanoPista, maxJugadores);
 
             if (nuevaPista != null) {
                 request.setAttribute("mensaje", "Pista creada exitosamente. ID de la pista: " + nuevaPista.getId());

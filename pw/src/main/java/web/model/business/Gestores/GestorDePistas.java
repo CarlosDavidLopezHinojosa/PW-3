@@ -150,4 +150,12 @@ public class GestorDePistas {
     public static void asociarMaterialAPista(PistaDTO pista, MaterialDTO material) {
         PistaDAO.asociarMaterialAPista(pista.getId(), material.getId());
     }
+
+    public static PistaDTO insertarPista(String nombre, boolean disponible, boolean esExterior, TamanoPista tamano, int maxJugadores) {
+        return PistaDAO.insertarPista(nombre, disponible, esExterior, tamano, maxJugadores);
+    }
+
+    public static void modificarPistaDisponibilidad(int idPista, boolean nuevaDisponibilidad) {
+        PistaDAO.modificarPistaDisponibilidad(idPista, nuevaDisponibilidad);
+    }
 }

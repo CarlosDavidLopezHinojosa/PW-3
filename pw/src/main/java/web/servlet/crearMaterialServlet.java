@@ -1,6 +1,7 @@
 package web.servlet;
 
 import java.io.IOException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.DTOs.MaterialDTO;
 import web.model.business.DTOs.MaterialDTO.EstadoMaterial;
 import web.model.business.DTOs.MaterialDTO.TipoMaterial;
-import web.model.data.DAOs.MaterialDAO;
+import web.model.business.Gestores.GestorDeMateriales;
 
 
 
@@ -23,7 +24,8 @@ public class crearMaterialServlet extends HttpServlet {
             boolean usoExterior = request.getParameter("usoExterior") != null;
             EstadoMaterial estadoMaterial = EstadoMaterial.valueOf(request.getParameter("estadoMaterial"));
 
-            MaterialDTO nuevoMaterial = MaterialDAO.insertarMaterial(tipoMaterial, usoExterior, estadoMaterial);
+            GestorDeMateriales gestorDeMateriales = GestorDeMateriales.getGestor();
+            MaterialDTO nuevoMaterial = gestorDeMateriales.insertarMaterial(tipoMaterial, usoExterior, estadoMaterial);
 
             if (nuevoMaterial != null) {
                 request.setAttribute("mensaje", "Material creado exitosamente. ID del material: " + nuevoMaterial.getId());

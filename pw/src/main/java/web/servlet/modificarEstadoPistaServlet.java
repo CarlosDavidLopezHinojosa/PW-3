@@ -9,7 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.DTOs.PistaDTO;
-import web.model.data.DAOs.PistaDAO;
+import web.model.business.Gestores.GestorDePistas;
+import web.model.data.common.DBConnection;
 
 
 
@@ -19,7 +20,7 @@ public class modificarEstadoPistaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<PistaDTO> pistas = PistaDAO.obtenerPistas();
+            List<PistaDTO> pistas = GestorDePistas.obtenerPistas();
             request.setAttribute("pistas", pistas);
         } catch (Exception e) {
             request.setAttribute("error", "Error al obtener las pistas: " + e.getMessage());
@@ -33,12 +34,25 @@ public class modificarEstadoPistaServlet extends HttpServlet {
         try {
             int idPista = Integer.parseInt(request.getParameter("idPista"));
             boolean nuevaDisponibilidad = Boolean.parseBoolean(request.getParameter("nuevaDisponibilidad"));
-            PistaDAO.modificarPistaDisponibilidad(idPista, nuevaDisponibilidad);
+            GestorDePistas.modificarPistaDisponibilidad(idPista, nuevaDisponibilidad);
             request.setAttribute("mensaje", "Disponibilidad de la pista actualizada correctamente.");
         } catch (Exception e) {
             request.setAttribute("error", "Error al actualizar la disponibilidad de la pista: " + e.getMessage());
         }
 
         doGet(request, response);
+    }
+
+    /**
+     * Modifica la disponibilidad de una pista en la base de datos.
+     *
+     * @param idPista El id de la pista cuya disponibilidad se va a modificar.
+     * @param nuevaDisponibilidad La nueva disponibilidad que se asignará a la pista.
+     */
+    public static void modificarPistaDisponibilidad(int idPista, boolean nuevaDisponibilidad) {
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        conexion.updatePistaDisponibilidad(idPista, nuevaDisponibilidad);
+        conexion.closeConnection();
     }
 }

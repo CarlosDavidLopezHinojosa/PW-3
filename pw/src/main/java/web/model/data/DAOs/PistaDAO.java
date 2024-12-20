@@ -1,5 +1,6 @@
 package web.model.data.DAOs;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -125,10 +126,10 @@ public class PistaDAO {
      * @param esExterior Indica si se desean pistas exteriores o interiores.
      * @return
      */
-    public static List<PistaDTO> listarPistasDisponiblesPorFechaYTipo(LocalDateTime fecha, boolean esExterior) {
+    public static List<PistaDTO> listarPistasDisponiblesPorFechaYTipo2(LocalDateTime fecha, boolean esExterior) {
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
-        List<PistaDTO> pistas_disponibles = conexion.selectPistasDisponiblesPorFechaYTipo(fecha, esExterior);
+        List<PistaDTO> pistas_disponibles = conexion.selectPistasDisponiblesPorFechaYTipo2(fecha, esExterior);
         conexion.closeConnection();
         return pistas_disponibles;
     }
@@ -136,16 +137,18 @@ public class PistaDAO {
     /**
      * Lista las pistas disponibles en una fecha específica y de un tamaño específico.
      *
-     * @param fecha La fecha para la que se desean obtener las pistas disponibles.
-     * @param tamano El tamaño de la pista requerido.
+     * @param diaYHora La fecha y hora para la que se desean obtener las pistas disponibles.
+     * @param duracion La duración de la reserva en minutos.
+     * @param tamanoPista El tamaño de la pista requerido.
      * @return Una lista de objetos PistaDTO que representan las pistas disponibles.
+     * @throws SQLException Si ocurre un error al intentar recuperar los registros de la base de datos.
      */
-    public static List<PistaDTO> listarPistasDisponiblesPorFechaYTipo(LocalDateTime fecha, PistaDTO.TamanoPista tamano){
+    public static List<PistaDTO> listarPistasDisponiblesPorFechaYTipo(LocalDateTime diaYHora, int duracion, PistaDTO.TamanoPista tamanoPista) throws SQLException {
         DBConnection conexion = new DBConnection();
         conexion.getConnection();
-        List<PistaDTO> pistas_disponibles = conexion.selectPistasDisponiblesPorFechaYTipo(fecha, tamano);
+        List<PistaDTO> pistasDisponibles = conexion.selectPistasDisponiblesPorFechaYTipo(diaYHora, duracion, tamanoPista);
         conexion.closeConnection();
-        return pistas_disponibles;
+        return pistasDisponibles;
     }
 
     /**
@@ -212,19 +215,6 @@ public class PistaDAO {
     }
 
     /**
-     * Modifica la disponibilidad de una pista en la base de datos.
-     *
-     * @param idPista El id de la pista cuya disponibilidad se va a modificar.
-     * @param nuevaDisponibilidad La nueva disponibilidad que se asignará a la pista.
-     */
-    public static void modificarPistaDisponibilidad(int idPista, boolean nuevaDisponibilidad) {
-        DBConnection conexion = new DBConnection();
-        conexion.getConnection();
-        conexion.updatePistaDisponibilidad(idPista, nuevaDisponibilidad);
-        conexion.closeConnection();
-    }
-
-        /**
      * Recupera un objeto PistaDTO desde la base de datos basado en el ID proporcionado.
      *
      * @param idPista El ID de la pista que se desea recuperar.
@@ -237,6 +227,19 @@ public class PistaDAO {
         PistaDTO pista = conexion.selectPistaPorId(idPista);
         conexion.closeConnection();
         return pista;
+    }
+
+    /**
+     * Modifica la disponibilidad de una pista en la base de datos.
+     *
+     * @param idPista El id de la pista cuya disponibilidad se va a modificar.
+     * @param nuevaDisponibilidad La nueva disponibilidad que se asignará a la pista.
+     */
+    public static void modificarPistaDisponibilidad(int idPista, boolean nuevaDisponibilidad) {
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        conexion.updatePistaDisponibilidad(idPista, nuevaDisponibilidad);
+        conexion.closeConnection();
     }
 
 }

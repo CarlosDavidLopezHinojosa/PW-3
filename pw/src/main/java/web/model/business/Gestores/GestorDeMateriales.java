@@ -30,5 +30,9 @@ public class GestorDeMateriales {
     public MaterialDTO obtenerMaterialId(int id) {
         return MaterialDAO.obtenerMaterialId(id);
     }
+
+    public void modificarMaterialEstado(int id, EstadoMaterial nuevoEstado) {
+        MaterialDAO.modificarMaterialEstado(id, nuevoEstado);
+    }
     
 }
