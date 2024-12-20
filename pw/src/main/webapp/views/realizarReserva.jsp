@@ -7,18 +7,14 @@
 <head>
     <title>Realizar Reserva</title>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
-    <style>
-        .back-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/realizarreserva.css">
+
 </head>
 <body>
     <a href="<%= request.getContextPath() %>/controller/welcomeclientcontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
-    <h1>Realizar Reserva</h1>
     <form id="reservaForm" action="<%= request.getContextPath() %>/realizarReserva" method="post" onsubmit="return validarFormulario()">
+    <h1>Realizar Reserva</h1>
+
         <label for="tipoReserva">Tipo de Reserva:</label>
         <select id="tipoReserva" name="tipoReserva" required onchange="actualizarCampos(); buscarPistasDisponibles();">
             <option value="Seleccione una opción" selected>Seleccione una opción</option>
@@ -188,5 +184,8 @@
             document.getElementById("tipoReserva").addEventListener('change', actualizarCampos);
         });
     </script>
+
+    <%-- <script src="static/js/realizarreserva.js"></script> --%>
+
 </body>
 </html>
