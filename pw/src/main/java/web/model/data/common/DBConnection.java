@@ -257,7 +257,7 @@ public class DBConnection {
 	 * @param esExterior Indica si la pista es exterior.
 	 * @return
 	 */
-	public List<PistaDTO> selectPistasDisponiblesPorFechaYTipo(LocalDateTime fecha, boolean esExterior) {
+	public List<PistaDTO> selectPistasDisponiblesPorFechaYTipo2(LocalDateTime fecha, boolean esExterior) {
         List<PistaDTO> pistasDisponibles = new ArrayList<>();
 		String query = sqlProperties.getProperty("selectPistasDisponiblesFechaExterior");
         try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
@@ -281,37 +281,35 @@ public class DBConnection {
         return pistasDisponibles;
     }
 
-	/**
-	 * Selecciona una lista de pistas disponibles según la fecha y el tipo de pista.
-	 * @param fecha La fecha en la que se desean buscar las pistas disponibles.
-	 * @param tamano El tamaño de la pista (enum TamanoPista).
-	 * @return	Una lista de objetos PistaDTO que representan las pistas disponibles en la fecha especificada.
-	 */
-	public List<PistaDTO> selectPistasDisponiblesPorFechaYTipo(LocalDateTime fecha, PistaDTO.TamanoPista tamano) {
-		List<PistaDTO> pistasDisponibles = new ArrayList<>();
-		String query = sqlProperties.getProperty("selectPistasDisponiblesFechaTamano");
-		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
-			stmt.setString(1, tamano.name());
-			stmt.setTimestamp(2, Timestamp.valueOf(fecha));
-			try (ResultSet rs = stmt.executeQuery()) {
-				while (rs.next()) {
-					PistaDTO pista = new PistaDTO(
-						rs.getString("nombre"),
-						rs.getInt("id"),
-						rs.getBoolean("disponible"),
-						rs.getBoolean("esExterior"),
-						TamanoPista.valueOf(rs.getString("tamano")),
-						rs.getInt("maxJugadores")
-					);
-					pistasDisponibles.add(pista);
-				}
-			}
-		} catch (SQLException e) {
-			System.err.println("Error while retrieving records from Pista table.");
-			e.printStackTrace();
-		}
-		return pistasDisponibles;
-	}
+		/**
+     * Selecciona una lista de pistas disponibles según la fecha, duración y el tipo de pista.
+     * @param diaYHora La fecha y hora en la que se desean buscar las pistas disponibles.
+     * @param duracion La duración de la reserva en minutos.
+     * @param tamanoPista El tamaño de la pista requerido.
+     * @return Una lista de objetos PistaDTO que representan las pistas disponibles.
+     * @throws SQLException Si ocurre un error al intentar recuperar los registros de la base de datos.
+     */
+    public List<PistaDTO> selectPistasDisponiblesPorFechaYTipo(LocalDateTime diaYHora, int duracion, PistaDTO.TamanoPista tamanoPista) throws SQLException {
+        List<PistaDTO> pistasDisponibles = new ArrayList<>();
+        String query = sqlProperties.getProperty("selectPistasDisponiblesPorFechaYTipo");
+        try (PreparedStatement ps = this.connection.prepareStatement(query)) {
+            ps.setString(1, tamanoPista.name());
+            ps.setTimestamp(2, Timestamp.valueOf(diaYHora));
+            ps.setTimestamp(3, Timestamp.valueOf(diaYHora));
+            ps.setInt(4, duracion);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    PistaDTO pista = new PistaDTO();
+                    pista.setId(rs.getInt("id"));
+                    pista.setNombre(rs.getString("nombre"));
+                    pista.setTamano(PistaDTO.TamanoPista.valueOf(rs.getString("tamano")));
+                    pista.setMaxJugadores(rs.getInt("maxJugadores"));
+                    pistasDisponibles.add(pista);
+                }
+            }
+        }
+        return pistasDisponibles;
+    }
 
 	/**
 	 * Selecciona una lista de pistas disponibles en una fecha específica.
@@ -448,22 +446,21 @@ public class DBConnection {
 	 * @param numAdultos El número de adultos en la reserva.
 	 * @param numNinos El número de niños en la reserva.
 	 */
-	public void insertIntoReserva(int id, int idUsuario, LocalDateTime diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, String tipoReserva, int numAdultos, int numNinos) {
+	public void insertIntoReserva(int id, int idUsuario, LocalDateTime diaYHora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, String tipoReserva, int numAdultos, int numNinos) {
 		String query = sqlProperties.getProperty("insertIntoReserva");
 		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setInt(1, id);
 			stmt.setInt(2, idUsuario);
 			stmt.setTimestamp(3, Timestamp.valueOf(diaYHora));
 			stmt.setInt(4, idBono);
-			stmt.setInt(5, nSesionBono);
-			stmt.setInt(6, duracion);
-			stmt.setInt(7, idPista);
-			stmt.setFloat(8, precio);
-			stmt.setFloat(9, descuento);
-			stmt.setString(10, pistaTamano.name());
+			stmt.setInt(5, duracion);
+			stmt.setInt(6, idPista);
+			stmt.setFloat(7, precio);
+			stmt.setFloat(8, descuento);
+			stmt.setString(9, pistaTamano.name());
 			stmt.setString(11, tipoReserva);
-			stmt.setInt(12, numAdultos);
-			stmt.setInt(13, numNinos);
+			stmt.setInt(11, numAdultos);
+			stmt.setInt(12, numNinos);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println("Error while inserting record into Reserva table.");
@@ -491,7 +488,6 @@ public class DBConnection {
 								rs.getInt("idUsuario"),
 								rs.getTimestamp("diaYHora").toLocalDateTime(),
 								rs.getInt("idBono"),
-								rs.getInt("nSesionBono"),
 								rs.getInt("duracion"),
 								rs.getInt("idPista"),
 								rs.getFloat("precio"),
@@ -508,7 +504,6 @@ public class DBConnection {
 								rs.getInt("idUsuario"),
 								rs.getTimestamp("diaYHora").toLocalDateTime(),
 								rs.getInt("idBono"),
-								rs.getInt("nSesionBono"),
 								rs.getInt("duracion"),
 								rs.getInt("idPista"),
 								rs.getFloat("precio"),
@@ -525,7 +520,6 @@ public class DBConnection {
 								rs.getInt("idUsuario"),
 								rs.getTimestamp("diaYHora").toLocalDateTime(),
 								rs.getInt("idBono"),
-								rs.getInt("nSesionBono"),
 								rs.getInt("duracion"),
 								rs.getInt("idPista"),
 								rs.getFloat("precio"),
@@ -566,7 +560,6 @@ public class DBConnection {
 						rs.getInt("idUsuario"),
 						rs.getTimestamp("diaYHora").toLocalDateTime(),
 						rs.getInt("idBono"),
-						rs.getInt("nSesionBono"),
 						rs.getInt("duracion"),
 						rs.getInt("idPista"),
 						rs.getFloat("precio"),
@@ -584,7 +577,6 @@ public class DBConnection {
 						rs.getInt("idUsuario"),
 						rs.getTimestamp("diaYHora").toLocalDateTime(),
 						rs.getInt("idBono"),
-						rs.getInt("nSesionBono"),
 						rs.getInt("duracion"),
 						rs.getInt("idPista"),
 						rs.getFloat("precio"),
@@ -602,7 +594,6 @@ public class DBConnection {
 						rs.getInt("idUsuario"),
 						rs.getTimestamp("diaYHora").toLocalDateTime(),
 						rs.getInt("idBono"),
-						rs.getInt("nSesionBono"),
 						rs.getInt("duracion"),
 						rs.getInt("idPista"),
 						rs.getFloat("precio"),
@@ -642,7 +633,6 @@ public class DBConnection {
 							rs.getInt("idUsuario"),
 							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
 							rs.getInt("idPista"),
 							rs.getFloat("precio"),
@@ -660,7 +650,6 @@ public class DBConnection {
 							rs.getInt("idUsuario"),
 							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
 							rs.getInt("idPista"),
 							rs.getFloat("precio"),
@@ -678,7 +667,6 @@ public class DBConnection {
 							rs.getInt("idUsuario"),
 							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
 							rs.getInt("idPista"),
 							rs.getFloat("precio"),
@@ -721,7 +709,6 @@ public class DBConnection {
 							rs.getInt("idUsuario"),
 							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
 							rs.getInt("idPista"),
 							rs.getFloat("precio"),
@@ -739,7 +726,6 @@ public class DBConnection {
 							rs.getInt("idUsuario"),
 							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
 							rs.getInt("idPista"),
 							rs.getFloat("precio"),
@@ -757,7 +743,6 @@ public class DBConnection {
 							rs.getInt("idUsuario"),
 							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
 							rs.getInt("idPista"),
 							rs.getFloat("precio"),
@@ -817,7 +802,6 @@ public class DBConnection {
 							rs.getInt("idUsuario"),
 							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
 							rs.getInt("idPista"),
 							rs.getFloat("precio"),
@@ -835,7 +819,6 @@ public class DBConnection {
 							rs.getInt("idUsuario"),
 							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
 							rs.getInt("idPista"),
 							rs.getFloat("precio"),
@@ -853,7 +836,6 @@ public class DBConnection {
 							rs.getInt("idUsuario"),
 							rs.getTimestamp("diaYHora").toLocalDateTime(),
 							rs.getInt("idBono"),
-							rs.getInt("nSesionBono"),
 							rs.getInt("duracion"),
 							rs.getInt("idPista"),
 							rs.getFloat("precio"),
@@ -886,7 +868,6 @@ public class DBConnection {
 						rs.getInt("idUsuario"),
 						rs.getTimestamp("diaYHora").toLocalDateTime(),
 						rs.getInt("idBono"),
-						rs.getInt("nSesionBono"),
 						rs.getInt("duracion"),
 						rs.getInt("idPista"),
 						rs.getFloat("precio"),
@@ -904,7 +885,6 @@ public class DBConnection {
 						rs.getInt("idUsuario"),
 						rs.getTimestamp("diaYHora").toLocalDateTime(),
 						rs.getInt("idBono"),
-						rs.getInt("nSesionBono"),
 						rs.getInt("duracion"),
 						rs.getInt("idPista"),
 						rs.getFloat("precio"),
@@ -922,7 +902,6 @@ public class DBConnection {
 						rs.getInt("idUsuario"),
 						rs.getTimestamp("diaYHora").toLocalDateTime(),
 						rs.getInt("idBono"),
-						rs.getInt("nSesionBono"),
 						rs.getInt("duracion"),
 						rs.getInt("idPista"),
 						rs.getFloat("precio"),
@@ -1364,23 +1343,6 @@ public class DBConnection {
     public void updateReserva(ReservaDTO reserva) {
         String query = sqlProperties.getProperty("updateReserva");
         try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
-			stmt.setTimestamp(1, Timestamp.valueOf(reserva.getDiaYHora()));
-            stmt.setInt(2, reserva.getIdReserva());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-	/**
-     * Actualiza una reserva en la base de datos.
-     *
-     * @param reserva El objeto ReservaDTO que representa la reserva a actualizar.
-     */
-    public void updateReserva(ReservaDTO reserva) {
-		String query = "UPDATE Reserva SET diaYHora = ?, numAdultos = ?, numNinos = ?, duracion = ?, idPista = ?, precio = ? WHERE id = ?";
-		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
 			stmt.setTimestamp(1, Timestamp.valueOf(reserva.getDiaYHora())); // Primer parámetro en la consulta
 			stmt.setInt(2, reserva.getNumAdultos()); // Tercer parámetro en la consulta
 			stmt.setInt(3, reserva.getNumNinos()); // Cuarto parámetro en la consulta
@@ -1389,10 +1351,10 @@ public class DBConnection {
 			stmt.setFloat(6, reserva.getPrecio()); // Séptimo parámetro en la consulta
 			stmt.setInt(7, reserva.getIdReserva()); // Octavo parámetro en la consulta (condición WHERE)
 			stmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
      * Recupera un objeto PistaDTO desde la base de datos basado en el ID proporcionado.
@@ -1402,7 +1364,7 @@ public class DBConnection {
      * @throws SQLException Si ocurre un error al intentar recuperar el registro de la base de datos.
      */
     public PistaDTO selectPistaPorId(int idPista) throws SQLException {
-        String query = "SELECT * FROM Pista WHERE id = ?";
+        String query = sqlProperties.getProperty("selectPistaPorId");
         try (PreparedStatement ps = this.connection.prepareStatement(query)) {
             ps.setInt(1, idPista);
             try (ResultSet rs = ps.executeQuery()) {
@@ -1420,7 +1382,7 @@ public class DBConnection {
     }
 
     public int obtenerSesionesBono(int idBono) throws SQLException {
-        String query = "SELECT sesiones FROM Bono WHERE id = ?";
+        String query = sqlProperties.getProperty("selectSesionesBono");
         try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
             stmt.setInt(1, idBono);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -1433,7 +1395,7 @@ public class DBConnection {
     }
 
     public void actualizarSesionesBono(int idBono, int nuevasSesiones) throws SQLException {
-        String query = "UPDATE Bono SET sesiones = ? WHERE id = ?";
+        String query = sqlProperties.getProperty("updateSesionesBono");
         try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
             stmt.setInt(1, nuevasSesiones);
             stmt.setInt(2, idBono);
@@ -1442,7 +1404,7 @@ public class DBConnection {
     }
 
     public void eliminarBono(int idBono) throws SQLException {
-        String query = "DELETE FROM Bono WHERE id = ?";
+        String query = sqlProperties.getProperty("deleteBono");
         try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
             stmt.setInt(1, idBono);
             stmt.executeUpdate();
