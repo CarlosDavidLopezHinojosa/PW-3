@@ -99,11 +99,10 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
      * @param numAdultos  El número de adultos en la reserva.
      * @param numNinos    El número de niños en la reserva.
      * @param idBono      El identificador del bono asociado a la reserva.
-     * @param nSesionBono El número de sesiones restantes en el bono.
      * @return La instancia de Reserva creada según el tipo especificado.
      * @throws IllegalArgumentException Si el tipo de reserva no es reconocido.
      */
-    public static ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public static ReservaInfantilDTO crearReservaInfantil(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaInfantilDTO reserva = new ReservaInfantilDTO();
         reserva.setDiaYHora(diaYhora);
@@ -118,8 +117,6 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
         reserva.setNumAdultos(numAdultos);
         reserva.setNumNinos(numNinos);
         reserva.setIdBono(idBono);
-        reserva.setNSesionBono(nSesionBono);
-
         return reserva;
     }
 
@@ -138,11 +135,10 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
      * @param numAdultos  El número de adultos en la reserva.
      * @param numNinos    El número de niños en la reserva.
      * @param idBono      El identificador del bono asociado a la reserva.
-     * @param nSesionBono El número de sesiones restantes en el bono.
      * @return La instancia de Reserva creada según el tipo especificado.
      * @throws IllegalArgumentException Si el tipo de reserva no es reconocido.
      */
-    public static ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public static ReservaAdultosDTO crearReservaAdultos(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaAdultosDTO reserva = new ReservaAdultosDTO();
         reserva.setDiaYHora(diaYhora);
@@ -157,8 +153,6 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
         reserva.setNumAdultos(numAdultos);
         reserva.setNumNinos(numNinos);
         reserva.setIdBono(idBono);
-        reserva.setNSesionBono(nSesionBono);
-
         return reserva;
     }
 
@@ -177,11 +171,10 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
      * @param numAdultos  El número de adultos en la reserva.
      * @param numNinos    El número de niños en la reserva.
      * @param idBono      El identificador del bono asociado a la reserva.
-     * @param nSesionBono El número de sesiones restantes en el bono.
      * @return La instancia de Reserva creada según el tipo especificado.
      * @throws IllegalArgumentException Si el tipo de reserva no es reconocido.
      */
-    public static ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
+    public static ReservaFamiliarDTO crearReservaFamiliar(String tipoReserva, int idUsuario, LocalDateTime diaYhora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int idReserva, int numAdultos, int numNinos){
         // Detalles para material: detalles[0] = Material.Tipo, detalles[1] = cantidad
         ReservaFamiliarDTO reserva = new ReservaFamiliarDTO();
         reserva.setDiaYHora(diaYhora);
@@ -196,8 +189,6 @@ public class ReservaBonoFactoryDTO extends ReservaFactoryDTO{
         reserva.setNumAdultos(numAdultos);
         reserva.setNumNinos(numNinos);
         reserva.setIdBono(idBono);
-        reserva.setNSesionBono(nSesionBono);
-
         return reserva;
     }
     
