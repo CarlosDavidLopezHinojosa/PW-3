@@ -141,5 +141,16 @@ public class JugadorDAO {
         return jugadores;
     }
 
-    
+    /**
+     * Cambia la contraseña de un usuario en la base de datos.
+     *
+     * @param email El correo electrónico del usuario.
+     * @param nuevaContrasena La nueva contraseña del usuario.
+     */
+    public static void cambiarContrasena(String email, String nuevaContrasena) {
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        conexion.updateContrasena(email, nuevaContrasena);
+        conexion.closeConnection();
+    }
 }
