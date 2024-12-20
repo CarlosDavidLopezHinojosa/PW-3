@@ -7,7 +7,7 @@
 
 /* Fondo con gradiente y disposición flexible */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #6a11cb, #2575fc);
   display: flex;
   justify-content: center;
@@ -59,6 +59,12 @@ h2 {
   color: black;
 }
 
+label {
+  display: block;
+  text-align: left;
+  font-weight: bold;
+}
+
 /* Estilos para los campos de entrada */
 input[type='text'] {
   width: 100%;
@@ -102,7 +108,28 @@ a.btn-back {
 }
 
 a.btn-back:hover {
-  background-color: #5a6268;
+  opacity: 0.8;
+}
+
+/* Estilo para el botón secundario */
+a.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  transition: background-color 0.3s;
+  /* text-transform: none; Asegura que el texto no esté en mayúsculas */
+  margin-top: 10px; /* Ajusta el margen superior para alinearlo con el botón de envío */
+  margin-left: 3px;
+}
+
+a.btn-secondary:hover {
+  opacity: 0.8;
 }
 
 /* Estilos responsivos */

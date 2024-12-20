@@ -1,29 +1,43 @@
-/* Estilos específicos para la página de inicio de sesión */
-
+/* General */
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
   background: linear-gradient(to bottom, #8a33ca, #2575fc);
   color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
+/* Contenedor principal */
 .container {
   width: 100%;
   max-width: 400px; /* Ancho máximo del contenedor */
-  margin: 50px auto; /* Centrar el contenedor horizontalmente y añadir margen superior */
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background: #fff;
   border-radius: 10px;
+  text-align: center; /* Centrar el texto del título */
 }
 
+/* Título */
 h2 {
   margin-bottom: 20px;
   color: #333;
   text-align: center; /* Centrar el texto del título */
 }
 
+/* Etiquetas */
+label {
+  display: block;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 5px; /* Añade un margen inferior para separar del input */
+}
+
+/* Campos de texto */
 input[type='email'],
 input[type='password'] {
   width: 100%;
@@ -35,25 +49,35 @@ input[type='password'] {
   box-sizing: border-box; /* Asegura que el padding y el borde se incluyan en el ancho total */
 }
 
-p.error {
-  color: red;
-  font-size: 14px;
-  margin-top: -10px;
-  margin-bottom: 15px;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
+/* Botones */
+button[type='submit'],
+a.btn-back {
+  background-color: #007bff;
   color: white;
   border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
   border-radius: 5px;
-  font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background: #0056b3;
+button[type='submit']:hover,
+a.btn-back:hover {
+  opacity: 0.8;
+}
+
+/* Estilo para los mensajes de error */
+.error {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #e3342f;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
 }

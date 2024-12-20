@@ -27,10 +27,3 @@ function validatePassword() {
   //errorMessage.style.display = 'none'
   return true
 }
-
-window.addEventListener('blur', () => {
-  const errorMessage = document.getElementById('error-message')
-  if (errorMessage) {
-    errorMessage.style.display = 'none'
-  }
-})

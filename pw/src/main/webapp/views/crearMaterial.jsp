@@ -29,7 +29,7 @@
             <select id="estadoMaterial" name="estadoMaterial" class="input-field" required>
                 <option value="DISPONIBLE">DISPONIBLE</option>
                 <option value="RESERVADO">RESERVADO</option>
-                <option value="MAL_ESTADO">MAL_ESTADO</option>
+                <option value="MAL ESTADO">MAL_ESTADO</option>
             </select>
 
             <input type="submit" value="Crear Material" class="btn btn-primary">

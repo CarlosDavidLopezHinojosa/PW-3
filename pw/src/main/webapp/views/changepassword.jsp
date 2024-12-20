@@ -33,7 +33,18 @@
             <label for="confirmPassword">Confirmar Nueva Contraseña:</label>
             <input type="password" id="confirmPassword" name="confirmPassword" required><br>
             <button type="submit">Cambiar Contraseña</button>
+
+            <%
+                String error = (String) request.getAttribute("error");
+                if (error != null) {
+                  out.println("<p class='error-message'>" + error + "</p>");
+                }
+            %>
+
         </form>
+        <p>
+            <a href="<%= request.getContextPath() %>/views/updateview.jsp" style="color: #007bff;">Volver atrás</a>
+        </p>
     </div>
     <script src="<%= request.getContextPath() %>/static/js/validatepassword.js"></script>
 </body>

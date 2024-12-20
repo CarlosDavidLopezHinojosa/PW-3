@@ -13,6 +13,11 @@
   margin-right: 10px;
 }
 
+.label {
+  display: block;
+  font-weight: bold;
+}
+
 /* Mensajes de error y éxito */
 .error-message {
   margin-top: 20px;
