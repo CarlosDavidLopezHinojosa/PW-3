@@ -33,17 +33,17 @@ public class adquirirBonoServlet extends HttpServlet {
             }
 
             int idUser = customer.getId();
-            String sesionesStr = request.getParameter("sesiones");
+            //String sesionesStr = request.getParameter("sesiones");
             String tipoReserva = request.getParameter("tipoReserva");
             String pistaTamanoStr = request.getParameter("pistaTamano");
 
-            if (sesionesStr == null || tipoReserva == null || pistaTamanoStr == null || sesionesStr.isEmpty() || tipoReserva.isEmpty() || pistaTamanoStr.isEmpty()) {
-                request.setAttribute("mensaje", "Todos los campos son obligatorios.");
+            if (/**sesionesStr == null ||**/ tipoReserva == null || pistaTamanoStr == null /**|| sesionesStr.isEmpty()**/ || tipoReserva.isEmpty() || pistaTamanoStr.isEmpty()) {
+                request.setAttribute("error", "Todos los campos son obligatorios.");
                 request.getRequestDispatcher("/views/adquirirBono.jsp").forward(request, response);
                 return;
             }
 
-            int sesiones = Integer.parseInt(sesionesStr);
+            int sesiones = 5;
             PistaDTO.TamanoPista pistaTamano = PistaDTO.TamanoPista.valueOf(pistaTamanoStr.toUpperCase());
 
             GestorDeBonos gestorDeBonos = GestorDeBonos.getGestor();
@@ -51,7 +51,7 @@ public class adquirirBonoServlet extends HttpServlet {
 
             request.setAttribute("mensaje", "Bono creado exitosamente con ID: " + nuevoBono.getId());
         } catch (Exception e) {
-            request.setAttribute("mensaje", "Error al crear el bono: " + e.getMessage());
+            request.setAttribute("error", "Error al crear el bono: " + e.getMessage());
         }
 
         request.getRequestDispatcher("/views/adquirirBono.jsp").forward(request, response);

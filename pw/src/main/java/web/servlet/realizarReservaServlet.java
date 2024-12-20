@@ -116,8 +116,7 @@ public class realizarReservaServlet extends HttpServlet {
             CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
 
             if (customer == null) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Usuario no autenticado.");
+                response.sendRedirect(request.getContextPath() + "/views/loginview.jsp");
                 return;
             }
 

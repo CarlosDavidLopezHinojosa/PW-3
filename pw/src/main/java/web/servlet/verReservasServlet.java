@@ -25,6 +25,7 @@ public class verReservasServlet extends HttpServlet {
             if (customer == null) {
                 request.setAttribute("mensaje", "Usuario no autenticado.");
                 request.getRequestDispatcher("/views/verReservas.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/views/loginview.jsp");
                 return;
             }
 

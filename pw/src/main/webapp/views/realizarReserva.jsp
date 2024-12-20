@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="web.model.business.DTOs.BonoDTO" %>
+<%@ page import="web.model.business.Beans.CustomerBean" %>
 <%@ page import="web.model.business.DTOs.PistaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -8,6 +9,14 @@
     <title>Realizar Reserva</title>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/realizarreserva.css">
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/user.png" %>" type="image/x-icon">
+
+    <%
+        CustomerBean customerBean = (CustomerBean) session.getAttribute("customerBean");
+        if(customerBean == null || customerBean.getRol().equals("CLIENTE")) {
+            response.sendRedirect("../views/loginview.jsp");
+        }
+    %>
 
 </head>
 <body>
@@ -59,7 +68,7 @@
     <%
         String mensaje = (String) request.getAttribute("mensaje");
         if (mensaje != null) {
-            out.println("<p style='color:red;'>" + mensaje + "</p>");
+            out.println("<p class='error-message'>" + mensaje + "</p>");
         }
     %>
 
