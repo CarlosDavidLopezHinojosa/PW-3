@@ -223,4 +223,20 @@ public class PistaDAO {
         conexion.updatePistaDisponibilidad(idPista, nuevaDisponibilidad);
         conexion.closeConnection();
     }
+
+        /**
+     * Recupera un objeto PistaDTO desde la base de datos basado en el ID proporcionado.
+     *
+     * @param idPista El ID de la pista que se desea recuperar.
+     * @return Un objeto PistaDTO que representa la pista recuperada.
+     * @throws SQLException Si ocurre un error al intentar recuperar el registro de la base de datos.
+     */
+    public static PistaDTO obtenerPistaPorId(int idPista) throws SQLException {
+        DBConnection conexion = new DBConnection();
+        conexion.getConnection();
+        PistaDTO pista = conexion.selectPistaPorId(idPista);
+        conexion.closeConnection();
+        return pista;
+    }
+
 }

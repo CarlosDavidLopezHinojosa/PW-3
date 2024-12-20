@@ -1388,4 +1388,82 @@ public class DBConnection {
 					e.printStackTrace();
 			}
 	}
+
+
+	/**
+     * Actualiza una reserva en la base de datos.
+     *
+     * @param reserva El objeto ReservaDTO que representa la reserva a actualizar.
+     */
+    public void updateReserva(ReservaDTO reserva) {
+		String query = "UPDATE Reserva SET diaYHora = ?, numAdultos = ?, numNinos = ?, duracion = ?, idPista = ?, precio = ? WHERE id = ?";
+		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			stmt.setTimestamp(1, Timestamp.valueOf(reserva.getDiaYHora())); // Primer parámetro en la consulta
+			stmt.setInt(2, reserva.getNumAdultos()); // Tercer parámetro en la consulta
+			stmt.setInt(3, reserva.getNumNinos()); // Cuarto parámetro en la consulta
+			stmt.setInt(4, reserva.getDuracion()); // Quinto parámetro en la consulta
+			stmt.setInt(5, reserva.getIdPista()); // Sexto parámetro en la consulta
+			stmt.setFloat(6, reserva.getPrecio()); // Séptimo parámetro en la consulta
+			stmt.setInt(7, reserva.getIdReserva()); // Octavo parámetro en la consulta (condición WHERE)
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+     * Recupera un objeto PistaDTO desde la base de datos basado en el ID proporcionado.
+     *
+     * @param idPista El ID de la pista que se desea recuperar.
+     * @return Un objeto PistaDTO que representa la pista recuperada.
+     * @throws SQLException Si ocurre un error al intentar recuperar el registro de la base de datos.
+     */
+    public PistaDTO selectPistaPorId(int idPista) throws SQLException {
+        String query = "SELECT * FROM Pista WHERE id = ?";
+        try (PreparedStatement ps = this.connection.prepareStatement(query)) {
+            ps.setInt(1, idPista);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    PistaDTO pista = new PistaDTO();
+                    pista.setId(rs.getInt("id"));
+                    pista.setNombre(rs.getString("nombre"));
+                    pista.setTamano(PistaDTO.TamanoPista.valueOf(rs.getString("tamano")));
+                    pista.setMaxJugadores(rs.getInt("maxJugadores"));
+                    return pista;
+                }
+            }
+        }
+        return null;
+    }
+
+    public int obtenerSesionesBono(int idBono) throws SQLException {
+        String query = "SELECT sesiones FROM Bono WHERE id = ?";
+        try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+            stmt.setInt(1, idBono);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("sesiones");
+                }
+            }
+        }
+        return 0;
+    }
+
+    public void actualizarSesionesBono(int idBono, int nuevasSesiones) throws SQLException {
+        String query = "UPDATE Bono SET sesiones = ? WHERE id = ?";
+        try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+            stmt.setInt(1, nuevasSesiones);
+            stmt.setInt(2, idBono);
+            stmt.executeUpdate();
+        }
+    }
+
+    public void eliminarBono(int idBono) throws SQLException {
+        String query = "DELETE FROM Bono WHERE id = ?";
+        try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+            stmt.setInt(1, idBono);
+            stmt.executeUpdate();
+        }
+    }
 }
+

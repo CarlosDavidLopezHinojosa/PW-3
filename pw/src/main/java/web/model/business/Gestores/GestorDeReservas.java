@@ -1,5 +1,6 @@
 package web.model.business.Gestores;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -101,8 +102,8 @@ public class GestorDeReservas {
      * <p>Si el usuario confirma, se crea y almacena la reserva.</p>
      * <p>Si el usuario no confirma, la reserva se cancela.</p>
      */
-    public static ReservaDTO hacerReservaIndividual(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
-        return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, -1, -1, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
+    public static int hacerReservaIndividual(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
+        return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, -1, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
     }
 
     /**
@@ -167,8 +168,8 @@ public class GestorDeReservas {
  *   <li><code>Exception</code>: Captura errores de formato de fecha.</li>
  * </ul>
  */
-    public static ReservaDTO hacerReservaBono(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int nSesionBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
-        return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, nSesionBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
+    public static int hacerReservaBono(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos) {
+        return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
     }
 
     /**
@@ -337,4 +338,33 @@ public class GestorDeReservas {
     public static void eliminarReserva(int id) {
         ReservaDAO.eliminarReserva(id);
     }
+
+    public static int insertarReserva(String tipoReserva, int idUsuario, LocalDateTime diaYHora, int idBono, int duracion, int idPista, float precio, float descuento, PistaDTO.TamanoPista pistaTamano, int numAdultos, int numNinos){
+        return ReservaDAO.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
+    }
+
+    public static List<ReservaDTO> obtenerReservasFuturas(){
+        return ReservaDAO.obtenerReservasFuturas();
+    }
+
+    public static List<ReservaDTO> obtenerReservasFuturasUsuario(int idUsuario) {
+        return ReservaDAO.obtenerReservasFuturasUsuario(idUsuario);
+    }
+
+    public static List<ReservaDTO> obtenerReservasPistaDia(int idPista, LocalDateTime dia){
+        return ReservaDAO.obtenerReservasPistaDia(idPista, dia);
+    }
+
+    public static List<ReservaDTO> obtenerReservas(){
+        return ReservaDAO.obtenerReservas();
+    }
+
+    public static ReservaDTO obtenerReservaPorId(int id){
+        return ReservaDAO.obtenerReservaPorId(id);
+    }
+
+    public static void actualizarReserva(ReservaDTO reserva){
+        ReservaDAO.actualizarReserva(reserva);
+    }
+
 }

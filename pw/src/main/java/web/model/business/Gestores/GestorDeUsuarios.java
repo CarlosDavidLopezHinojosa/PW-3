@@ -82,11 +82,29 @@ public class GestorDeUsuarios {
         JugadorDAO.modificarInformacion(id, email, nombre, apellidos, fechaNacimiento);
     }
 
-    /**
-     * Lista todos los usuarios registrados en la base de datos. 
-     * Imprime la información de cada usuario en la consola.
-     */
-    public static List<JugadorDTO> listarUsuarios() {
+    
+
+    public static boolean existeUsuarioEmail(String email) {
+        return JugadorDAO.existeUsuarioEmail(email);
+    }
+
+    public static boolean existeUsuarioId(int id) {
+        return JugadorDAO.existeUsuarioId(id);
+    }
+
+    public static JugadorDTO getUsuarioEmail(String email) {
+        return JugadorDAO.getUsuarioEmail(email);
+    }
+
+    public static JugadorDTO darDeAlta_G(String email, String nombre, String apellidos, LocalDate fechaNacimiento, String password, Roles rol) {
+        return JugadorDAO.darDeAlta(email, nombre, apellidos, fechaNacimiento, password, rol);
+    }
+
+    public static void modificarInformacion_G(int id, String email, String nombre, String apellidos, LocalDate fechaNacimiento) {
+        JugadorDAO.modificarInformacion(id, email, nombre, apellidos, fechaNacimiento);
+    }
+
+    public static List<JugadorDTO> obtenerUsuarios() {
         return JugadorDAO.obtenerUsuarios();
     }
 }

@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import web.model.business.DTOs.JugadorDTO;
-import web.model.data.DAOs.JugadorDAO;
+import web.model.business.Gestores.GestorDeUsuarios;
 
 @WebServlet("/jugadores")
 public class VerJugadoresServlet extends HttpServlet {
@@ -17,7 +17,7 @@ public class VerJugadoresServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<JugadorDTO> jugadores = JugadorDAO.obtenerUsuarios();
+            List<JugadorDTO> jugadores = GestorDeUsuarios.obtenerUsuarios();
             // Set the list of players as a request attribute
             request.setAttribute("jugadores", jugadores);
         } catch (Exception e) {

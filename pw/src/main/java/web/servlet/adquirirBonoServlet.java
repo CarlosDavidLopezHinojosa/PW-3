@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import web.model.business.Beans.CustomerBean;
 import web.model.business.DTOs.BonoDTO;
 import web.model.business.DTOs.PistaDTO;
-import web.model.data.DAOs.BonoDAO;
+import web.model.business.Gestores.GestorDeBonos;
 
 @WebServlet("/adquirirBono")
 public class adquirirBonoServlet extends HttpServlet {
@@ -46,7 +46,8 @@ public class adquirirBonoServlet extends HttpServlet {
             int sesiones = Integer.parseInt(sesionesStr);
             PistaDTO.TamanoPista pistaTamano = PistaDTO.TamanoPista.valueOf(pistaTamanoStr.toUpperCase());
 
-            BonoDTO nuevoBono = BonoDAO.insertarBono(sesiones, idUser, tipoReserva, pistaTamano);
+            GestorDeBonos gestorDeBonos = GestorDeBonos.getGestor();
+            BonoDTO nuevoBono = gestorDeBonos.insertarBono(sesiones, idUser, tipoReserva, pistaTamano);
 
             request.setAttribute("mensaje", "Bono creado exitosamente con ID: " + nuevoBono.getId());
         } catch (Exception e) {
