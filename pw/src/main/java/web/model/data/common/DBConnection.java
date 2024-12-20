@@ -1410,5 +1410,17 @@ public class DBConnection {
             stmt.executeUpdate();
         }
     }
+
+		public void updateContrasena(String email, String contrasena) {
+		String query = sqlProperties.getProperty("updateContrasena");
+		try (PreparedStatement stmt = this.connection.prepareStatement(query)) {
+			stmt.setString(1, contrasena);
+			stmt.setString(2, email);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Error while updating record in Jugador table.");
+			e.printStackTrace();
+		}
+	}
 }
 
