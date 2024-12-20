@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="web.model.business.Beans.CustomerBean" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,8 +9,14 @@
     <link rel="icon" href="<%= request.getContextPath() + "/static/images/admin.png" %>" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/crearpista.css">
-    
 
+
+    <%
+        CustomerBean customerBean = (CustomerBean) session.getAttribute("customerBean");
+        if(customerBean == null || customerBean.getRol().equals("CLIENTE")) {
+            response.sendRedirect("../views/loginview.jsp");
+        }
+    %>
 </head>
 <body>
     <!-- Botón de regreso -->
@@ -24,12 +31,17 @@
             <input type="text" id="nombrePista" name="nombrePista" required>
 
             <!-- Disponible -->
-            <label for="disponible">¿Disponible?:</label>
-            <input type="checkbox" id="disponible" name="disponible" value="true">
+            <div class="checkbox-group">
+                <label for="disponible">¿Disponible?</label>
+                <input type="checkbox" id="disponible" name="disponible" value="true">
+            </div>
 
             <!-- Es Exterior -->
-            <label for="esExterior">¿Es Exterior?:</label>
-            <input type="checkbox" id="esExterior" name="esExterior" value="true">
+            <div class="checkbox-group">
+                <label for="esExterior">¿Es Exterior?</label>
+                <input type="checkbox" id="esExterior" name="esExterior" value="true">
+            </div>
+
 
             <!-- Tamaño de la Pista -->
             <label for="tamanoPista">Tamaño de la Pista:</label>

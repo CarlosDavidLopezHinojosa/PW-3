@@ -6,6 +6,10 @@ body {
   font-family: Arial, sans-serif;
   background: linear-gradient(to bottom, #6a11cb, #2575fc);
   color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .container {
@@ -13,7 +17,6 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   max-width: 400px;
-  margin: 50px auto;
   padding: 30px;
   text-align: center;
 }
@@ -64,10 +67,27 @@ input:focus {
   transform: scale(1.02);
 }
 
+/* Mensajes de error */
 .error-message {
-  color: red;
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #e3342f;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 4px;
   font-size: 14px;
-  margin-top: 10px;
+  text-align: center;
+}
+
+.success-message {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #38c172;
+  background-color: #d4edda;
+  color: #155724;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
 }
 
 /* Estilos para pantallas pequeñas */

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="web.model.business.DTOs.PistaDTO" %>
-
+<%@ page import="web.model.business.Beans.CustomerBean" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +9,13 @@
     <link rel="icon" href="<%= request.getContextPath() + "/static/images/admin.png" %>" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/modificarestadopista.css">
+
+    <%
+        CustomerBean customerBean = (CustomerBean) session.getAttribute("customerBean");
+        if(customerBean == null || customerBean.getRol().equals("CLIENTE")) {
+            response.sendRedirect("../views/loginview.jsp");
+        }
+    %>
 </head>
 <body>
     <div class="page-container">

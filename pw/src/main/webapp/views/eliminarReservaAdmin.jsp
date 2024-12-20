@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="web.model.business.DTOs.Reservas.ReservaDTO" %>
-
+<%@ page import="web.model.business.Beans.CustomerBean" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +10,14 @@
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/eliminarreserva.css">
     <script src="<%= request.getContextPath() %>/static/js/eliminar-reserva.js" defer></script>
+
+    <%
+        CustomerBean customerBean = (CustomerBean) session.getAttribute("customerBean");
+        if(customerBean == null || customerBean.getRol().equals("CLIENTE")) {
+            response.sendRedirect("../views/loginview.jsp");
+        }
+    %>
+
 </head>
 <body>
     <div class="page-container">
@@ -37,8 +45,8 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" id="confirmDelete" name="confirmDelete" required>
-                        <label for="confirmDelete">Estoy seguro de que deseo eliminar la reserva</label>
+                        <label for="confirmDelete">Estoy seguro de que deseo eliminar la reserva</label><input type="checkbox" id="confirmDelete" name="confirmDelete" required>
+                        
                     </div>
 
                     <div class="form-group">
