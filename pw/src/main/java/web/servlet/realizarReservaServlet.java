@@ -213,7 +213,13 @@ public class realizarReservaServlet extends HttpServlet {
                 return;
             }
 
-            GestorDeReservas.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
+            ReservaDTO reserva = GestorDeReservas.insertarReserva(tipoReserva, idUsuario, diaYHora, idBono, duracion, idPista, precio, descuento, pistaTamano, numAdultos, numNinos);
+
+            if (reserva == null) {
+                request.setAttribute("mensaje", "Error al realizar la reserva.");
+                request.getRequestDispatcher("/views/realizarReserva.jsp").forward(request, response);
+                return;
+            }
 
             // Restar una sesión al bono si es una reserva de bono
             if (esBono) {
