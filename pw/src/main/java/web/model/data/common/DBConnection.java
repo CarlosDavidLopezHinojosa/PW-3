@@ -458,7 +458,7 @@ public class DBConnection {
 			stmt.setFloat(7, precio);
 			stmt.setFloat(8, descuento);
 			stmt.setString(9, pistaTamano.name());
-			stmt.setString(11, tipoReserva);
+			stmt.setString(10, tipoReserva);
 			stmt.setInt(11, numAdultos);
 			stmt.setInt(12, numNinos);
 			stmt.executeUpdate();
