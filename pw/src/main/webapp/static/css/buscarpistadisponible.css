@@ -1,0 +1,165 @@
+/* Estilo general */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #2575fc, #21d883);
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Altura completa de la ventana */
+}
+
+.header {
+  top: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+h1 {
+  text-align: center;
+  color: black; /* Azul oscuro */
+  margin-top: 20px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 800px; /* Nuevo ancho máximo */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+form {
+  width: 100%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+button {
+  background-color: #0056b3; /* Azul oscuro */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #003d82; /* Azul más oscuro */
+}
+
+.back-button {
+  display: inline-block; /* Asegura que el botón mantenga su forma */
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  color: #fff;
+  background-color: #6c757d; /* Gris */
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #5a6268; /* Gris más oscuro */
+}
+
+.alert {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  text-align: center; /* Centrar el texto */
+}
+
+.alert-info {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #e3342f;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.pistas-container {
+  width: 100%;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pistas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.pista-item {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.pista-item:hover {
+  background-color: #f1f1f1;
+}
+
+/* Estilo responsivo */
+@media (max-width: 768px) {
+  .form-container {
+    width: 100%;
+    padding: 15px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+
+  .back-button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}

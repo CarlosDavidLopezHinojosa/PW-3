@@ -1,73 +1,91 @@
 <%@ page import="java.util.List" %>
 <%@ page import="web.model.business.DTOs.Reservas.ReservaDTO" %>
 <%@ page import="web.model.business.DTOs.PistaDTO" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Modificar Reserva</title>
-    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
-    <style>
-        .back-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/styles.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/static/css/modificarreserva.css">
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/user.png" %>" type="image/x-icon">
 </head>
 <body>
-    <a href="<%= request.getContextPath() %>/controller/welcomeclientcontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
-    <h1>Modificar Reserva</h1>
-    
-    <%
-        String mensaje = (String) request.getAttribute("mensaje");
-        if (mensaje != null) {
-            out.println("<p>" + mensaje + "</p>");
-        }
-        
-        List<ReservaDTO> reservas = (List<ReservaDTO>) request.getAttribute("reservas");
-        if (reservas != null) {
-            if (reservas.isEmpty()) {
-                out.println("<p>El usuario no tiene reservas futuras.</p>");
-            } else {
-                out.println("<h2>Reservas Futuras:</h2>");
-                out.println("<form id='modificarReservaForm' action='" + request.getContextPath() + "/modificarReserva' method='post' onsubmit='return validarFormulario()'>");
-                out.println("<ul>");
-                for (ReservaDTO reserva : reservas) {
-                    out.println("<li>");
-                    out.println("<input type='radio' name='idReserva' value='" + reserva.getIdReserva() + "' required>");
-                    out.println("ID: " + reserva.getIdReserva() + ", Fecha y Hora: " + reserva.getDiaYHora() + ", Pista: " + reserva.getIdPista() + ", Tipo: " + reserva.getTipoReserva() + ", Adultos: " + reserva.getNumAdultos() + ", Niños: " + reserva.getNumNinos() + ", Duración: " + reserva.getDuracion() + " minutos, Bono: " + (reserva.getIdBono() != -1 ? "Sí" : "No"));
-                    out.println("</li>");
-                }
-                out.println("</ul>");
-                out.println("<label for='nuevaFecha'>Nueva Fecha y Hora:</label>");
-                out.println("<input type='datetime-local' id='nuevaFecha' name='nuevaFecha' required><br><br>");
-
-                out.println("<input type='hidden' id='tipoReserva' name='tipoReserva'>");
-
-                out.println("<label for='duracion'>Duración (minutos):</label>");
-                out.println("<input type='number' id='duracion' name='duracion' required onchange='buscarPistasDisponibles()'><br><br>");
-
-                out.println("<label for='numAdultos' id='numAdultosLabel'>Número de Adultos:</label>");
-                out.println("<input type='number' id='numAdultos' name='numAdultos' required><br><br>");
-
-                out.println("<label for='numNinos' id='numNinosLabel'>Número de Niños:</label>");
-                out.println("<input type='number' id='numNinos' name='numNinos' required><br><br>");
-
-                out.println("<label for='pista'>Pista:</label>");
-                out.println("<select id='pista' name='pista' required onchange='actualizarPrecio()'>");
-                out.println("<option value=''>Seleccione una pista</option>");
-                out.println("</select><br><br>");
-
-                out.println("<input type='hidden' id='pistaTamano' name='pistaTamano'>");
-                out.println("<input type='hidden' id='precio' name='precio'>");
-
-                out.println("<input type='submit' name='confirmar' value='Modificar Reserva'>");
-                out.println("</form>");
+    <div class="header">
+        <a href="<%= request.getContextPath() %>/controller/welcomeclientcontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
+    </div>
+    <div class="form-container">
+        <% 
+            String mensaje = (String) request.getAttribute("mensaje");
+            if (mensaje != null) {
+        %>
+            <p class="alert alert-info"><%= mensaje %></p>
+        <% 
             }
-        }
-    %>
 
+            List<ReservaDTO> reservas = (List<ReservaDTO>) request.getAttribute("reservas");
+            if (reservas == null || reservas.isEmpty()) {
+        %>
+            <div class="alert alert-info">No tienes reservas futuras.</div>
+        <% 
+            } else { 
+        %>
+            
+            <form id="modificarReservaForm" action="<%= request.getContextPath() %>/modificarReserva" method="post" onsubmit="return validarFormulario()">
+                <div class="reservas-info">
+                <h2>Reservas Futuras</h2>
+                    <ul class="reservas-list">
+                        <% 
+                        
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                        for (ReservaDTO reserva : reservas) { %>
+                            <li>
+                                <input type="radio" name="idReserva" value="<%= reserva.getIdReserva() %>" required>
+                                <%= String.format(
+                                        "ID: %d, Fecha y Hora: %s, Pista: %d, Tipo: %s, Adultos: %d, Niños: %d, Duración: %d minutos, Bono: %s",
+                                        reserva.getIdReserva(), reserva.getDiaYHora().format(formatter) , reserva.getIdPista(),
+                                        reserva.getTipoReserva(), reserva.getNumAdultos(), reserva.getNumNinos(),
+                                        reserva.getDuracion(), reserva.getIdBono() != -1 ? "Sí" : "No"
+                                ) %>
+                            </li>
+                        <% } %>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="nuevaFecha">Nueva Fecha y Hora:</label>
+                    <input type="datetime-local" id="nuevaFecha" name="nuevaFecha" required>
+                </div>
+                <input type="hidden" id="tipoReserva" name="tipoReserva">
+
+                <div class="form-group">
+                    <label for="duracion">Duración (minutos):</label>
+                    <input type="number" id="duracion" name="duracion" required onchange="buscarPistasDisponibles()">
+                </div>
+
+                <div class="form-group">
+                    <label for="numAdultos">Número de Adultos:</label>
+                    <input type="number" id="numAdultos" name="numAdultos" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="numNinos">Número de Niños:</label>
+                    <input type="number" id="numNinos" name="numNinos" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pista">Pista:</label>
+                    <select id="pista" name="pista" required onchange="actualizarPrecio()">
+                        <option value="">Seleccione una pista</option>
+                    </select>
+                </div>
+                <input type="hidden" id="pistaTamano" name="pistaTamano">
+                <input type="hidden" id="precio" name="precio">
+                <button type="submit" class="btn btn-primary">Modificar Reserva</button>
+            </form>
+        <% } %>
+    </div>
+    
     <script>
         function actualizarCampos() {
             var reservaSeleccionada = document.querySelector('input[name="idReserva"]:checked').parentElement.textContent;

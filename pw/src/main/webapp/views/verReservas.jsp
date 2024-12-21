@@ -1,42 +1,51 @@
 <%@ page import="java.util.List" %>
 <%@ page import="web.model.business.DTOs.Reservas.ReservaDTO" %>
 <%@ page import="web.model.business.Beans.CustomerBean" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Ver Reservas</title>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
-    <style>
-        .back-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/verreservas.css">
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/user.png" %>" type="image/x-icon">
 </head>
 <body>
-    <a href="<%= request.getContextPath() %>/controller/welcomeclientcontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
-    <h1>Ver Reservas</h1>
-    
-    <%
-        String mensaje = (String) request.getAttribute("mensaje");
-        if (mensaje != null) {
-            out.println("<p>" + mensaje + "</p>");
-        }
-        
-        List<ReservaDTO> reservas = (List<ReservaDTO>) request.getAttribute("reservas");
-        if (reservas != null && !reservas.isEmpty()) {
-            for (ReservaDTO reserva : reservas) {
-                out.println("<div>");
-                out.println("<p>ID: " + reserva.getIdReserva() + "</p>");
-                out.println("<p>Fecha y Hora: " + reserva.getDiaYHora() + "</p>");
-                out.println("<p>Pista: " + reserva.getIdPista() + "</p>");
-                out.println("</div>");
+    <div class="header">
+        <a href="<%= request.getContextPath() %>/controller/welcomeclientcontroller.jsp" class="back-button btn btn-secondary">Volver al Menú Principal</a>
+    </div>
+    <div class="container">
+        <h1>Ver Reservas</h1>
+        <% 
+            String mensaje = (String) request.getAttribute("mensaje");
+            if (mensaje != null) {
+        %>
+            <p class="alert alert-info"><%= mensaje %></p>
+        <% 
             }
-        } else {
-            out.println("<p>No tienes reservas futuras.</p>");
-        }
-    %>
+
+            List<ReservaDTO> reservas = (List<ReservaDTO>) request.getAttribute("reservas");
+            if (reservas != null && !reservas.isEmpty()) {
+        %>
+            <div class="reservas-list">
+                <% 
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                for (ReservaDTO reserva : reservas) { %>
+                    <div class="reserva-item">
+                        <p><strong>ID:</strong> <%= reserva.getIdReserva() %></p>
+                        <p><strong>Fecha y Hora:</strong> <%= reserva.getDiaYHora().format(formatter) %></p>
+                        <p><strong>Pista:</strong> <%= reserva.getIdPista() %></p>
+                    </div>
+                <% } %>
+            </div>
+        <% 
+            } else { 
+        %>
+            <p class="alert alert-info">No se encontraron reservas.</p>
+        <% 
+            } 
+        %>
+    </div>
 </body>
 </html>

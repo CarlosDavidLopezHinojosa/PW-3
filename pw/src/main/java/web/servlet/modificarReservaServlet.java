@@ -29,8 +29,9 @@ public class modificarReservaServlet extends HttpServlet {
         CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
 
         if (customer == null) {
-            request.setAttribute("mensaje", "Usuario no autenticado.");
+            //request.setAttribute("mensaje", "Usuario no autenticado.");
             request.getRequestDispatcher("/views/modificarReserva.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/views/loginview.jsp");
             return;
         }
 

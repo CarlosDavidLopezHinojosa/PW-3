@@ -26,7 +26,7 @@ public class cancelarReservaServlet extends HttpServlet {
 
         if (customer == null) {
             request.setAttribute("mensaje", "Usuario no autenticado.");
-            request.getRequestDispatcher("/views/cancelarReserva.jsp").forward(request, response);
+            request.getRequestDispatcher(request.getContextPath() + "/views/cancelarReserva.jsp").forward(request, response);
             return;
         }
 
