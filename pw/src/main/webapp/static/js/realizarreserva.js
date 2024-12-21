@@ -1,3 +1,6 @@
+var hiddenPath = document.getElementById('hiddenPath').innerText
+console.log(hiddenPath === '/PW')
+console.log(hiddenPath)
 function toggleBonoFields() {
   var bonoFields = document.getElementById('bonoFields')
   if (document.getElementById('esBono').checked) {
@@ -52,6 +55,7 @@ function buscarPistasDisponibles() {
   if (tipoReserva && diaYHora && duracion) {
     var xhr = new XMLHttpRequest()
     var url =
+      hiddenPath +
       '/realizarReserva?action=buscarPistasDisponibles&tipoReserva=' +
       tipoReserva +
       '&diaYHora=' +
@@ -79,7 +83,8 @@ function buscarBonosDisponibles() {
     var xhr = new XMLHttpRequest()
     xhr.open(
       'GET',
-      '/realizarReserva?action=buscarBonosDisponibles&tipoReserva=' +
+      hiddenPath +
+        '/realizarReserva?action=buscarBonosDisponibles&tipoReserva=' +
         tipoReserva,
       true
     )
