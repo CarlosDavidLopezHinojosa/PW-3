@@ -27,8 +27,9 @@ public class adquirirBonoServlet extends HttpServlet {
             CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
 
             if (customer == null) {
-                request.setAttribute("mensaje", "Usuario no autenticado.");
-                request.getRequestDispatcher("/views/adquirirBono.jsp").forward(request, response);
+                // request.setAttribute("mensaje", "Usuario no autenticado.");
+                // request.getRequestDispatcher("/views/adquirirBono.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/views/loginview.jsp");
                 return;
             }
 

@@ -6,6 +6,8 @@ body {
   background: linear-gradient(180deg, #21d883, #2575fc);
   color: #333;
   margin-top: 70px;
+  height: 100vh; /* Altura completa de la ventana */
+  overflow-y: auto; /* Habilitar desplazamiento vertical */
 }
 
 h1 {

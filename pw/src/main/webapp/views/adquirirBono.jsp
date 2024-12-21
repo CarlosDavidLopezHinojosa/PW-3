@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Adquirir Bono</title>
+    <link rel="icon" href="<%= request.getContextPath() + "/static/images/user.png" %>" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/css/adquirirbono.css">
 </head>
@@ -42,10 +43,6 @@
 
             if (error != null) {
                 out.println("<p class='alert alert-info'>" + error + "</p>");
-            }
-        %>
-            <p class="alert alert-info"><%= mensaje %></p>
-        <% 
             }
         %>
         </form>

@@ -35,7 +35,7 @@ public class realizarReservaServlet extends HttpServlet {
             CustomerBean customer = (CustomerBean) session.getAttribute("customerBean");
 
             if (customer == null) {
-                request.setAttribute("mensaje", "Usuario no autenticado. Por favor, inicie sesión para realizar una reserva.");
+                response.sendRedirect(request.getContextPath() + "/views/loginview.jsp");
             } else {
                 GestorDeBonos gestorDeBonos = GestorDeBonos.getGestor();
                 int tipoReserva = Integer.parseInt(request.getParameter("tipoReserva"));

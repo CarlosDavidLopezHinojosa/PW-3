@@ -56,10 +56,10 @@
             <div class="actions-grid">
                 <a href="<%= request.getContextPath() %>/views/adquirirBono.jsp" class="btn btn-secondary">Adquirir Bono</a>
                 <a href="<%= request.getContextPath() %>/views/buscarPistaDisponible.jsp" class="btn btn-secondary">Buscar Pista Disponible</a>
-                <a href="<%= request.getContextPath() %>/jugadores" class="btn btn-secondary">Ver Jugadores</a>
+                <%-- <a href="<%= request.getContextPath() %>/jugadores" class="btn btn-secondary">Ver Jugadores</a>
                 <a href="<%= request.getContextPath() %>/verMateriales" class="btn btn-secondary">Ver Materiales</a>
                 <a href="<%= request.getContextPath() %>/verBonos" class="btn btn-secondary">Ver Bonos</a>
-                <a href="<%= request.getContextPath() %>/verPistas" class="btn btn-secondary">Ver Pistas</a>
+                <a href="<%= request.getContextPath() %>/verPistas" class="btn btn-secondary">Ver Pistas</a> --%>
             </div>
         </div>
 
